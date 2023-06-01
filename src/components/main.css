@@ -1,0 +1,14 @@
+.row {
+    border: 1px solid green;
+}
+
+.col-6 {
+    border: 1px solid red;
+}
+.col-12 {
+    border: 1px dotted red;
+}
+.container-fluid {
+    width: 100vw;
+    border: 1px solid black;
+}
