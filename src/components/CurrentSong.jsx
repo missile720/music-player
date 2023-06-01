@@ -3,7 +3,8 @@ import './CurrentSong.css'
 
 function CurrentSong() {
     const [percentage, setPercentage] = useState(10)
-    function changePercent(event){
+    
+    function changePercent(event) {
         setPercentage(event.target.value)
     }
 
@@ -12,10 +13,10 @@ function CurrentSong() {
             <div className="current-song-left-side">
                 <div className="image-container">
                     {/* Current Song picture */}
-                <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-music" viewBox="0 0 16 16">
-  <path d="M11 6.64a1 1 0 0 0-1.243-.97l-1 .25A1 1 0 0 0 8 6.89v4.306A2.572 2.572 0 0 0 7 11c-.5 0-.974.134-1.338.377-.36.24-.662.628-.662 1.123s.301.883.662 1.123c.364.243.839.377 1.338.377.5 0 .974-.134 1.338-.377.36-.24.662-.628.662-1.123V8.89l2-.5V6.64z"/>
-  <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z"/>
-</svg>                </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-file-earmark-music" viewBox="0 0 16 16">
+                        <path d="M11 6.64a1 1 0 0 0-1.243-.97l-1 .25A1 1 0 0 0 8 6.89v4.306A2.572 2.572 0 0 0 7 11c-.5 0-.974.134-1.338.377-.36.24-.662.628-.662 1.123s.301.883.662 1.123c.364.243.839.377 1.338.377.5 0 .974-.134 1.338-.377.36-.24.662-.628.662-1.123V8.89l2-.5V6.64z" />
+                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
+                    </svg>                </div>
                 <div className="song-title-artist">
                     <ul>
                         <li>Song </li>
@@ -27,7 +28,7 @@ function CurrentSong() {
 
             <div className="current-song-right-side">
                 <div className="song-bar">
-                    <input type="range" min="1" max="100" step="1" value={percentage} onChange={changePercent}/>
+                    <input type="range" min="1" max="100" step="1" value={percentage} onChange={changePercent} />
                 </div>
                 <div className="music-play-buttons">
                     {/* skip backwards */}
