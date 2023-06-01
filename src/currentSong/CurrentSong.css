@@ -1,0 +1,13 @@
+
+.current-song-container{
+    width: 500px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.current-song-left-side{
+    display: flex;
+}
+li{
+    list-style: none;
+}
