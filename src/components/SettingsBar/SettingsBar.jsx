@@ -4,7 +4,9 @@ import "./SettingsBar.css";
 const SettingsBar = () => {
   //We will have to use the useContext hook in the main page to switch styles for entire site
   const [isDarkMode, setIsDarkMode] = useState(false);
+
   const onSettingsButtonClick = () => {};
+
   const onDarkModeToggleClick = () => {
     setIsDarkMode((prevState) => !prevState);
     console.log(isDarkMode);
