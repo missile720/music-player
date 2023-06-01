@@ -1,13 +1,9 @@
 import Login from "./components/Login";
-import SettingsBar from "./components/SettingsBar/SettingsBar.jsx";
+import Main from "./components/Main-window";
 import "./App.css";
 
 function App() {
-  return (
-    <>
-      <SettingsBar />
-    </>
-  );
+  return <>{Main ? <Main /> : <Login />}</>;
 }
 
 export default App;
