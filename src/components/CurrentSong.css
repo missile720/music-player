@@ -1,0 +1,22 @@
+
+.current-song-container{
+    width: 500px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.current-song-left-side{
+    display: flex;
+}
+ul{
+    padding-left: 1em;
+}
+li{
+    list-style: none;
+}
+
+.music-play-buttons{
+    display: flex;
+    justify-content: space-between;    
+}
+    
