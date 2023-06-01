@@ -1,3 +1,7 @@
+/*
+ * Stands for music player container, used to differentiate from 
+ * Bootstrap's own container classs
+ */
 .mp-container {
     overflow-y: scroll;
 }
