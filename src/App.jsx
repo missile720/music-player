@@ -1,6 +1,5 @@
 import Login from "./components/Login"
-import LibraryContainer from "./components/LibraryContainer"
-import testData from "./data/test-playlist-data.js"
+import Main from "./components/Main-window"
 import './App.css'
 
 function App() {
@@ -8,7 +7,8 @@ function App() {
 
   return (
     <>
-      <LibraryContainer library={[playlist]} />
+      {Main ? <Main /> : <Login />}
+
     </>
   )
 }
