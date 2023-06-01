@@ -1,13 +1,13 @@
-import Login from "./components/Login"
-import './App.css'
+import Login from "./components/Login";
+import SettingsBar from "./components/SettingsBar/SettingsBar.jsx";
+import "./App.css";
 
 function App() {
-
   return (
     <>
-      <Login/>
+      <SettingsBar />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
