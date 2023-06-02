@@ -1,11 +1,11 @@
 /**
  * Give props for cards to display, displays the cards in the container.
- * Meant to solely be used as a "parent class" and should not be used
- * generically
- * @param {ReactComponentElement[]} cards An array of Card Components to 
- * Display in the container
- * @returns {ReactComponentElement} Container Component For ither Playlist
- * or Library
+ * Meant to solely be used as a "Parent" class and should not be used
+ * on its own
+ * @param {ReactComponentElement[]} cards An array of Card components to 
+ * display in the container
+ * @returns {ReactComponentElement} Container component displaying either
+ * the songs of a playlist or the playlists in a library
  */
 function Container({ cards }) {
     return (

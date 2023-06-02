@@ -1,5 +1,11 @@
 import Card from "./Card"
 
+/**
+ * Component for displaying songs in a playlist
+ * @param {Object} song A song object
+ * @returns A Card component displaying the details of a
+ * given song
+ */
 function SongCard({ song }) {
     const songData = <span
         className="d-flex flex-column"

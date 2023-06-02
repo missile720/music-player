@@ -3,13 +3,14 @@ import PlaylistCard from "./PlaylistCard"
 
 /**
  * A container component that displays a library of playlists
+ * by converting the playlists into playlist cards
  * @param {Object[]} library An array of playlist objects
- * @returns A container component displaying cards for each playlist
- * in the library
+ * @returns {Container} A Container that displays PlaylistCard
+ * elements
  */
 function LibraryContainer({ library }) {
-    const playlistCards = library.map(playlist =>
-        <PlaylistCard playlist={playlist} />)
+    const playlistCards = library.map((playlist, index) =>
+        <PlaylistCard key={index} playlist={playlist} />)
 
     return <Container cards={playlistCards} />
 }

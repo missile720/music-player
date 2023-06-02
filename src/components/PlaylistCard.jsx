@@ -3,10 +3,16 @@ import Card from "./Card"
 /**
  * Generates a card for displaying playlists in a library.
  * @param {Object} playlist A playlist object
- * @returns {ReactComponentElement} A Card component displaying the
- * relevant data of a playlist
+ * @returns {Card} A Card that displays PlaylistCard elements
  */
 function PlaylistCard({ playlist }) {
+    /**
+     * Chooses a random index of a track from the playlist. Used
+     * for determining the art to be rendered for a playlist
+     * @param {Object} playlist A playlist object
+     * @returns A random index in the range of [0, The length
+     * of the playlist's tracks]
+     */
     const randomTrackIndex = (playlist) => {
         return Math.floor(Math.random() * playlist.tracks.length)
     }
@@ -18,7 +24,7 @@ function PlaylistCard({ playlist }) {
 
     return (
         <Card
-            coverArt={{ url: playlistArtURL, title: playlist.name }}
+            coverArt={{ url: playlistArtURL, title: randomTrack.album }}
             metaData={playlistTitle}
         />
     )

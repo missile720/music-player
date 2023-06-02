@@ -1,3 +1,7 @@
+/**
+ * Stands for music player card art, used to avoid interfering
+ * with bootstrap's card class
+ */
 .mp-card--art {
     height: 4rem;
 }

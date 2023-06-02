@@ -3,14 +3,14 @@ import "./Card.css"
 /**
  * A generic Card class to display playlists in a library or songs
  * in a playlist. Not meant to be used on its own, is instead
- * used as a generice "Parent" class for PlaylistCard and SongCard
- * @param {Object} coverArt An object that contained the url of the image
+ * used as a generic "Parent" class for PlaylistCard and SongCard
+ * @param {Object} coverArt An object that contains the url of the image
  * to be displayed with the playlist/song as well as the title 
  * of the image for the alt text
  * @param {ReactComponentElement} metaData The React component displaying
  * the most relevant details of a playlist/song to be displayed
- * that displays the relevant data 
- * @returns 
+ * @returns {ReactComponentElement} A Card meant to display relevant
+ * information of a playlist/song
  */
 function Card({ coverArt, metaData }) {
     return (
