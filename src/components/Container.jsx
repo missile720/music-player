@@ -11,7 +11,8 @@ function Container({ cards }) {
     return (
         <section
             className="mp-container container
-            bg-secondary-subtle h-100 w-100 p-3"
+            bg-secondary-subtle h-100 w-100 p-3
+            d-flex flex-column gap-1"
         >
             {cards}
         </section>

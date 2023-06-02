@@ -36,7 +36,7 @@ function Main() {
                     </div>
                     {/* Current playlist */}
                     <div className='col-12 cur-list'>
-                        <PlaylistContainer />
+                        <PlaylistContainer playlist={playlist} />
                     </div>
                     {/* Current song bar */}
                     <div className='col-12 cur-song-bar'>
