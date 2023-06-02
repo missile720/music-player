@@ -1,0 +1,8 @@
+/*
+ * Stands for music player container, used to differentiate from 
+ * Bootstrap's own container classs
+ */
+.mp-container {
+    /* Adds a scrollbar whenever it can't normally contain all cards */
+    overflow-y: auto;
+}
