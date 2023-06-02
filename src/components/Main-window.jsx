@@ -1,5 +1,5 @@
 import Nav from "./Navbar";
-import SettingsBar from "./SettingsBar/SettingsBar";
+import SettingsBar from "./SettingsBar";
 import "./main.css";
 
 function Main() {
