@@ -3,11 +3,10 @@ import Main from "./components/Main-window"
 import './App.css'
 
 function App() {
-
   return (
     <>
-      {Main ? <Main /> : <Login/>}
-      
+      {Main ? <Main /> : <Login />}
+
     </>
   )
 }
