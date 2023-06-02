@@ -1,6 +1,6 @@
-import Login from "./components/Login"
-import Main from "./components/Main-window"
-import './App.css'
+import Login from "./components/Login";
+import Main from "./components/Main-window";
+import "./App.css";
 
 function App() {
   return (
@@ -11,4 +11,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
