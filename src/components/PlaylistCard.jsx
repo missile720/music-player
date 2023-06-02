@@ -1,18 +1,26 @@
+import Card from "./Card"
+
+/**
+ * Generates a card for displaying playlists in a library.
+ * @param {Object} playlist A playlist object
+ * @returns {ReactComponentElement} A Card component displaying the
+ * relevant data of a playlist
+ */
 function PlaylistCard({ playlist }) {
     const randomTrackIndex = (playlist) => {
         return Math.floor(Math.random() * playlist.tracks.length)
     }
 
     const randomTrack = playlist.tracks[randomTrackIndex(playlist)]
+    const playlistArtURL = randomTrack.coverArt
+
+    const playlistTitle = <h4>{playlist.name}</h4>
 
     return (
-        <div className="playlist-card bg-primary p-2 d-flex">
-            <img
-                src={randomTrack.coverArt}
-                alt={`${randomTrack.title} Cover Art`}
-            />
-            <h4>{playlist.name}</h4>
-        </div>
+        <Card
+            coverArt={{ url: playlistArtURL, title: playlist.name }}
+            metaData={playlistTitle}
+        />
     )
 }
 

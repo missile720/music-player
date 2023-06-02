@@ -10,8 +10,8 @@
 function Container({ cards }) {
     return (
         <section
-            className="mp-container container-fluid 
-            bg-secondary-subtle h-100 p-3"
+            className="mp-container container
+            bg-secondary-subtle h-100 w-100 p-3"
         >
             {cards}
         </section>
