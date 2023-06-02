@@ -9,7 +9,7 @@ import './main.css'
 function Main() {
   // Test data is temporary, used for demoing Library and Playlist Containers
   const { playlist } = testData
-
+  console.log(playlist)
   return (
     <div className='container-fluid h-100'>
       <div className='row h-100'>
@@ -25,7 +25,7 @@ function Main() {
           {/* Library playlist */}
           <div className='col-12 lib-list'>
             {/* Library initialized as an array of the single playlist in the test data */}
-            <LibraryContainer library={[playlist]} />
+            <LibraryContainer library={playlist} />
           </div>
           <div className='col-12 settings-bar'>
             <SettingsBar />
@@ -40,7 +40,8 @@ function Main() {
           {/* Current playlist */}
           <div className='col-12 cur-list'>
             {/* Uses the single playlist in the test data to demo the playlist container */}
-            <PlaylistContainer playlist={playlist} />
+            <PlaylistContainer playlist={playlist[0]} />
+            
           </div>
           {/* Current song bar */}
           <div className='col-12 cur-song-bar'>
