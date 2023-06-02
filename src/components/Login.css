@@ -1,0 +1,24 @@
+.login {
+    width: 350px;
+    border-radius: 20px;
+    background-color: aqua;
+}
+
+.login-header{
+    padding: 20px;
+}
+
+.login-form{
+    margin: 20px 0;
+}
+
+.login-form > input, .login-button {
+    margin: 20px;
+}
+
+.signup-text{
+    width: max-content;
+    cursor: pointer;
+    font-size: 15px;
+    text-decoration: underline;
+}
