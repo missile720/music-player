@@ -1,14 +1,14 @@
-import Login from "./components/Login";
-import Main from "./components/Main-window";
-import "./App.css";
+import Login from "./components/Login"
+import Main from "./components/Main-window"
+import './App.css'
 
 function App() {
   return (
     <>
-      {true? <Main /> : <Login />}
+      {false ? <Main /> : <Login />}
 
     </>
   )
 }
 
-export default App;
+export default App
