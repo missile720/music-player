@@ -5,6 +5,7 @@ const Context = React.createContext();
 
 function ContextProvider({ children }) {
   const [accessToken, setAccessToken] = useState("");
+  const [amazonAccessToken, setAmazonAccessToken] = useState("");
   const clientId = "146d22c1a56f4060939214df2f8b8ab4";
   const redirectUri = "http://localhost:5173/callback";
 
@@ -127,7 +128,8 @@ function ContextProvider({ children }) {
     console.log(data);
   }
 
-  async function fetchPlaylists(amazonAccessToken) {
+  async function fetchPlaylists() {
+    console.log(amazonAccessToken);
     const url = "https://api.music.amazon.dev/v1/me";
     const options = {
       headers: {
@@ -161,8 +163,10 @@ function ContextProvider({ children }) {
           alert("oauth error " + response.error);
           return;
         }
-        const amazonAccessToken = response.access_token;
-        fetchPlaylists(amazonAccessToken);
+        const accessToken = response.access_token;
+        setAmazonAccessToken(accessToken);
+        console.log(amazonAccessToken);
+        fetchPlaylists();
       });
     });
   }
