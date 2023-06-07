@@ -1,20 +1,37 @@
-import { useEffect, useState} from 'react';
+import { useState } from "react";
 import "./Login.css"
 
 function Login() {
-  const [accessToken, setAccessToken] = useState('');
-  const clientId = 'a74cfef560a1459780760b9609009811';
-  const redirectUri = 'http://localhost:5173/callback';
+  const [dataSet, setDataSet] = useState({});
 
   async function loginSpotify(){
+    const clientId = 'a74cfef560a1459780760b9609009811';
+    const redirectUri = 'http://localhost:5173/callback';
+
     let codeVerifier = generateRandomString(128);
+
+    async function generateCodeChallenge(codeVerifier) {
+      function base64encode(string) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(string);
+        const base64 = window.btoa(String.fromCharCode(...data));
+        return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      }
+    
+      const encoder = new TextEncoder();
+      const data = encoder.encode(codeVerifier);
+      const digest = await window.crypto.subtle.digest('SHA-256', data);
+    
+      return base64encode(digest);
+    }
+    
 
     generateCodeChallenge(codeVerifier).then(codeChallenge => {
       let state = generateRandomString(16);
-      let scope = 'user-read-private user-read-email';
-    
+      let scope = 'user-read-private user-read-email playlist-read-private'; //make sure to check doc for scope for each type of request
+
       localStorage.setItem('code_verifier', codeVerifier);
-    
+
       let args = new URLSearchParams({
         response_type: 'code',
         client_id: clientId,
@@ -24,26 +41,61 @@ function Login() {
         code_challenge_method: 'S256',
         code_challenge: codeChallenge
       });
-    
+
       window.location = 'https://accounts.spotify.com/authorize?' + args;
     });
+
+    const urlParams = new URLSearchParams(window.location.search);
+    let code = urlParams.get('code');
+
+    codeVerifier = localStorage.getItem('code_verifier');
+
+    let body = new URLSearchParams({
+      grant_type: 'authorization_code',
+      code: code,
+      redirect_uri: redirectUri,
+      client_id: clientId,
+      code_verifier: codeVerifier
+    });
+
+    const response = fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: body
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('HTTP status ' + response.status);
+        }
+        return response.json();
+      })
+      .then(data => {
+        localStorage.setItem('access_token', data.access_token);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   }
 
-  async function generateCodeChallenge(codeVerifier) {
-    function base64encode(string) {
-      return btoa(String.fromCharCode.apply(null, new Uint8Array(string)))
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=+$/, '');
-    }
+  //getProfile();
+
+  async function getProfile() {
+    let accessToken = localStorage.getItem('access_token');
   
-    const encoder = new TextEncoder();
-    const data = encoder.encode(codeVerifier);
-    const digest = await window.crypto.subtle.digest('SHA-256', data);
+    const response = await fetch('https://api.spotify.com/v1/me', {
+      headers: {
+        Authorization: 'Bearer ' + accessToken
+      }
+    });
   
-    return base64encode(digest);
+    const data = await response.json();
+    setDataSet(data);
   }
-  
+
+  console.log(dataSet);
+
   function generateRandomString(length) {
     let text = '';
     let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -54,78 +106,11 @@ function Login() {
     return text;
   }
 
-  useEffect(() => {
-    // Check if the current URL contains the authorization code and state
-    const params = new URLSearchParams(window.location.search);
-    const authorizationCode = params.get('code');
-    const state = params.get('state');
-
-    if (authorizationCode && state) {
-      // Verify the state if needed
-
-      // Exchange the authorization code for an access token
-      exchangeAuthorizationCode(authorizationCode);
-    }
-  }, []);
-
-  useEffect(() => {
-    if(accessToken){
-      getProfilePlaylists(accessToken);
-    }
-  },[accessToken])
-
-  const exchangeAuthorizationCode = async (code) => {
-    const codeVerifier = localStorage.getItem('code_verifier');
-
-    try {
-      const response = await fetch('https://accounts.spotify.com/api/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
-          code: code,
-          redirect_uri: redirectUri,
-          client_id: clientId,
-          code_verifier: codeVerifier
-        })
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to exchange authorization code for access token');
-      }
-  
-      const data = await response.json();
-
-      setAccessToken(data.access_token);
-      // Store the access token in your application state or any other suitable location
-      // Optionally, you can also store the refresh token, expiration time, and other relevant information
-  
-    } catch (error) {
-      console.error('Error exchanging authorization code for access token:', error);
-      // Handle the error in an appropriate way
-    }
-  };
-
-  async function getProfilePlaylists(accessToken) {
-
-    const response = await fetch('https://api.spotify.com/v1/me/playlists', {
-      headers: {
-        Authorization: 'Bearer ' + accessToken
-      }
-    });
-  
-    const data = await response.json();
-    console.log(data);
-  }
-
   return (
     <div className='container-fluid d-flex align-items-center justify-content-center h-100'>
         <div className='login d-flex align-items-center flex-column'>
             <h1 className="login-header">Login to account:</h1>
               <button className="login-button" onClick={loginSpotify}>Connect Spotify Account</button>
-              {/* <button className="login-button">Connect SoundCloud Account</button> */}
               <button className="login-button">Connect ITunes Account</button>
         </div>
     </div>
