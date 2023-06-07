@@ -1,9 +1,11 @@
 import { useContext } from 'react';
 import { Context } from "../Context"
+import { YouTubeContext } from '../YouTubeContext'
 import "./Login.css"
 
 function Login() {
-  const { loginSpotify } = useContext(Context);
+  const { loginSpotify } = useContext(Context)
+  const { loginYouTube } = useContext(YouTubeContext)
 
   return (
     <div className='container-fluid d-flex align-items-center justify-content-center h-100'>
@@ -12,7 +14,7 @@ function Login() {
         <button className="login-button" onClick={loginSpotify}>Connect Spotify Account</button>
         {/* <button className="login-button">Connect SoundCloud Account</button> */}
         <button className="login-button">Connect ITunes Account</button>
-        <button className="login-button">Connect YouTube Account</button>
+        <button className="login-button" onClick={loginYouTube}>Connect YouTube Account</button>
       </div>
     </div>
   )
