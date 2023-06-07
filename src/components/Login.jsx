@@ -1,4 +1,4 @@
-import { useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import "./Login.css"
 
 function Login() {
@@ -6,15 +6,15 @@ function Login() {
   const clientId = '146d22c1a56f4060939214df2f8b8ab4';
   const redirectUri = 'http://localhost:5173/callback';
 
-  async function loginSpotify(){
+  async function loginSpotify() {
     let codeVerifier = generateRandomString(128);
 
     generateCodeChallenge(codeVerifier).then(codeChallenge => {
       let state = generateRandomString(16);
       let scope = 'user-read-private user-read-email';
-    
+
       localStorage.setItem('code_verifier', codeVerifier);
-    
+
       let args = new URLSearchParams({
         response_type: 'code',
         client_id: clientId,
@@ -24,7 +24,7 @@ function Login() {
         code_challenge_method: 'S256',
         code_challenge: codeChallenge
       });
-    
+
       window.location = 'https://accounts.spotify.com/authorize?' + args;
     });
   }
@@ -36,18 +36,18 @@ function Login() {
         .replace(/\//g, '_')
         .replace(/=+$/, '');
     }
-  
+
     const encoder = new TextEncoder();
     const data = encoder.encode(codeVerifier);
     const digest = await window.crypto.subtle.digest('SHA-256', data);
-  
+
     return base64encode(digest);
   }
-  
+
   function generateRandomString(length) {
     let text = '';
     let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  
+
     for (let i = 0; i < length; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
@@ -69,10 +69,10 @@ function Login() {
   }, []);
 
   useEffect(() => {
-    if(accessToken){
+    if (accessToken) {
       getProfile(accessToken);
     }
-  },[accessToken])
+  }, [accessToken])
 
   const exchangeAuthorizationCode = async (code) => {
     const codeVerifier = localStorage.getItem('code_verifier');
@@ -91,17 +91,17 @@ function Login() {
           code_verifier: codeVerifier
         })
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to exchange authorization code for access token');
       }
-  
+
       const data = await response.json();
 
       setAccessToken(data.access_token);
       // Store the access token in your application state or any other suitable location
       // Optionally, you can also store the refresh token, expiration time, and other relevant information
-  
+
     } catch (error) {
       console.error('Error exchanging authorization code for access token:', error);
       // Handle the error in an appropriate way
@@ -115,19 +115,20 @@ function Login() {
         Authorization: 'Bearer ' + accessToken
       }
     });
-  
+
     const data = await response.json();
     console.log(data);
   }
 
   return (
     <div className='container-fluid d-flex align-items-center justify-content-center h-100'>
-        <div className='login d-flex align-items-center flex-column'>
-            <h1 className="login-header">Login to account:</h1>
-              <button className="login-button" onClick={loginSpotify}>Connect Spotify Account</button>
-              {/* <button className="login-button">Connect SoundCloud Account</button> */}
-              <button className="login-button">Connect ITunes Account</button>
-        </div>
+      <div className='login d-flex align-items-center flex-column'>
+        <h1 className="login-header">Login to account:</h1>
+        <button className="login-button" onClick={loginSpotify}>Connect Spotify Account</button>
+        {/* <button className="login-button">Connect SoundCloud Account</button> */}
+        <button className="login-button">Connect ITunes Account</button>
+        <button className="login-button">Connect YouTube Account</button>
+      </div>
     </div>
   )
 }
