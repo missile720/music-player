@@ -3,7 +3,7 @@ import "./Login.css"
 
 function Login() {
   const [accessToken, setAccessToken] = useState('');
-  const clientId = 'a74cfef560a1459780760b9609009811';
+  const clientId = '146d22c1a56f4060939214df2f8b8ab4';
   const redirectUri = 'http://localhost:5173/callback';
 
   async function loginSpotify(){
@@ -70,7 +70,7 @@ function Login() {
 
   useEffect(() => {
     if(accessToken){
-      getProfilePlaylists(accessToken);
+      getProfile(accessToken);
     }
   },[accessToken])
 
@@ -108,9 +108,9 @@ function Login() {
     }
   };
 
-  async function getProfilePlaylists(accessToken) {
-
-    const response = await fetch('https://api.spotify.com/v1/me/playlists', {
+  async function getProfile(accessToken) {
+    console.log(accessToken)
+    const response = await fetch('https://api.spotify.com/v1/me', {
       headers: {
         Authorization: 'Bearer ' + accessToken
       }
