@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useContext } from "react";
+import { Context } from "../Context";
 import "./Login.css";
 
 function Login() {
@@ -124,48 +125,6 @@ function Login() {
     const data = await response.json();
     console.log(data);
   }
-
-  function loginAmazon() {
-    const options = {
-      scope: "profile",
-      pkce: true,
-      scope_data: {
-        profile: { essential: false },
-      },
-    };
-    amazon.Login.authorize(options, function (response) {
-      if (response.error) {
-        alert("oauth error " + response.error);
-        return;
-      }
-      amazon.Login.retrieveToken(response.code, function (response) {
-        if (response.error) {
-          alert("oauth error " + response.error);
-          return;
-        }
-        console.log("Access Token: " + response.access_token);
-      });
-    });
-  }
-
-  /*
-      <script type="text/javascript">
-      window.onAmazonLoginReady = function () {
-        amazon.Login.setClientId(
-          "amzn1.application-oa2-client.4647d811315141b7ad84ee97c7e9da1c"
-        );
-      };
-      (function (d) {
-        var a = d.createElement("script");
-        a.type = "text/javascript";
-        a.async = true;
-        a.id = "amazon-login-sdk";
-        a.src = "https://assets.loginwithamazon.com/sdk/na/login1.js";
-        d.getElementById("amazon-root").appendChild(a);
-      })(document);
-    </script>
-
-  */
 
   return (
     <div className="container-fluid d-flex align-items-center justify-content-center h-100">
