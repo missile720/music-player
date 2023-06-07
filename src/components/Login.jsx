@@ -1,6 +1,9 @@
 import { useContext } from "react";
 import { Context } from "../Context";
 import "./Login.css";
+import { useContext } from "react";
+import { Context } from "../Context";
+import "./Login.css";
 
 function Login() {
   const { loginSpotify, loginAmazon } = useContext(Context);
