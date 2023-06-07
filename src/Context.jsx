@@ -5,6 +5,7 @@ const Context = React.createContext()
 
 function ContextProvider({ children }) {
     const [accessToken, setAccessToken] = useState('');
+    const [userProfileSpotify, setUserProfileSpotify] = useState({});
     const clientId = '146d22c1a56f4060939214df2f8b8ab4';
     const redirectUri = 'http://localhost:5173/callback';
 
@@ -33,7 +34,7 @@ function ContextProvider({ children }) {
 
     async function generateCodeChallenge(codeVerifier) {
         function base64encode(string) {
-            return btoa(String.fromCharCode.apply(null, new Uint8Array(string)))
+            return window.btoa(String.fromCharCode.apply(null, new Uint8Array(string)))
                 .replace(/\+/g, '-')
                 .replace(/\//g, '_')
                 .replace(/=+$/, '');
@@ -119,12 +120,13 @@ function ContextProvider({ children }) {
         });
 
         const data = await response.json();
-        console.log(data);
+        console.log(data)
+        setUserProfileSpotify(data);
     }
 
 
     return (
-        <Context.Provider value={{ accessToken, clientId, redirectUri, loginSpotify }}>
+        <Context.Provider value={{ accessToken, userProfileSpotify, loginSpotify }}>
             {children}
         </Context.Provider>
     )
