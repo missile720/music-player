@@ -1,3 +1,4 @@
+/* eslint react/prop-types: 0 */
 import Container from "./Container"
 import PlaylistCard from "./PlaylistCard"
 
