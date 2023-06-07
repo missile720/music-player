@@ -1,3 +1,4 @@
+/* eslint react/prop-types: 0 */
 /**
  * Give props for cards to display, displays the cards in the container.
  * Meant to solely be used as a "Parent" class and should not be used
