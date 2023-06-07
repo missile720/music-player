@@ -126,6 +126,29 @@ function Login() {
     console.log(data);
   }
 
+  function loginAmazon() {
+    const options = {
+      scope: "profile",
+      pkce: true,
+      scope_data: {
+        profile: { essential: false },
+      },
+    };
+    amazon.Login.authorize(options, function (response) {
+      if (response.error) {
+        alert("oauth error " + response.error);
+        return;
+      }
+      amazon.Login.retrieveToken(response.code, function (response) {
+        if (response.error) {
+          alert("oauth error " + response.error);
+          return;
+        }
+        console.log("Access Token: " + response.access_token);
+      });
+    });
+  }
+
   return (
     <div className="container-fluid d-flex align-items-center justify-content-center h-100">
       <div className="login d-flex align-items-center flex-column">
