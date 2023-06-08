@@ -1,4 +1,6 @@
 /* eslint react/prop-types: 0 */
+import {useContext} from 'react';
+import {Context} from "../Context"
 import Container from "./Container"
 import PlaylistCard from "./PlaylistCard"
 
@@ -9,11 +11,16 @@ import PlaylistCard from "./PlaylistCard"
  * @returns {Container} A Container that displays PlaylistCard
  * elements
  */
-function LibraryContainer({ library }) {
-    const playlistCards = library.map((playlist, index) =>
+function LibraryContainer() {
+    const {userPlaylistSpotify} = useContext(Context);
+    
+    if(userPlaylistSpotify.items){
+        const playlistCards = userPlaylistSpotify.items.map((playlist, index) =>
         <PlaylistCard key={index} playlist={playlist} />)
 
-    return <Container cards={playlistCards} />
+        return <Container cards={playlistCards} />
+    }
+
 }
 
 export default LibraryContainer
