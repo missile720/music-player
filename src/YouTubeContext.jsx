@@ -1,19 +1,24 @@
 import { useState, useEffect, createContext } from "react"
+import config from "./apiConfig.js"
 
 const YouTubeContext = createContext()
 
 function YouTubeContextProvider({ children }) {
     // State Variables
-    const [youTubeAccessToken, setYouTubeAccessToken] = useState()
+    const [youTubeAccessToken, setYouTubeAccessToken] = useState("")
     const fragmentString = location.hash.substring(1)
 
+    // API Config Consts
+    const { youTubeConfig } = config
+    const { clientId, apiKey } = youTubeConfig
+
     // Constants
-    const clientId = "355803749408-kcs13sp2rj45tnebbro4lbbpctsl9p5v.apps.googleusercontent.com"
     const redirectUri = "http://localhost:5173/callback"
     const scope = "https://www.googleapis.com/auth/youtube.readonly"
     const oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth"
 
-    // Side effect for checking if an access token has been granted
+    // Side effect for checking if an access token has been granted.
+    // If it has, logs the user's playlists.
     useEffect(() => {
         const params = {}
         const regex = /([^&=]+)=([^&]*)/g
@@ -25,6 +30,10 @@ function YouTubeContextProvider({ children }) {
 
         if (Object.keys(params).length > 0) {
             localStorage.setItem("oauth2-test-params", JSON.stringify(params))
+            if (params["access_token"]) {
+                setYouTubeAccessToken(params["access_token"])
+                console.log(`success, access token: ${youTubeAccessToken}`)
+            }
         }
 
     }, [])
