@@ -128,21 +128,39 @@ function ContextProvider({ children }) {
     console.log(data);
   }
 
-  async function fetchPlaylists() {
-    console.log(amazonAccessToken);
-    const url = "https://api.music.amazon.dev/v1/me";
+  async function fetchUserProfile() {
+    const url = "https://api.amazon.com/user/profile";
     const options = {
       headers: {
-        "x-api-key":
-          "amzn1.application-oa2-client.4647d811315141b7ad84ee97c7e9da1c",
-        Authorization: "Bearer " + amazonAccessToken,
+        Authorization: `Bearer ${amazonAccessToken}`,
+        "x-api-key": "amzn1.application-oa2-client.4647d811315141b7ad84ee97c7e9da1c"
+      },
+    };
+    try {
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error("User data request failed with status: ", response.status)
+      }
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.log("Error fetching user profile: ", error)
+    }
+  }
+
+  async function fetchAmazonTopPlaylists() {
+    const url = 'https://api.music.amazon.dev/browse/playlists/top';
+    const options = {
+      headers: {
+        Authorization: `Bearer ${amazonAccessToken}`,
+        "x-api-key": "amzn1.application-oa2-client.4647d811315141b7ad84ee97c7e9da1c"
       },
     };
 
     const response = await fetch(url, options);
     const data = await response.json();
     console.log(data);
-    return data;
+
   }
 
   function loginAmazon() {
@@ -155,18 +173,18 @@ function ContextProvider({ children }) {
     };
     amazon.Login.authorize(options, function (response) {
       if (response.error) {
-        alert("oauth error " + response.error);
+        console.log("oauth error: " + response.error);
         return;
       }
       amazon.Login.retrieveToken(response.code, function (response) {
         if (response.error) {
-          alert("oauth error " + response.error);
+          console.log("oauth error: " + response.error);
           return;
         }
         const accessToken = response.access_token;
         setAmazonAccessToken(accessToken);
-        console.log(amazonAccessToken);
-        fetchPlaylists();
+        fetchUserProfile();
+        fetchAmazonTopPlaylists();
       });
     });
   }
