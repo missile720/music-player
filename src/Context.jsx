@@ -5,6 +5,8 @@ const Context = React.createContext()
 
 function ContextProvider({ children }) {
     const [accessToken, setAccessToken] = useState('');
+    const [refreshToken, setRefreshToken] = useState('');
+    const [expiresIn, setExpiresIn] = useState('');
     const [userProfileSpotify, setUserProfileSpotify] = useState({});
     const clientId = '146d22c1a56f4060939214df2f8b8ab4';
     const redirectUri = 'http://localhost:5173/callback';
@@ -57,26 +59,6 @@ function ContextProvider({ children }) {
         return text;
     }
 
-    useEffect(() => {
-        // Check if the current URL contains the authorization code and state
-        const params = new URLSearchParams(window.location.search);
-        const authorizationCode = params.get('code');
-        const state = params.get('state');
-
-        if (authorizationCode && state) {
-            // Verify the state if needed
-
-            // Exchange the authorization code for an access token
-            exchangeAuthorizationCode(authorizationCode);
-        }
-    }, []);
-
-    useEffect(() => {
-        if (accessToken) {
-            getProfile(accessToken);
-        }
-    }, [accessToken])
-
     const exchangeAuthorizationCode = async (code) => {
         const codeVerifier = localStorage.getItem('code_verifier');
 
@@ -100,19 +82,17 @@ function ContextProvider({ children }) {
             }
 
             const data = await response.json();
-
             setAccessToken(data.access_token);
-            // Store the access token in your application state or any other suitable location
-            // Optionally, you can also store the refresh token, expiration time, and other relevant information
+            setRefreshToken(data.refresh_token);
+            setExpiresIn(data.expires_in);
+            window.history.pushState({}, null, "/");
 
         } catch (error) {
             console.error('Error exchanging authorization code for access token:', error);
-            // Handle the error in an appropriate way
         }
     };
 
     async function getProfile(accessToken) {
-        console.log(accessToken)
         const response = await fetch('https://api.spotify.com/v1/me', {
             headers: {
                 Authorization: 'Bearer ' + accessToken
@@ -120,10 +100,64 @@ function ContextProvider({ children }) {
         });
 
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         setUserProfileSpotify(data);
     }
 
+    useEffect(() => {
+        // Check if the current URL contains the authorization code and state
+        const params = new URLSearchParams(window.location.search);
+        const authorizationCode = params.get('code');
+        const state = params.get('state');
+
+        if (authorizationCode && state) {
+            // Verify the state if needed
+
+            // Exchange the authorization code for an access token
+            exchangeAuthorizationCode(authorizationCode);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (accessToken) {
+            getProfile(accessToken);
+        }
+    }, [accessToken]);
+
+    useEffect(() => {
+        if(!refreshToken || !expiresIn){
+            return;
+        }
+        //Right before token expires this runs the refresh token
+        const refreshInterval = setInterval(async () => {
+            try {
+                const response = await fetch('https://accounts.spotify.com/api/token', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: new URLSearchParams({
+                        grant_type: 'refresh_token',
+                        refresh_token: refreshToken,
+                        client_id: clientId
+                    })
+                });
+    
+                if (!response.ok) {
+                    throw new Error('Failed to refresh access token');
+                }
+    
+                const data = await response.json();
+                setAccessToken(data.access_token);
+                setRefreshToken(data.refresh_token);
+                setExpiresIn(data.expires_in);
+            } catch (error) {
+                console.error('Error exchanging authorization code for access token:', error);
+            }
+        }, (expiresIn - 60) * 1000);
+
+        return () => clearInterval(refreshInterval);
+    }, [refreshToken,expiresIn]);
 
     return (
         <Context.Provider value={{ accessToken, userProfileSpotify, loginSpotify }}>
