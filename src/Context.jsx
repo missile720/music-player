@@ -8,6 +8,7 @@ function ContextProvider({ children }) {
     const [refreshToken, setRefreshToken] = useState('');
     const [expiresIn, setExpiresIn] = useState('');
     const [userProfileSpotify, setUserProfileSpotify] = useState({});
+    const [userPlaylistSpotify, setUserPlaylistSpotify] = useState({});
     const clientId = '146d22c1a56f4060939214df2f8b8ab4';
     const redirectUri = 'http://localhost:5173/callback';
 
@@ -104,6 +105,18 @@ function ContextProvider({ children }) {
         setUserProfileSpotify(data);
     }
 
+    async function getProfilePlaylist(accessToken) {
+        const response = await fetch('https://api.spotify.com/v1/me/playlists', {
+            headers: {
+                Authorization: 'Bearer ' + accessToken
+            }
+        });
+
+        const data = await response.json();
+        console.log(data);
+        setUserPlaylistSpotify(data);
+    }
+
     useEffect(() => {
         // Check if the current URL contains the authorization code and state
         const params = new URLSearchParams(window.location.search);
@@ -112,15 +125,16 @@ function ContextProvider({ children }) {
 
         if (authorizationCode && state) {
             // Verify the state if needed
-
             // Exchange the authorization code for an access token
             exchangeAuthorizationCode(authorizationCode);
         }
     }, []);
 
+    //retrieve Spotify data
     useEffect(() => {
         if (accessToken) {
             getProfile(accessToken);
+            getProfilePlaylist(accessToken);
         }
     }, [accessToken]);
 
@@ -160,7 +174,7 @@ function ContextProvider({ children }) {
     }, [refreshToken,expiresIn]);
 
     return (
-        <Context.Provider value={{ accessToken, userProfileSpotify, loginSpotify }}>
+        <Context.Provider value={{ accessToken, userProfileSpotify, userPlaylistSpotify, loginSpotify }}>
             {children}
         </Context.Provider>
     )
