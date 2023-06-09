@@ -1,11 +1,19 @@
 .current-song-container {
   width: 500px;
   display: flex;
-  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  justify-content: space-evenly;
+  
 }
 
 .current-song-left-side {
   display: flex;
+  justify-content: space-around;
+  align-items: center;
+  
+  
 }
 ul {
   padding-left: 1em;
@@ -17,4 +25,14 @@ li {
 .music-play-buttons {
   display: flex;
   justify-content: space-between;
+}
+
+#range {
+  width: 100%;
+}
+
+.current-song-right-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

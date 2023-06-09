@@ -175,7 +175,7 @@ function ContextProvider({ children }) {
     }, [refreshToken, expiresIn]);
 
     return (
-        <Context.Provider value={{ accessToken, userProfileSpotify, userPlaylistSpotify, loginSpotify, loginAmazon, fetchAmazonTopPlaylists, fetchUserProfile }}>
+        <Context.Provider value={{ accessToken, userProfileSpotify, userPlaylistSpotify, loginSpotify }}>
             {children}
         </Context.Provider>
     )

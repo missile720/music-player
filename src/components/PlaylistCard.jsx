@@ -1,3 +1,4 @@
+/* eslint react/prop-types: 0 */
 import Card from "./Card"
 
 /**
@@ -13,18 +14,15 @@ function PlaylistCard({ playlist }) {
      * @returns A random index in the range of [0, The length
      * of the playlist's tracks]
      */
-    const randomTrackIndex = (playlist) => {
-        return Math.floor(Math.random() * playlist.tracks.length)
-    }
 
-    const randomTrack = playlist.tracks[randomTrackIndex(playlist)]
-    const playlistArtURL = randomTrack.coverArt
+
+    const playlistArtURL = playlist.images[0].url;
 
     const playlistTitle = <h4>{playlist.name}</h4>
 
     return (
         <Card
-            coverArt={{ url: playlistArtURL, title: randomTrack.album }}
+            coverArt={{ url: playlistArtURL, title: playlist.name }}
             metaData={playlistTitle}
         />
     )

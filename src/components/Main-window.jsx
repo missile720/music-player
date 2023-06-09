@@ -3,6 +3,7 @@ import LibraryContainer from "./LibraryContainer"
 import PlaylistContainer from "./PlaylistContainer"
 import testData from "../data/test-playlist-data.js"
 import SettingsBar from './SettingsBar'
+import CurrentSong from './CurrentSong'
 import './main.css'
 
 
@@ -44,8 +45,8 @@ function Main() {
             
           </div>
           {/* Current song bar */}
-          <div className='col-12 cur-song-bar'>
-            Current song playing COMPONENT goes here
+          <div className='col-12 cur-song-bar '>
+            < CurrentSong />
           </div>
         </div>
       </div>

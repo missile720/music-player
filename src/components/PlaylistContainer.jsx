@@ -1,9 +1,10 @@
+/* eslint react/prop-types: 0 */
 import Container from "./Container"
 import SongCard from "./SongCard"
 
 /**
  * Displays the contents of a playlist by generating
- * SongCard elements for each track in its tracklist.
+ * SongCard elements for each track in its track list.
  * @param {Object} playlist A playlist object
  * @returns {Container} A Container that displays SongCard
  * elements for songs in a playlist
