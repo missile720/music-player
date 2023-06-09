@@ -4,7 +4,7 @@ import { YouTubeContext } from "../YouTubeContext"
 import "./Login.css"
 
 function Login() {
-  const { loginSpotify } = useContext(Context)
+  const { loginSpotify, loginAmazon } = useContext(Context)
   const { loginYouTube } = useContext(YouTubeContext)
 
   return (
@@ -13,11 +13,11 @@ function Login() {
         <h1 className="login-header">Login to account:</h1>
         <button className="login-button" onClick={loginSpotify}>Connect Spotify Account</button>
         {/* <button className="login-button">Connect SoundCloud Account</button> */}
-        <button className="login-button">Connect ITunes Account</button>
+        <button className="login-button" onClick={loginAmazon}>Connect Amazon Account</button>
         <button className="login-button" onClick={loginYouTube}>Connect YouTube Account</button>
       </div>
     </div>
-  )
+  );
 }
 
-export default Login
+export default Login;

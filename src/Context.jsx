@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
+import { loginAmazon, fetchAmazonTopPlaylists, fetchUserProfile } from "./components/AmazonAuth";
 
 const Context = React.createContext()
 
@@ -139,7 +140,7 @@ function ContextProvider({ children }) {
     }, [accessToken]);
 
     useEffect(() => {
-        if(!refreshToken || !expiresIn){
+        if (!refreshToken || !expiresIn) {
             return;
         }
         //Right before token expires this runs the refresh token
@@ -156,11 +157,11 @@ function ContextProvider({ children }) {
                         client_id: clientId
                     })
                 });
-    
+
                 if (!response.ok) {
                     throw new Error('Failed to refresh access token');
                 }
-    
+
                 const data = await response.json();
                 setAccessToken(data.access_token);
                 setRefreshToken(data.refresh_token);
@@ -171,10 +172,10 @@ function ContextProvider({ children }) {
         }, (expiresIn - 60) * 1000);
 
         return () => clearInterval(refreshInterval);
-    }, [refreshToken,expiresIn]);
+    }, [refreshToken, expiresIn]);
 
     return (
-        <Context.Provider value={{ accessToken, userProfileSpotify, userPlaylistSpotify, loginSpotify }}>
+        <Context.Provider value={{ accessToken, userProfileSpotify, userPlaylistSpotify, loginSpotify, loginAmazon, fetchAmazonTopPlaylists, fetchUserProfile }}>
             {children}
         </Context.Provider>
     )
