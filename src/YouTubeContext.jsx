@@ -1,5 +1,4 @@
 import { useState, useEffect, createContext } from "react"
-import config from "./apiConfig.js"
 
 const YouTubeContext = createContext()
 
@@ -17,9 +16,14 @@ function YouTubeContextProvider({ children }) {
     const [youTubeAccessToken, setYouTubeAccessToken] = useState("")
     const fragmentString = location.hash.substring(1)
 
-    // API Config Consts
-    const { youTubeConfig } = config
-    const { clientId, apiKey } = youTubeConfig
+    // API Constants from env
+    const {
+        VITE_REACT_YOUTUBE_CLIENT_ID,
+        VITE_REACT_YOUTUBE_API_KEY
+    } = import.meta.env
+
+    console.log(VITE_REACT_YOUTUBE_CLIENT_ID)
+    console.log(VITE_REACT_YOUTUBE_API_KEY)
 
     // Constants
     const redirectUri = "http://localhost:5173/callback"
@@ -28,6 +32,7 @@ function YouTubeContextProvider({ children }) {
     const youTubeApiPlaylistsUrl = "https://www.googleapis.com/youtube/v3/playlists?"
     const youTubeApiPlaylistItemsUrl = "https://www.googleapis.com/youtube/v3/playlistItems?"
 
+    // Effects
     // Side effect for checking if an access token has been granted.
     // If it has, logs the user's playlists.
     useEffect(() => {
@@ -53,6 +58,7 @@ function YouTubeContextProvider({ children }) {
         loadYouTubePlaylists()
     }
 
+    // Event Handler
     /**
      * Redirects user to OAuth2 page for YouTube, which determines the App's
      * access to the User's YouTube info
@@ -64,7 +70,7 @@ function YouTubeContextProvider({ children }) {
         form.setAttribute("action", oauth2Endpoint)
 
         const params = {
-            "client_id": clientId,
+            "client_id": VITE_REACT_YOUTUBE_CLIENT_ID,
             "redirect_uri": redirectUri,
             "response_type": "token",
             "scope": scope,
@@ -83,6 +89,7 @@ function YouTubeContextProvider({ children }) {
         form.submit()
     }
 
+    // Functions
     /**
      * Loads the user's playlists. Performs a fetch request then console logs the user's
      * playlists. 
@@ -97,18 +104,24 @@ function YouTubeContextProvider({ children }) {
                 ],
                 "mine": "true",
                 "access_token": youTubeAccessToken,
-                "key": apiKey
+                "key": VITE_REACT_YOUTUBE_API_KEY
             })
 
             // Used for API calls to get playlistItems (Effectivly the songs of a playlist)
             const playlistItemsArgs = new URLSearchParams({
                 "part": "snippet",
                 "access_token": youTubeAccessToken,
-                "key": apiKey
+                "key": VITE_REACT_YOUTUBE_API_KEY
             })
 
             const playlistRes = await fetch(youTubeApiPlaylistsUrl + playlistArgs)
             const playlistData = await playlistRes.json()
+
+            // If the API call returns an error, console logs the returned Error
+            if (playlistData.error) {
+                console.log(playlistData.error.message)
+                return
+            }
 
             console.log("--------YouTube Playlists-------")
             for (let i = 0; i < playlistData.items.length; i++) {
@@ -120,6 +133,7 @@ function YouTubeContextProvider({ children }) {
         }
     }
 
+    // Helper Functions
     /**
      * Logs a playlist and its contents to the console.
      * @param {Object} item An object representing an entry in the items
@@ -136,6 +150,10 @@ function YouTubeContextProvider({ children }) {
 
         const playlistItemsRes = await fetch(youTubeApiPlaylistItemsUrl + playlistItemsArgs)
         const playlistItemsData = await playlistItemsRes.json()
+
+        if (playlistItemsData.error) {
+            console.log(playlistItemsData.error.message)
+        }
 
         const { items } = playlistItemsData
         for (let playlistItem of items) {

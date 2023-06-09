@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Context } from "../Context"
-import { YouTubeContext } from '../YouTubeContext.jsx'
+import { YouTubeContext } from "../YouTubeContext"
 import "./Login.css"
 
 function Login() {
