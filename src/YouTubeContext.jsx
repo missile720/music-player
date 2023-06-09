@@ -16,6 +16,8 @@ function YouTubeContextProvider({ children }) {
     const redirectUri = "http://localhost:5173/callback"
     const scope = "https://www.googleapis.com/auth/youtube.readonly"
     const oauth2Endpoint = "https://accounts.google.com/o/oauth2/v2/auth"
+    const youTubeApiPlaylistsUrl = "https://www.googleapis.com/youtube/v3/playlists?"
+    const youTubeApiPlaylistItemsUrl = "https://www.googleapis.com/youtube/v3/playlistItems?"
 
     // Side effect for checking if an access token has been granted.
     // If it has, logs the user's playlists.
@@ -32,11 +34,15 @@ function YouTubeContextProvider({ children }) {
             localStorage.setItem("oauth2-test-params", JSON.stringify(params))
             if (params["access_token"]) {
                 setYouTubeAccessToken(params["access_token"])
-                console.log(`success, access token: ${youTubeAccessToken}`)
+                console.log(`success, access token`)
             }
         }
 
     }, [])
+
+    if (youTubeAccessToken) {
+        loadYouTubePlaylists()
+    }
 
     /**
      * Redirects user to OAuth2 page for YouTube, which determines the App's
@@ -66,6 +72,51 @@ function YouTubeContextProvider({ children }) {
 
         document.body.appendChild(form)
         form.submit()
+    }
+
+    /**
+     * Loads the user's playlists. Performs a fetch request then console logs the user's
+     * playlists. 
+     * 
+     */
+    async function loadYouTubePlaylists() {
+        try {
+            const playlistArgs = new URLSearchParams({
+                "part": [
+                    "snippet",
+                    "contentDetails"
+                ],
+                "mine": "true",
+                "access_token": youTubeAccessToken,
+                "key": apiKey
+            })
+
+            const playlistItemsArgs = new URLSearchParams({
+                "part": [
+                    "snippet",
+                    "contentDetails"
+                ],
+                "access_token": youTubeAccessToken,
+                "key": apiKey
+            })
+
+            const playlistRes = await fetch(youTubeApiPlaylistsUrl + playlistArgs)
+            const playlistData = await playlistRes.json()
+
+            console.log("--------YouTube Playlists-------")
+            for (let i = 0; i < playlistData.items.length; i++) {
+                console.log(`${i}: ${playlistData.items[i].snippet.title}`)
+                playlistItemsArgs.append("id", playlistData.items[i].contentDetails.id)
+                const playlistItemsRes = await fetch(youTubeApiPlaylistItemsUrl + playlistItemsArgs)
+                const playlistItemsData = await playlistItemsRes.json()
+                console.log(playlistItemsData)
+
+                playlistItemsArgs.delete("id")
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
