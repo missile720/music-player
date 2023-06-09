@@ -22,9 +22,6 @@ function YouTubeContextProvider({ children }) {
         VITE_REACT_YOUTUBE_API_KEY
     } = import.meta.env
 
-    console.log(VITE_REACT_YOUTUBE_CLIENT_ID)
-    console.log(VITE_REACT_YOUTUBE_API_KEY)
-
     // Constants
     const redirectUri = "http://localhost:5173/callback"
     const scope = "https://www.googleapis.com/auth/youtube.readonly"
