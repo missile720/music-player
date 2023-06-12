@@ -25,7 +25,7 @@ function Nav() {
         <div className="row h-100 align-items-center">
             {/* user icon */}
             <div className="col-2">
-                <img src={getProfilePic()} width="80" height="80" alt="User's profile picture" />
+                <img src={getProfilePic()} width="80px" height="80px" alt="User's profile picture" />
             </div>
 
             <div className="col-9 align-self-center">
