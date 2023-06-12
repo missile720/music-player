@@ -1,6 +1,7 @@
 .col-12 {
     border: 1px dotted red;
 }
+
 .container-fluid {
     width: 100vw;
 }
@@ -8,17 +9,29 @@
 .lib-list {
     height: 70%
 }
+
 .cur-list {
     height: 80%;
 }
 
-.settings-bar, .cur-song-bar {
+.settings-bar,
+.cur-song-bar {
     height: 15%;
 }
 
 .ns-bar {
     height: 10%;
 }
-.lib-text, .cur-text {
+
+.lib-text,
+.cur-text {
     height: 5%;
+}
+
+.playlist-bar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
 }
