@@ -1,5 +1,5 @@
 /* eslint react/prop-types: 0 */
-import { useContext } from "react"
+import { useState, useContext } from "react"
 import { Context } from "../Context"
 
 import Container from "./Container"
@@ -14,16 +14,23 @@ import SongCard from "./SongCard"
  */
 function PlaylistContainer({ playlist }) {
     const { getSpotifyPlaylistTracks } = useContext(Context)
-
-    let songCards = []
+    const [songCards, setSongCards] = useState([])
 
     if (playlist.tracks &&
         playlist.tracks.href) {
         getSpotifyPlaylistTracks(playlist.tracks.href)
+            .then(tracks => {
+                setSongCards(tracks.items.map(
+                    (song, index) =>
+                        <SongCard
+                            key={index}
+                            index={index}
+                            song={song.track}
+                        />
+                ))
+            })
     }
 
-    // const songCards = playlist.tracks.map((song, index) =>
-    //     <SongCard key={index} song={song} />)
 
     return <Container cards={songCards} />
 }

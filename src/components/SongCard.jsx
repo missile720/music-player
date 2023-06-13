@@ -8,7 +8,17 @@ import defaultSongArt from "../assets/defaultCardArt.svg"
  * @returns A Card component displaying the details of a
  * given song
  */
-function SongCard({ song }) {
+function SongCard({ index, song }) {
+    function getSongArt(song) {
+        if (song.album &&
+            song.album.images &&
+            song.album.images.length > 0) {
+            return song.album.images[0].url
+        }
+
+        return defaultSongArt
+    }
+
     const songData = <span
         className="d-flex flex-column"
     >
@@ -16,8 +26,10 @@ function SongCard({ song }) {
         <h5>{song.artist}</h5>
     </span>
 
+    console.log(index, song)
+
     return <Card
-        coverArt={{ url: song.coverArt, title: song.album }}
+        coverArt={{ url: getSongArt(song), title: song.album }}
         metaData={songData}
     />
 }
