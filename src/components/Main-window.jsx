@@ -1,3 +1,8 @@
+import { useEffect, useContext } from "react"
+
+import { Context } from "../Context.jsx"
+import useMusicPlayerState from "../hooks/useMusicPlayerState.js"
+
 import Nav from './Navbar'
 import LibraryContainer from "./LibraryContainer"
 import PlaylistContainer from "./PlaylistContainer"
@@ -9,7 +14,19 @@ import './main.css'
 
 function Main() {
   // Test data is temporary, used for demoing Library and Playlist Containers
-  const { playlist } = testData
+  // const { playlist } = testData
+  const { userPlaylistSpotify } = useContext(Context)
+  const { library, setLibrary, playlistIndex } = useMusicPlayerState()
+
+  useEffect(() => {
+    if (userPlaylistSpotify.items &&
+      userPlaylistSpotify.items.length !== library.length) {
+      setLibrary(userPlaylistSpotify.items)
+    }
+  }, [userPlaylistSpotify])
+
+  console.log(library)
+
   return (
     <div className='container-fluid h-100'>
       <div className='row h-100'>
@@ -25,7 +42,7 @@ function Main() {
           {/* Library playlist */}
           <div className='col-12 lib-list'>
             {/* Library initialized as an array of the single playlist in the test data */}
-            <LibraryContainer library={playlist} />
+            <LibraryContainer library={library} />
           </div>
           <div className='col-12 settings-bar'>
             <SettingsBar />
@@ -40,7 +57,7 @@ function Main() {
           {/* Current playlist */}
           <div className='col-12 cur-list'>
             {/* Uses the single playlist in the test data to demo the playlist container */}
-            <PlaylistContainer playlist={playlist[0]} />
+            {/* <PlaylistContainer playlist={playlist[0]} /> */}
 
           </div>
           {/* Current song bar */}

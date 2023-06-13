@@ -8,7 +8,11 @@ import defaultPlaylistArt from "../assets/defaultCardArt.svg"
  * @returns {Card} A Card that displays PlaylistCard elements
  */
 function PlaylistCard({ playlist }) {
-
+    /**
+     * Gets playlist's art
+     * @param {*} playlist Playlist object
+     * @returns {String} url for playlist cover art
+     */
     function getPlaylistArt(playlist) {
         if (playlist.images && playlist.images.length > 0) {
             return playlist.images[0].url
