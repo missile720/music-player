@@ -21,8 +21,6 @@ function PlaylistCard({ playlist }) {
         return defaultPlaylistArt
     }
 
-    console.log(playlist)
-
     const playlistArtURL = getPlaylistArt(playlist);
 
     const playlistTitle = <h4>{playlist.name}</h4>

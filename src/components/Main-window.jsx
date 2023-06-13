@@ -25,8 +25,6 @@ function Main() {
     }
   }, [userPlaylistSpotify])
 
-  console.log(library)
-
   return (
     <div className='container-fluid h-100'>
       <div className='row h-100'>
@@ -52,12 +50,12 @@ function Main() {
         {/* right column */}
         <div className='col-6'>
           <div className='col-12 cur-text'>
-            <h3>Current Playlist Name</h3>
+            <h3>{library.length > 0 && library[0].name}</h3>
           </div>
           {/* Current playlist */}
           <div className='col-12 cur-list'>
             {/* Uses the single playlist in the test data to demo the playlist container */}
-            {/* <PlaylistContainer playlist={playlist[0]} /> */}
+            <PlaylistContainer playlist={library.length > 0 && library[0]} />
 
           </div>
           {/* Current song bar */}

@@ -118,6 +118,17 @@ function ContextProvider({ children }) {
         setUserPlaylistSpotify(data);
     }
 
+    async function getSpotifyPlaylistTracks(tracksUrl) {
+        const response = await fetch(tracksUrl, {
+            headers: {
+                Authorization: "Bearer " + accessToken
+            }
+        });
+        const data = await response.json();
+
+        console.log(data)
+    }
+
     useEffect(() => {
         // Check if the current URL contains the authorization code and state
         const params = new URLSearchParams(window.location.search);
@@ -175,7 +186,16 @@ function ContextProvider({ children }) {
     }, [refreshToken, expiresIn]);
 
     return (
-        <Context.Provider value={{ accessToken, userProfileSpotify, userPlaylistSpotify, loginSpotify, loginAmazon, fetchAmazonTopPlaylists, fetchUserProfile }}>
+        <Context.Provider value={{
+            accessToken,
+            userProfileSpotify,
+            userPlaylistSpotify,
+            getSpotifyPlaylistTracks,
+            loginSpotify,
+            loginAmazon,
+            fetchAmazonTopPlaylists,
+            fetchUserProfile,
+        }}>
             {children}
         </Context.Provider>
     )
