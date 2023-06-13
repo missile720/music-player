@@ -16,7 +16,14 @@ function Main() {
   // Test data is temporary, used for demoing Library and Playlist Containers
   // const { playlist } = testData
   const { userPlaylistSpotify } = useContext(Context)
-  const { library, setLibrary, playlistIndex } = useMusicPlayerState()
+  const {
+    library,
+    setLibrary,
+    playlistIndex,
+    choosePlaylist
+  } = useMusicPlayerState()
+
+  // console.log(playlistIndex)
 
   useEffect(() => {
     if (userPlaylistSpotify.items &&
@@ -40,7 +47,10 @@ function Main() {
           {/* Library playlist */}
           <div className='col-12 lib-list'>
             {/* Library initialized as an array of the single playlist in the test data */}
-            <LibraryContainer library={library} />
+            <LibraryContainer
+              library={library}
+              choosePlaylist={choosePlaylist}
+            />
           </div>
           <div className='col-12 settings-bar'>
             <SettingsBar />
@@ -55,7 +65,7 @@ function Main() {
           {/* Current playlist */}
           <div className='col-12 cur-list'>
             {/* Uses the single playlist in the test data to demo the playlist container */}
-            <PlaylistContainer playlist={library.length > 0 && library[0]} />
+            <PlaylistContainer playlist={library.length > 0 && library[playlistIndex]} />
 
           </div>
           {/* Current song bar */}

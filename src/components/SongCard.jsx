@@ -8,7 +8,12 @@ import defaultSongArt from "../assets/defaultCardArt.svg"
  * @returns A Card component displaying the details of a
  * given song
  */
-function SongCard({ index, song }) {
+function SongCard({ song }) {
+    /**
+     * Get the art for a song
+     * @param {Object} song Track object from Spotify API
+     * @returns {string} The url for a song's album art
+     */
     function getSongArt(song) {
         if (song.album &&
             song.album.images &&
@@ -19,17 +24,43 @@ function SongCard({ index, song }) {
         return defaultSongArt
     }
 
+    /**
+     * Returns a string of artists for the song
+     * @param {Object} song Track object from Spotify API
+     * @returns {string} A string of the artists for a track
+     */
+    function getArtists(song) {
+        if (song.artists &&
+            song.artists.length > 0) {
+            return song.artists.map(artist => artist.name)
+                .join(", ")
+        }
+
+        return "Unknown Artist"
+    }
+
+    /**
+     * Gets a song's album
+     * @param {Object} song Track object from Spotify API
+     * @returns {string} The album a song is from
+     */
+    function getAlbum(song) {
+        if (song.album) {
+            return song.album.name
+        }
+
+        return "Unknown Album"
+    }
+
     const songData = <span
         className="d-flex flex-column"
     >
-        <h4>{song.title}</h4>
-        <h5>{song.artist}</h5>
+        <h4>{song.name}</h4>
+        <h5>{getArtists(song)}</h5>
     </span>
 
-    console.log(index, song)
-
     return <Card
-        coverArt={{ url: getSongArt(song), title: song.album }}
+        coverArt={{ url: getSongArt(song), title: getAlbum(song) }}
         metaData={songData}
     />
 }

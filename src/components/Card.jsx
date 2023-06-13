@@ -16,7 +16,7 @@ import "./Card.css"
 function Card({ coverArt, metaData }) {
     return (
         <div
-            className="playlist-card bg-primary p-2 d-flex 
+            className="container-card bg-primary p-2 d-flex 
                 align-items-center rounded gap-2 bg-body-tertiary"
         >
             <img

@@ -118,6 +118,13 @@ function ContextProvider({ children }) {
         setUserPlaylistSpotify(data);
     }
 
+    /**
+     * Gets the Spotify Playlist Tracks Object from a 
+     * Spotify API Playlist Tracks Endpoint
+     * @param {string} tracksUrl The Spotify API endpoint to get the
+     * tracks for a specific playlist
+     * @returns {Object} A Spotify Playlist Tracks Response Object
+     */
     async function getSpotifyPlaylistTracks(tracksUrl) {
         const response = await fetch(tracksUrl, {
             headers: {
