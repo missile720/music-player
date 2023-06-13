@@ -8,6 +8,7 @@
 
 .settings-button {
   border: none;
+  outline: none;
   background-color: transparent;
   cursor: pointer;
 }
@@ -20,3 +21,4 @@
 .dark-mode-switch {
   font-size: 1.5rem;
 }
+
