@@ -1,5 +1,6 @@
 /* eslint react/prop-types: 0 */
 import Card from "./Card"
+import defaultSongArt from "../assets/defaultCardArt.svg"
 
 /**
  * Component for displaying songs in a playlist

@@ -102,7 +102,7 @@ function ContextProvider({ children }) {
         });
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setUserProfileSpotify(data);
     }
 
@@ -114,7 +114,7 @@ function ContextProvider({ children }) {
         });
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setUserPlaylistSpotify(data);
     }
 
