@@ -14,6 +14,7 @@ function Nav() {
     }
 
     async function searchList(accessToken, search) {
+        setSongList({});
         const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(search)}&type=track`, {
             headers: {
                 Authorization: 'Bearer ' + accessToken,

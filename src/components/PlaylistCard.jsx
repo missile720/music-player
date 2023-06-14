@@ -1,6 +1,6 @@
 /* eslint react/prop-types: 0 */
 import Card from "./Card"
-
+import defaultPic from "../assets/defaultProfilePic.svg"
 /**
  * Generates a card for displaying playlists in a library.
  * @param {Object} playlist A playlist object
@@ -16,7 +16,7 @@ function PlaylistCard({ playlist }) {
      */
 
 
-    const playlistArtURL = playlist.images[0].url;
+    const playlistArtURL = playlist.images[0] ? playlist.images[0].url :  defaultPic;
 
     const playlistTitle = <h4>{playlist.name}</h4>
 
