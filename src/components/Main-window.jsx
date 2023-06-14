@@ -65,7 +65,10 @@ function Main() {
           {/* Current playlist */}
           <div className='col-12 cur-list'>
             {/* Uses the single playlist in the test data to demo the playlist container */}
-            <PlaylistContainer playlist={library.length > 0 && library[playlistIndex]} />
+            <PlaylistContainer
+              playlist={library.length > 0 ? library[playlistIndex] : []}
+              playlistIndex={playlistIndex}
+            />
 
           </div>
           {/* Current song bar */}

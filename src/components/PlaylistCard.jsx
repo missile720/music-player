@@ -25,12 +25,14 @@ function PlaylistCard({ playlist, index, choosePlaylist }) {
 
     const playlistTitle = <h4>{playlist.name}</h4>
 
+    console.log(index)
+
 
     return (
         <Card
-            onClick={() => choosePlaylist(index)}
             coverArt={{ url: playlistArtURL, title: playlist.name }}
             metaData={playlistTitle}
+            cardClickHandler={() => choosePlaylist(index)}
         />
     )
 }
