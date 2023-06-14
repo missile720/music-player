@@ -5,3 +5,7 @@
 .mp-card--art {
     height: 4rem;
 }
+
+.container-card {
+    cursor: pointer;
+}
