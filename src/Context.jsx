@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
-import { loginAmazon, fetchAmazonTopPlaylists, fetchUserProfile } from "./components/AmazonAuth";
 
 const Context = React.createContext()
 
@@ -175,7 +174,7 @@ function ContextProvider({ children }) {
     }, [refreshToken, expiresIn]);
 
     return (
-        <Context.Provider value={{ accessToken, userProfileSpotify, userPlaylistSpotify, loginSpotify, loginAmazon, fetchAmazonTopPlaylists, fetchUserProfile }}>
+        <Context.Provider value={{ accessToken, userProfileSpotify, userPlaylistSpotify, loginSpotify }}>
             {children}
         </Context.Provider>
     )
