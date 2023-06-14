@@ -197,10 +197,7 @@ function ContextProvider({ children }) {
             userProfileSpotify,
             userPlaylistSpotify,
             getSpotifyPlaylistTracks,
-            loginSpotify,
-            loginAmazon,
-            fetchAmazonTopPlaylists,
-            fetchUserProfile,
+            loginSpotify
         }}>
             {children}
         </Context.Provider>
