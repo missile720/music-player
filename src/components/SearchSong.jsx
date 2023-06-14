@@ -1,4 +1,5 @@
 import './SearchSong.css'
+import PropTypes from 'prop-types'
 
 function SearchSong(props) {
     let songs = [];
@@ -9,10 +10,25 @@ function SearchSong(props) {
                 artist: track.artists[0].name,
                 title: track.name,
                 uri: track.uri,
-                albumArt: track.album.images[0]
+                albumArt: track.album.images[0].url
             };
         })
     }
+    console.log(props.data)
+
+    let cards = songs.map((song) => {
+        return (<div key = {song.uri} className="playlist-card bg-primary m-2 p-2 d-flex align-items-center rounded gap-2 bg-body-tertiary">
+                    <img
+                        src={song.albumArt}
+                        alt={`${song.title} Cover Art`}
+                        className="mp-card--art"
+                    />
+                    <div className='d-flex flex-column align-items-start'>
+                        <h4>{song.title}</h4>
+                        <h5>{song.artist}</h5>
+                    </div>
+                </div>)
+    })
 
     return (
         <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
@@ -23,11 +39,15 @@ function SearchSong(props) {
             <div className="offcanvas-body">
                 {/* Place for song lists */}
                 <div>
-                    Some text as placeholder. In real life you can have the elements you have chosen. Like, text, images, lists, etc.
+                    {cards}
                 </div>
             </div>
         </div>
     )
 }
+
+SearchSong.propTypes = {
+    data: PropTypes.object
+};
 
 export default SearchSong
