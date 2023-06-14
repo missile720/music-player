@@ -101,7 +101,7 @@ function ContextProvider({ children }) {
         });
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setUserProfileSpotify(data);
     }
 
@@ -113,8 +113,26 @@ function ContextProvider({ children }) {
         });
 
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setUserPlaylistSpotify(data);
+    }
+
+    /**
+     * Gets the Spotify Playlist Tracks Object from a 
+     * Spotify API Playlist Tracks Endpoint
+     * @param {string} tracksUrl The Spotify API endpoint to get the
+     * tracks for a specific playlist
+     * @returns {Object} A Spotify Playlist Tracks Response Object
+     */
+    async function getSpotifyPlaylistTracks(tracksUrl) {
+        const response = await fetch(tracksUrl, {
+            headers: {
+                Authorization: "Bearer " + accessToken
+            }
+        });
+        const data = await response.json();
+
+        return data
     }
 
     useEffect(() => {
@@ -174,7 +192,13 @@ function ContextProvider({ children }) {
     }, [refreshToken, expiresIn]);
 
     return (
-        <Context.Provider value={{ accessToken, userProfileSpotify, userPlaylistSpotify, loginSpotify }}>
+        <Context.Provider value={{
+            accessToken,
+            userProfileSpotify,
+            userPlaylistSpotify,
+            getSpotifyPlaylistTracks,
+            loginSpotify
+        }}>
             {children}
         </Context.Provider>
     )
