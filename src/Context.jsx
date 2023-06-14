@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react"
 import PropTypes from "prop-types"
-import { loginAmazon, fetchAmazonTopPlaylists, fetchUserProfile } from "./components/AmazonAuth";
 
 const Context = React.createContext()
 
