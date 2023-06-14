@@ -9,16 +9,17 @@ import SongCard from "./SongCard"
  * Displays the contents of a playlist by generating
  * SongCard elements for each track in its track list.
  * @param {Object} playlist A playlist object
+ * @param {Object[]} library An array of playlist objects
  * @param {Number} playlistIndex The index of the playlist in the library
  * @returns {Container} A Container that displays SongCard
  * elements for songs in a playlist
  */
-function PlaylistContainer({ playlist, playlistIndex }) {
-    const { userPlaylistSpotify, getSpotifyPlaylistTracks } = useContext(Context)
+function PlaylistContainer({ playlist, library, playlistIndex }) {
+    const { getSpotifyPlaylistTracks } = useContext(Context)
     const [songCards, setSongCards] = useState([])
 
+    // If playlist is from spotify, fetch the tracklist
     useEffect(() => {
-        // If playlist is from spotify, fetch the tracklist
         if (playlist.tracks && playlist.tracks.href) {
             getSpotifyPlaylistTracks(playlist.tracks.href)
                 .then(tracks =>
@@ -30,12 +31,8 @@ function PlaylistContainer({ playlist, playlistIndex }) {
                                 song={song.track}
                             />
                     )))
-            console.log("fetch")
         }
-    }, [userPlaylistSpotify, playlistIndex])
-
-    console.log("render")
-
+    }, [library, playlistIndex])
 
     return <Container cards={songCards} />
 }

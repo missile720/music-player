@@ -5,4 +5,5 @@
 .mp-container {
     /* Adds a scrollbar whenever it can't normally contain all cards */
     overflow-y: auto;
+    max-height: 80vh;
 }

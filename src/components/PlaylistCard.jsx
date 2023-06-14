@@ -5,6 +5,9 @@ import defaultPlaylistArt from "../assets/defaultCardArt.svg"
 /**
  * Generates a card for displaying playlists in a library.
  * @param {Object} playlist A playlist object
+ * @param {Number} index The index of the playlist in the library
+ * @param {func} choosePlaylist The setter for the current index of
+ * the selected playlist in the library
  * @returns {Card} A Card that displays PlaylistCard elements
  */
 function PlaylistCard({ playlist, index, choosePlaylist }) {
@@ -24,9 +27,6 @@ function PlaylistCard({ playlist, index, choosePlaylist }) {
     const playlistArtURL = getPlaylistArt(playlist);
 
     const playlistTitle = <h4>{playlist.name}</h4>
-
-    console.log(index)
-
 
     return (
         <Card
