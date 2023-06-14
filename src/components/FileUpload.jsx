@@ -7,13 +7,20 @@ const FileUpload = () => {
         name: '',
         songs: []
     });
-    const [files, setFiles] = useState(['Song1', 'song2'])
 
     function handlePLaylistCoverChange(event) {
-        setPlaylistData({
-            ...playlistData,
-            handlePLaylistCoverChange: event.target.value
-        })
+        const reader = new FileReader();
+        const file = event.target.files[0];
+
+        reader.onload = (event) => {
+            const image = event.target.result;
+            setPlaylistData({
+                ...playlistData,
+                coverImage: image
+            })
+        };
+
+        reader.readAsDataURL(file);
     }
 
     function handlePlaylistChangeName(event) {
@@ -23,10 +30,32 @@ const FileUpload = () => {
         })
     }
 
-    function handleFileUpload() {
+    function handleFileUpload(event) {
+        const jsMediaTags = window.jsmediatags;
+        const files = [...event.target.files]
+        console.log(files[0])
+        const songFiles = files.map(song => {
+            const songData = {
+                name: song.name,
+                artist: 'unknown',
+                songImage: 'test',
+                duration: '2',
+            }
+
+            jsMediaTags.read(song, {
+                onSuccess: function (tag) {
+                    console.log(tag.title)
+                },
+                onError: function (error) {
+                    console.log(error)
+                }
+            })
+
+            return songData
+        })
         setPlaylistData({
             ...playlistData,
-            songs: files
+            songs: songFiles
         })
     }
 
@@ -58,7 +87,7 @@ const FileUpload = () => {
                     </div>
                     <div className="modal-footer">
                         <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
+                        <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
                     </div>
                 </div>
             </div>

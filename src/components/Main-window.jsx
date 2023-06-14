@@ -6,7 +6,6 @@ import SettingsBar from './SettingsBar'
 import CurrentSong from './CurrentSong'
 import FileUpload from './FileUpload'
 import './main.css'
-import { useState } from 'react'
 
 
 function Main() {
@@ -24,13 +23,11 @@ function Main() {
           <div className='col-12 ns-bar text-center'>
             <Nav />
           </div>
-          <div className='col-12 lib-text'>
-            <div className="playlist-bar">
-              <h3>Library</h3>
-              <button type="button" className="btn btn-primary" data-bs-toggle="modal" data-bs-target="#file-upload" >
-                Create Playlist From Local Music
-              </button>
-            </div>
+          <div className='col-12 lib-text playlist-bar'>
+            <h3>Library</h3>
+            <button type="button" className="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#file-upload" >
+              Create Playlist From Local Music
+            </button>
           </div>
           {/* Library playlist */}
           <div className='col-12 lib-list'>
