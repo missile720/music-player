@@ -8,7 +8,7 @@ import "./App.css";
 function App() {
   const { accessToken } = useContext(Context);
 
-  return <>{true ? <Main /> : <Login />}</>;
+  return <>{accessToken ? <Main /> : <Login />}</>;
 }
 
 export default App;
