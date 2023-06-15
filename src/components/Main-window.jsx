@@ -24,13 +24,10 @@ function Main() {
   // Load the user's playlists from Spotify into the library whenever
   // it's updated
   useEffect(() => {
-    if (
-      userPlaylistSpotify.items &&
-      userPlaylistSpotify.items.length !== library.length
-    ) {
-      setLibrary(userPlaylistSpotify.items);
+    if (userPlaylistSpotify.items) {
+      setLibrary(userPlaylistSpotify.items)
     }
-  }, [userPlaylistSpotify]);
+  }, [userPlaylistSpotify])
 
   return (
     <div className="container-fluid h-100">
