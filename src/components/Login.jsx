@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Context } from "../context/Context"
+import { Context } from "../contexts/Context"
 import "./Login.css"
 
 function Login() {

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Context } from "../context/Context"
+import { Context } from "../contexts/Context"
 import defaultPfp from "../assets/defaultProfilePic.svg"
 import searchIcon from "../assets/searchIcon.svg"
 

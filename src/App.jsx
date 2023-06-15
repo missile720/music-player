@@ -2,7 +2,7 @@ import { useContext } from 'react'
 
 import Login from "./components/Login"
 import Main from "./components/Main-window"
-import { Context } from "./context/Context"
+import { Context } from "./contexts/Context"
 import "./App.css"
 
 function App() {

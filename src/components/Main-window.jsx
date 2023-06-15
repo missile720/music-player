@@ -1,6 +1,6 @@
 import { useEffect, useContext } from "react"
 
-import { Context } from "../context/Context.jsx"
+import { Context } from "../contexts/Context.jsx"
 import useMusicPlayerState from "../hooks/useMusicPlayerState.js"
 
 import Nav from './Navbar'

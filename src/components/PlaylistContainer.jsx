@@ -1,6 +1,6 @@
 /* eslint react/prop-types: 0 */
 import { useState, useEffect, useContext } from "react"
-import { Context } from "../context/Context"
+import { Context } from "../contexts/Context"
 
 import Container from "./Container"
 import SongCard from "./SongCard"
