@@ -1,10 +1,29 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Context } from "../contexts/Context"
+import SearchSong from './SearchSong';
 import defaultPfp from "../assets/defaultProfilePic.svg"
 import searchIcon from "../assets/searchIcon.svg"
 
 function Nav() {
-    const { userProfileSpotify } = useContext(Context);
+    const { userProfileSpotify, accessToken } = useContext(Context);
+    const [search, setSearch] = useState("");
+    const [songList, setSongList] = useState({})
+
+    function updateText(event) {
+        setSearch(event.target.value);
+    }
+
+    async function searchList(accessToken, search) {
+        setSongList({});
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(search)}&type=track`, {
+            headers: {
+                Authorization: 'Bearer ' + accessToken,
+            }
+        });
+
+        const data = await response.json();
+        setSongList(data);
+    }
 
     /**
      * Returns the user's profile pic from spotify if it exists.
@@ -31,10 +50,11 @@ function Nav() {
             <div className="col-9 align-self-center">
                 {/* search bar */}
                 <div className="input-group mb-3">
-                    <input type="text" className="form-control" placeholder="Search Playlist" aria-label="Search Playlist" aria-describedby="button-addon2" />
-                    <button className="btn btn-outline-warning" type="button" id="button-addon2">
-                        <img src={searchIcon} width="16" height="16" fill="currentColor" className="bi bi-search" viewBox="0 0 16 16" alt="Search Icon" />
+                    <input type="text" className="form-control" placeholder="Search Songs" aria-label="Search Songs" aria-describedby="button-addon2" onChange={updateText} value={search} />
+                    <button className="btn btn-outline-warning" type="button" id="button-addon2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" onClick={() => searchList(accessToken, search)}>
+                        <img src={searchIcon} width="16" height="16" className="bi bi-search" alt="Search Icon" />
                     </button>
+                    <SearchSong data={songList} />
                 </div>
             </div>
         </div>
