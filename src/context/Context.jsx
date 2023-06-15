@@ -98,7 +98,7 @@ function ContextProvider({ children }) {
         }
     };
 
-    async function getProfile(accessToken) {
+    async function getProfile() {
         const response = await fetch('https://api.spotify.com/v1/me', {
             headers: {
                 Authorization: 'Bearer ' + accessToken
@@ -106,11 +106,10 @@ function ContextProvider({ children }) {
         });
 
         const data = await response.json();
-        // console.log(data);
         setUserProfileSpotify(data);
     }
 
-    async function getProfilePlaylist(accessToken) {
+    async function getProfilePlaylist() {
         const response = await fetch('https://api.spotify.com/v1/me/playlists', {
             headers: {
                 Authorization: 'Bearer ' + accessToken
@@ -118,7 +117,6 @@ function ContextProvider({ children }) {
         });
 
         const data = await response.json();
-        // console.log(data);
         setUserPlaylistSpotify(data);
     }
 
@@ -130,7 +128,6 @@ function ContextProvider({ children }) {
      * @returns {Object} A Spotify Playlist Tracks Response Object
      */
     async function getSpotifyPlaylistTracks(tracksUrl) {
-        console.log(tracksUrl);
         const response = await fetch(tracksUrl, {
             headers: {
                 Authorization: "Bearer " + accessToken

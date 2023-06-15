@@ -1,6 +1,6 @@
 import './SearchSong.css'
 import {useContext} from "react"
-import { Context } from "../Context"
+import { Context } from "../context/Context"
 import PropTypes from 'prop-types'
 
 function SearchSong(props) {

@@ -1,6 +1,6 @@
 /* eslint react/prop-types: 0 */
 import {useState, useContext} from 'react'
-import { Context } from "../Context.jsx"
+import { Context } from "../context/Context"
 import Card from "./Card"
 import defaultSongArt from "../assets/defaultCardArt.svg"
 import trash from '../assets/trash.svg'
