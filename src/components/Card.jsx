@@ -1,6 +1,5 @@
 /* eslint react/prop-types: 0 */
 import "./Card.css"
-
 /**
  * A generic Card class to display playlists in a library or songs
  * in a playlist. Not meant to be used on its own, is instead
@@ -13,10 +12,12 @@ import "./Card.css"
  * @returns {ReactComponentElement} A Card meant to display relevant
  * information of a playlist/song
  */
-function Card({ coverArt, metaData }) {
+function Card({ coverArt, metaData, cardClickHandler}) {
+
     return (
         <div
-            className="playlist-card bg-primary p-2 d-flex 
+            onClick={cardClickHandler}
+            className="container-card bg-primary p-2 d-flex 
                 align-items-center rounded gap-2 bg-body-tertiary"
         >
             <img

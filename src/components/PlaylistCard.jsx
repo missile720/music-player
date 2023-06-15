@@ -1,22 +1,30 @@
 /* eslint react/prop-types: 0 */
 import Card from "./Card"
+import defaultPlaylistArt from "../assets/defaultCardArt.svg"
 
 /**
  * Generates a card for displaying playlists in a library.
  * @param {Object} playlist A playlist object
+ * @param {Number} index The index of the playlist in the library
+ * @param {func} choosePlaylist The setter for the current index of
+ * the selected playlist in the library
  * @returns {Card} A Card that displays PlaylistCard elements
  */
-function PlaylistCard({ playlist }) {
+function PlaylistCard({ playlist, index, choosePlaylist }) {
     /**
-     * Chooses a random index of a track from the playlist. Used
-     * for determining the art to be rendered for a playlist
-     * @param {Object} playlist A playlist object
-     * @returns A random index in the range of [0, The length
-     * of the playlist's tracks]
+     * Gets playlist's art
+     * @param {*} playlist Playlist object
+     * @returns {String} url for playlist cover art
      */
+    function getPlaylistArt(playlist) {
+        if (playlist.images && playlist.images.length > 0) {
+            return playlist.images[0].url
+        }
 
+        return defaultPlaylistArt
+    }
 
-    const playlistArtURL = playlist.images[0].url;
+    const playlistArtURL = getPlaylistArt(playlist);
 
     const playlistTitle = <h4>{playlist.name}</h4>
 
@@ -24,6 +32,7 @@ function PlaylistCard({ playlist }) {
         <Card
             coverArt={{ url: playlistArtURL, title: playlist.name }}
             metaData={playlistTitle}
+            cardClickHandler={() => choosePlaylist(index)}
         />
     )
 }

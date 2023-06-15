@@ -7,7 +7,9 @@
 }
 
 .lib-list {
-    height: 70%
+    height: 70%;
+    overflow: auto;
+    background-color: #e2e3e5;
 }
 
 .cur-list {

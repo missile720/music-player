@@ -1,63 +1,87 @@
-import Nav from './Navbar'
-import LibraryContainer from "./LibraryContainer"
-import PlaylistContainer from "./PlaylistContainer"
-import testData from "../data/test-playlist-data.js"
-import SettingsBar from './SettingsBar'
-import CurrentSong from './CurrentSong'
-import FileUpload from './FileUpload'
-import './main.css'
+import { useEffect, useContext } from "react";
 
+import { Context } from "../context/Context.jsx";
+import useMusicPlayerState from "../hooks/useMusicPlayerState.js";
+
+import Nav from "./Navbar";
+import LibraryContainer from "./LibraryContainer";
+import PlaylistContainer from "./PlaylistContainer";
+import SettingsBar from "./SettingsBar";
+import CurrentSong from "./CurrentSong";
+import FileUpload from "./FileUpload";
+import "./main.css";
 
 function Main() {
   // Test data is temporary, used for demoing Library and Playlist Containers
-  const { playlist } = testData
-  console.log(playlist)
+  const { userPlaylistSpotify } = useContext(Context);
+  const { library, setLibrary, playlistIndex, choosePlaylist } =
+    useMusicPlayerState();
+
+  useEffect(() => {
+    if (
+      userPlaylistSpotify.items &&
+      userPlaylistSpotify.items.length !== library.length
+    ) {
+      setLibrary(userPlaylistSpotify.items);
+    }
+  }, [userPlaylistSpotify]);
 
   return (
-    <div className='container-fluid h-100'>
+    <div className="container-fluid h-100">
       <FileUpload />
-      <div className='row h-100'>
+      <div className="row h-100">
         {/* left column */}
-        <div className='col-6'>
+        <div className="col-6">
           {/* Nav/search bar */}
-          <div className='col-12 ns-bar text-center'>
+          <div className="col-12 ns-bar text-center">
             <Nav />
           </div>
-          <div className='col-12 lib-text playlist-bar'>
+          <div className="col-12 lib-text playlist-bar">
             <h3>Library</h3>
-            <button type="button" className="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#file-upload" >
+            <button
+              type="button"
+              className="btn btn-secondary"
+              data-bs-toggle="modal"
+              data-bs-target="#file-upload"
+            >
               Create Playlist From Local Music
             </button>
           </div>
           {/* Library playlist */}
-          <div className='col-12 lib-list'>
+          <div className="col-12 lib-list">
             {/* Library initialized as an array of the single playlist in the test data */}
-            <LibraryContainer library={playlist} />
+            <LibraryContainer
+              library={library}
+              choosePlaylist={choosePlaylist}
+            />
           </div>
-          <div className='col-12 settings-bar'>
+          <div className="col-12 settings-bar">
             <SettingsBar />
           </div>
         </div>
 
         {/* right column */}
-        <div className='col-6'>
-          <div className='col-12 cur-text'>
-            <h3>Current Playlist Name</h3>
+        <div className="col-6">
+          <div className="col-12 cur-text">
+            <h3>{library.length > 0 && library[playlistIndex].name}</h3>
           </div>
           {/* Current playlist */}
-          <div className='col-12 cur-list'>
+          <div className="col-12 cur-list">
             {/* Uses the single playlist in the test data to demo the playlist container */}
-            <PlaylistContainer playlist={playlist[0]} />
-
+            <PlaylistContainer
+              playlist={library.length > 0 ? library[playlistIndex] : []}
+              library={library}
+              playlistIndex={playlistIndex}
+            />
           </div>
           {/* Current song bar */}
-          <div className='col-12 cur-song-bar '>
-            < CurrentSong />
+          <div className="col-12 cur-song-bar ">
+            <CurrentSong />
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Main;
