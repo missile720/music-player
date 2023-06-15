@@ -15,11 +15,12 @@ import SongCard from "./SongCard"
  * elements for songs in a playlist
  */
 function PlaylistContainer({ playlist, library, playlistIndex }) {
-    const { getSpotifyPlaylistTracks } = useContext(Context)
+    const { getSpotifyPlaylistTracks, currentPlaylistId } = useContext(Context)
     const [songCards, setSongCards] = useState([])
 
     // If playlist is from spotify, fetch the tracklist
     useEffect(() => {
+        currentPlaylistId(playlist.id)
         if (playlist.tracks && playlist.tracks.href) {
             getSpotifyPlaylistTracks(playlist.tracks.href)
                 .then(tracks =>

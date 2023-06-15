@@ -1,8 +1,5 @@
 /* eslint react/prop-types: 0 */
-import {useState} from 'react'
 import "./Card.css"
-import trash from '../assets/trash.svg'
-import trashHover from '../assets/trashSelected.svg'
 /**
  * A generic Card class to display playlists in a library or songs
  * in a playlist. Not meant to be used on its own, is instead
@@ -15,16 +12,7 @@ import trashHover from '../assets/trashSelected.svg'
  * @returns {ReactComponentElement} A Card meant to display relevant
  * information of a playlist/song
  */
-function Card({ coverArt, metaData, cardClickHandler }) {
-    const [hover,setHover] = useState(false);
-
-    function handleMouseEnter(){
-        setHover(true);
-    }
-
-    function handleMouseLeave(){
-        setHover(false);
-    }
+function Card({ coverArt, metaData, cardClickHandler}) {
 
     return (
         <div
@@ -38,7 +26,6 @@ function Card({ coverArt, metaData, cardClickHandler }) {
                 className="mp-card--art"
             />
             {metaData}
-            <img src={ hover ? trashHover : trash} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} alt="trash icon" className="trashIcon"/>
         </div>
     )
 }

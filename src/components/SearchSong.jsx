@@ -1,7 +1,10 @@
 import './SearchSong.css'
+import {useContext} from "react"
+import { Context } from "../Context"
 import PropTypes from 'prop-types'
 
 function SearchSong(props) {
+    const { addPlaylistTrack, currentPlaylist } = useContext(Context)
     let songs = [];
     let data = props.data;
 
@@ -17,7 +20,7 @@ function SearchSong(props) {
     }
 
     let cards = songs.map((song) => {
-        return (<div key = {song.uri} className="playlist-card bg-primary m-2 p-2 d-flex align-items-center rounded gap-2 bg-body-tertiary songSearch">
+        return (<div key = {song.uri} onClick={() => addPlaylistTrack(currentPlaylist, song.uri)} className="playlist-card bg-primary m-2 p-2 d-flex align-items-center rounded gap-2 bg-body-tertiary songSearch">
                     <img
                         src={song.albumArt}
                         alt={`${song.title} Cover Art`}

@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Context } from "../Context"
-import SearchSong from './searchSong';
+import SearchSong from './SearchSong';
 import defaultPfp from "../assets/defaultProfilePic.svg"
 import searchIcon from "../assets/searchIcon.svg"
 
