@@ -12,6 +12,8 @@ import './main.css'
 
 
 function Main() {
+  console.log("render")
+
   const { userPlaylistSpotify } = useContext(Context)
   const {
     library,
