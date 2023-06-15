@@ -9,6 +9,7 @@ function ContextProvider({ children }) {
     const [expiresIn, setExpiresIn] = useState('');
     const [userProfileSpotify, setUserProfileSpotify] = useState({});
     const [userPlaylistSpotify, setUserPlaylistSpotify] = useState({});
+    const [currentPlaylist, setCurrentPlaylist] = useState("");
     const clientId = '146d22c1a56f4060939214df2f8b8ab4';
     const redirectUri = 'http://localhost:5173/callback';
 
@@ -17,7 +18,7 @@ function ContextProvider({ children }) {
 
         generateCodeChallenge(codeVerifier).then(codeChallenge => {
             let state = generateRandomString(16);
-            let scope = 'user-read-private user-read-email playlist-read-private';
+            let scope = 'user-read-private user-read-email playlist-read-private playlist-modify-public playlist-modify-private';
 
             localStorage.setItem('code_verifier', codeVerifier);
 
@@ -60,6 +61,10 @@ function ContextProvider({ children }) {
         return text;
     }
 
+    function currentPlaylistId(id){
+        setCurrentPlaylist(id);
+    }
+
     const exchangeAuthorizationCode = async (code) => {
         const codeVerifier = localStorage.getItem('code_verifier');
 
@@ -93,7 +98,7 @@ function ContextProvider({ children }) {
         }
     };
 
-    async function getProfile(accessToken) {
+    async function getProfile() {
         const response = await fetch('https://api.spotify.com/v1/me', {
             headers: {
                 Authorization: 'Bearer ' + accessToken
@@ -101,11 +106,10 @@ function ContextProvider({ children }) {
         });
 
         const data = await response.json();
-        // console.log(data);
         setUserProfileSpotify(data);
     }
 
-    async function getProfilePlaylist(accessToken) {
+    async function getProfilePlaylist() {
         const response = await fetch('https://api.spotify.com/v1/me/playlists', {
             headers: {
                 Authorization: 'Bearer ' + accessToken
@@ -113,7 +117,6 @@ function ContextProvider({ children }) {
         });
 
         const data = await response.json();
-        // console.log(data);
         setUserPlaylistSpotify(data);
     }
 
@@ -133,6 +136,52 @@ function ContextProvider({ children }) {
         const data = await response.json();
 
         return data
+    }
+
+    function deletePlaylistTrack(playlistId, trackUri) {
+        if(trackUri){
+            fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+                method: 'DELETE',
+                headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                tracks: [
+                    { uri: trackUri }
+                ]
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                console.log('Track deleted successfully.');
+                } else {
+                console.log('Failed to delete track from the playlist.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+
+    function addPlaylistTrack(playlistId, trackUri) {
+        fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                uris: [trackUri]
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('Track added to the playlist successfully.');
+            } else {
+                console.log('Failed to add track to the playlist.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
     }
 
     useEffect(() => {
@@ -196,8 +245,12 @@ function ContextProvider({ children }) {
             accessToken,
             userProfileSpotify,
             userPlaylistSpotify,
+            currentPlaylist,
             getSpotifyPlaylistTracks,
-            loginSpotify
+            loginSpotify,
+            deletePlaylistTrack,
+            addPlaylistTrack,
+            currentPlaylistId
         }}>
             {children}
         </Context.Provider>
