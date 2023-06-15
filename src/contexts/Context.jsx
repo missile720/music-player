@@ -61,7 +61,7 @@ function ContextProvider({ children }) {
         return text;
     }
 
-    function currentPlaylistId(id){
+    function currentPlaylistId(id) {
         setCurrentPlaylist(id);
     }
 
@@ -139,27 +139,30 @@ function ContextProvider({ children }) {
     }
 
     function deletePlaylistTrack(playlistId, trackUri) {
-        if(trackUri){
+        if (trackUri) {
             fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
                 method: 'DELETE',
                 headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                tracks: [
-                    { uri: trackUri }
-                ]
+                    tracks: [
+                        { uri: trackUri }
+                    ]
                 })
             })
-            .then(response => {
-                if (response.ok) {
-                console.log('Track deleted successfully.');
-                } else {
-                console.log('Failed to delete track from the playlist.');
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                .then(response => {
+                    if (response.ok) {
+                        if (accessToken) {
+                            getProfilePlaylist(accessToken)
+                        }
+                        console.log('Track deleted successfully.');
+                    } else {
+                        console.log('Failed to delete track from the playlist.');
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         }
     }
 
@@ -174,14 +177,17 @@ function ContextProvider({ children }) {
                 uris: [trackUri]
             })
         })
-        .then(response => {
-            if (response.ok) {
-                console.log('Track added to the playlist successfully.');
-            } else {
-                console.log('Failed to add track to the playlist.');
-            }
-        })
-        .catch(error => console.error('Error:', error));
+            .then(response => {
+                if (response.ok) {
+                    if (accessToken) {
+                        getProfilePlaylist(accessToken)
+                    }
+                    console.log('Track added to the playlist successfully.');
+                } else {
+                    console.log('Failed to add track to the playlist.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
     }
 
     useEffect(() => {

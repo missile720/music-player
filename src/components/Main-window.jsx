@@ -1,7 +1,7 @@
 import { useEffect, useContext } from "react";
 
-import { Context } from "../context/Context.jsx";
-import useMusicPlayerState from "../hooks/useMusicPlayerState.js";
+import { Context } from "../contexts/Context.jsx"
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx"
 
 import Nav from "./Navbar";
 import LibraryContainer from "./LibraryContainer";
@@ -12,19 +12,22 @@ import FileUpload from "./FileUpload";
 import "./main.css";
 
 function Main() {
-  // Test data is temporary, used for demoing Library and Playlist Containers
-  const { userPlaylistSpotify } = useContext(Context);
-  const { library, setLibrary, playlistIndex, choosePlaylist } =
-    useMusicPlayerState();
+  console.log("render")
 
+  const { userPlaylistSpotify } = useContext(Context)
+  const {
+    library,
+    setLibrary,
+    playlistIndex
+  } = useContext(MusicPlayerStateContext)
+
+  // Load the user's playlists from Spotify into the library whenever
+  // it's updated
   useEffect(() => {
-    if (
-      userPlaylistSpotify.items &&
-      userPlaylistSpotify.items.length !== library.length
-    ) {
-      setLibrary(userPlaylistSpotify.items);
+    if (userPlaylistSpotify.items) {
+      setLibrary(userPlaylistSpotify.items)
     }
-  }, [userPlaylistSpotify]);
+  }, [userPlaylistSpotify])
 
   return (
     <div className="container-fluid h-100">
@@ -50,10 +53,7 @@ function Main() {
           {/* Library playlist */}
           <div className="col-12 lib-list">
             {/* Library initialized as an array of the single playlist in the test data */}
-            <LibraryContainer
-              library={library}
-              choosePlaylist={choosePlaylist}
-            />
+            <LibraryContainer library={library} />
           </div>
           <div className="col-12 settings-bar">
             <SettingsBar />
@@ -70,8 +70,6 @@ function Main() {
             {/* Uses the single playlist in the test data to demo the playlist container */}
             <PlaylistContainer
               playlist={library.length > 0 ? library[playlistIndex] : []}
-              library={library}
-              playlistIndex={playlistIndex}
             />
           </div>
           {/* Current song bar */}

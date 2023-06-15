@@ -1,6 +1,8 @@
 /* eslint react/prop-types: 0 */
 import { useState, useEffect, useContext } from "react"
-import { Context } from "../context/Context"
+
+import { Context } from "../contexts/Context"
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
 
 import Container from "./Container"
 import SongCard from "./SongCard"
@@ -9,13 +11,12 @@ import SongCard from "./SongCard"
  * Displays the contents of a playlist by generating
  * SongCard elements for each track in its track list.
  * @param {Object} playlist A playlist object
- * @param {Object[]} library An array of playlist objects
- * @param {Number} playlistIndex The index of the playlist in the library
  * @returns {Container} A Container that displays SongCard
  * elements for songs in a playlist
  */
-function PlaylistContainer({ playlist, library, playlistIndex }) {
+function PlaylistContainer({ playlist }) {
     const { getSpotifyPlaylistTracks, currentPlaylistId } = useContext(Context)
+    const { library, playlistIndex } = useContext(MusicPlayerStateContext)
     const [songCards, setSongCards] = useState([])
 
     // If playlist is from spotify, fetch the tracklist
