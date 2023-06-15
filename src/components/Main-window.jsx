@@ -1,6 +1,7 @@
 import { useEffect, useContext } from "react"
 
 import { Context } from "../contexts/Context.jsx"
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx"
 import useMusicPlayerState from "../hooks/useMusicPlayerState.js"
 
 import Nav from './Navbar'
@@ -18,8 +19,8 @@ function Main() {
     library,
     setLibrary,
     playlistIndex,
-    choosePlaylist
-  } = useMusicPlayerState()
+    setPlaylistIndex
+  } = useContext(MusicPlayerStateContext)
 
   useEffect(() => {
     if (userPlaylistSpotify.items &&
@@ -45,7 +46,7 @@ function Main() {
             {/* Library initialized as an array of the single playlist in the test data */}
             <LibraryContainer
               library={library}
-              choosePlaylist={choosePlaylist}
+              choosePlaylist={setPlaylistIndex}
             />
           </div>
           <div className='col-12 settings-bar'>
