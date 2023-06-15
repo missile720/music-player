@@ -1,4 +1,7 @@
 /* eslint react/prop-types: 0 */
+import { useContext } from "react"
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
+
 import Card from "./Card"
 import defaultPlaylistArt from "../assets/defaultCardArt.svg"
 
@@ -6,13 +9,14 @@ import defaultPlaylistArt from "../assets/defaultCardArt.svg"
  * Generates a card for displaying playlists in a library.
  * @param {Object} playlist A playlist object
  * @param {Number} index The index of the playlist in the library
- * @param {func} choosePlaylist The setter for the current index of
- * the selected playlist in the library
  * @returns {Card} A Card that displays PlaylistCard elements
  */
-function PlaylistCard({ playlist, index, choosePlaylist }) {
+function PlaylistCard({ playlist, index }) {
+    const {
+        setPlaylistIndex
+    } = useContext(MusicPlayerStateContext)
+
     /**
-     * Gets playlist's art
      * @param {*} playlist Playlist object
      * @returns {String} url for playlist cover art
      */
@@ -32,7 +36,7 @@ function PlaylistCard({ playlist, index, choosePlaylist }) {
         <Card
             coverArt={{ url: playlistArtURL, title: playlist.name }}
             metaData={playlistTitle}
-            cardClickHandler={() => choosePlaylist(index)}
+            cardClickHandler={() => setPlaylistIndex(index)}
         />
     )
 }
