@@ -1,21 +1,12 @@
 import { useState } from "react";
 
 const VolumeComponent = () => {
-    const getFromLocalStorage = (key) => {
-        const value = localStorage.getItem(key)
-        return value ? JSON.parse(value) : 50
-    }
-    const [volume, setVolume] = useState(getFromLocalStorage('volume'))
+    const [volume, setVolume] = useState(50)
 
-    const saveToLocalStorage = (key, value) => {
-        localStorage.setItem(key, JSON.stringify(value))
-    }
 
     const handleVolumeChange = (event) => {
         const newVolume = parseInt(event.target.value)
         setVolume(newVolume)
-        saveToLocalStorage('volume', volume)
-        console.log(volume)
     }
 
     return (
