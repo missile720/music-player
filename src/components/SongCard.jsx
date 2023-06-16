@@ -18,7 +18,7 @@ import trashHover from '../assets/trashSelected.svg'
 function SongCard({ song, index }) {
     const [hover, setHover] = useState(false);
     const { deletePlaylistTrack, currentPlaylist } = useContext(Context)
-    const { chooseSong } = useContext(MusicPlayerStateContext)
+    const { chooseSong, songIndex } = useContext(MusicPlayerStateContext)
 
     function handleMouseEnter() {
         setHover(true);
@@ -71,6 +71,16 @@ function SongCard({ song, index }) {
         return "Unknown Album"
     }
 
+    function getCardType(songIndex) {
+        let cardType = " song-card "
+
+        if (songIndex == index) {
+            cardType += " selected-card "
+        }
+
+        return cardType
+    }
+
     const songData = <>
         <span className="d-flex flex-column">
             <h4>{song.name}</h4>
@@ -90,6 +100,7 @@ function SongCard({ song, index }) {
         coverArt={{ url: getSongArt(song), title: getAlbum(song) }}
         metaData={songData}
         cardClickHandler={() => chooseSong(index)}
+        cardType={getCardType(songIndex)}
     />
 }
 

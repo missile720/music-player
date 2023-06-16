@@ -12,7 +12,10 @@ import defaultPlaylistArt from "../assets/defaultCardArt.svg"
  * @returns {Card} A Card that displays PlaylistCard elements
  */
 function PlaylistCard({ playlist, index }) {
-    const { choosePlaylist } = useContext(MusicPlayerStateContext)
+    const {
+        choosePlaylist,
+        playlistIndex
+    } = useContext(MusicPlayerStateContext)
 
     /**
      * @param {*} playlist Playlist object
@@ -26,6 +29,21 @@ function PlaylistCard({ playlist, index }) {
         return defaultPlaylistArt
     }
 
+    /**
+     * @param {Number} playlistIndex 
+     * @returns {string} The card's type. To be appended
+     * to the card as a classname.
+     */
+    function getCardType(playlistIndex) {
+        let baseCardType = " playlist-card "
+
+        if (playlistIndex === index) {
+            baseCardType += " selected-card "
+        }
+
+        return baseCardType
+    }
+
     const playlistArtURL = getPlaylistArt(playlist);
 
     const playlistTitle = <h4>{playlist.name}</h4>
@@ -35,6 +53,7 @@ function PlaylistCard({ playlist, index }) {
             coverArt={{ url: playlistArtURL, title: playlist.name }}
             metaData={playlistTitle}
             cardClickHandler={() => choosePlaylist(index)}
+            cardType={getCardType(playlistIndex)}
         />
     )
 }
