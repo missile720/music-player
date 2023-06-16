@@ -1,6 +1,7 @@
 /* eslint react/prop-types: 0 */
 import { useState, useContext } from 'react'
 import { Context } from "../contexts/Context"
+import { MusicPlayerStateContext } from '../contexts/MusicPlayerStateContext'
 
 import Card from "./Card"
 import defaultSongArt from "../assets/defaultCardArt.svg"
@@ -10,18 +11,14 @@ import trashHover from '../assets/trashSelected.svg'
 /**
  * Component for displaying songs in a playlist
  * @param {Object} song A song object
+ * @param {Number} index The index of a song in the playlist
  * @returns A Card component displaying the details of a
  * given song
  */
-function SongCard({ song }) {
-    /**
-     * Get the art for a song
-     * @param {Object} song Track object from Spotify API
-     * @returns {string} The url for a song's album art
-     */
-
+function SongCard({ song, index }) {
     const [hover, setHover] = useState(false);
     const { deletePlaylistTrack, currentPlaylist } = useContext(Context)
+    const { chooseSong } = useContext(MusicPlayerStateContext)
 
     function handleMouseEnter() {
         setHover(true);
@@ -31,6 +28,11 @@ function SongCard({ song }) {
         setHover(false);
     }
 
+    /**
+     * Get the art for a song
+     * @param {Object} song Track object from Spotify API
+     * @returns {string} The url for a song's album art
+     */
     function getSongArt(song) {
         if (song.album &&
             song.album.images &&
@@ -74,12 +76,20 @@ function SongCard({ song }) {
             <h4>{song.name}</h4>
             <h5>{getArtists(song)}</h5>
         </span>
-        <img src={hover ? trashHover : trash} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onClick={() => deletePlaylistTrack(currentPlaylist, song.uri)} alt="trash icon" className="trashIcon" />
+        <img
+            src={hover ? trashHover : trash}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            onClick={() => deletePlaylistTrack(currentPlaylist, song.uri)}
+            alt="trash icon"
+            className="trashIcon"
+        />
     </>
 
     return <Card
         coverArt={{ url: getSongArt(song), title: getAlbum(song) }}
         metaData={songData}
+        cardClickHandler={() => chooseSong(index)}
     />
 }
 

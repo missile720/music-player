@@ -12,9 +12,7 @@ import defaultPlaylistArt from "../assets/defaultCardArt.svg"
  * @returns {Card} A Card that displays PlaylistCard elements
  */
 function PlaylistCard({ playlist, index }) {
-    const {
-        setPlaylistIndex
-    } = useContext(MusicPlayerStateContext)
+    const { choosePlaylist } = useContext(MusicPlayerStateContext)
 
     /**
      * @param {*} playlist Playlist object
@@ -36,7 +34,7 @@ function PlaylistCard({ playlist, index }) {
         <Card
             coverArt={{ url: playlistArtURL, title: playlist.name }}
             metaData={playlistTitle}
-            cardClickHandler={() => setPlaylistIndex(index)}
+            cardClickHandler={() => choosePlaylist(index)}
         />
     )
 }
