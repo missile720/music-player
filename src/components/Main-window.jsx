@@ -31,8 +31,9 @@ function Main() {
     <div className="container-fluid h-100">
       <FileUpload />
       <div className="row h-100">
+
         {/* left column */}
-        <div className="col-6">
+        <div className="col-12 col-md-6 d-none d-md-block">
           {/* Nav/search bar */}
           <div className="col-12 ns-bar text-center">
             <Nav />
@@ -59,7 +60,7 @@ function Main() {
         </div>
 
         {/* right column */}
-        <div className="col-6">
+        <div className="col-12 col-md-6">
           <div className="col-12 cur-text">
             <h3>{library.length > 0 && library[playlistIndex].name}</h3>
           </div>
@@ -75,6 +76,7 @@ function Main() {
             <CurrentSong />
           </div>
         </div>
+
       </div>
     </div>
   );
