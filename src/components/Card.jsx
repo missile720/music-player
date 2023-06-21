@@ -12,8 +12,7 @@ import "./Card.css"
  * @returns {ReactComponentElement} A Card meant to display relevant
  * information of a playlist/song
  */
-function Card({ coverArt, metaData, cardClickHandler}) {
-
+function Card({ coverArt, metaData, cardClickHandler }) {
     return (
         <div
             onClick={cardClickHandler}

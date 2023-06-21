@@ -32,6 +32,9 @@ function SongCard({ song }) {
     }
 
     function getSongArt(song) {
+        if (typeof song.songImage === 'string') {
+            return song.songImage
+        }
         if (song.album &&
             song.album.images &&
             song.album.images.length > 0) {
@@ -47,6 +50,9 @@ function SongCard({ song }) {
      * @returns {string} A string of the artists for a track
      */
     function getArtists(song) {
+        if (typeof song.artist === 'string') {
+            return song.artist
+        }
         if (song.artists &&
             song.artists.length > 0) {
             return song.artists.map(artist => artist.name)
