@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import { Context } from "../contexts/Context.jsx"
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx"
@@ -13,6 +13,8 @@ import "./main.css";
 
 function Main() {
   const { userPlaylistSpotify } = useContext(Context)
+  const [localPlaylists, setLocalPlaylists] = useState(fetchLocalPlaylists());
+
   const {
     library,
     setLibrary,
@@ -22,10 +24,17 @@ function Main() {
   // Load the user's playlists from Spotify into the library whenever
   // it's updated
   useEffect(() => {
-    if (userPlaylistSpotify.items) {
+    if (localPlaylists && userPlaylistSpotify.items) {
+      const joinedPlaylists = [...userPlaylistSpotify.items, ...localPlaylists];
+      setLibrary(joinedPlaylists)
+    } else if (userPlaylistSpotify.items) {
       setLibrary(userPlaylistSpotify.items)
     }
-  }, [userPlaylistSpotify])
+  }, [userPlaylistSpotify, localPlaylists])
+
+  function fetchLocalPlaylists() {
+    return JSON.parse(localStorage.getItem("Local Music"));
+  }
 
   return (
     <div className="container-fluid h-100">
