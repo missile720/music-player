@@ -12,8 +12,6 @@ import FileUpload from "./FileUpload";
 import "./main.css";
 
 function Main() {
-  console.log("render")
-
   const { userPlaylistSpotify } = useContext(Context)
   const [localPlaylists, setLocalPlaylists] = useState(fetchLocalPlaylists());
 

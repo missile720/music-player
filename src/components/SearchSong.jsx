@@ -26,7 +26,7 @@ function SearchSong(props) {
                 alt={`${song.title} Cover Art`}
                 className="mp-card--art"
             />
-            <div className='d-flex flex-column align-items-start'>
+            <div className='d-flex flex-column align-items-start text-start'>
                 <h4>{song.title}</h4>
                 <h5>{song.artist}</h5>
             </div>

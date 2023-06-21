@@ -5,6 +5,25 @@ const MusicPlayerStateContext = createContext()
 function MusicPlayerStateContextProvider({ children }) {
     const [library, setLibrary] = useState([])
     const [playlistIndex, setPlaylistIndex] = useState(0)
+    const [songIndex, setSongIndex] = useState(-1)
+
+    /**
+     * Sets the current playlist index of the music player, also
+     * reseting the song index
+     * @param {Number} index The index of a playlist in the library
+     */
+    function choosePlaylist(index) {
+        setPlaylistIndex(index)
+        setSongIndex(-1)
+    }
+
+    /**
+     * Sets the current song index of the music player
+     * @param {Number} index The index of a song in a playlist
+     */
+    function chooseSong(index) {
+        setSongIndex(index)
+    }
 
     return (
         <MusicPlayerStateContext.Provider
@@ -12,7 +31,10 @@ function MusicPlayerStateContextProvider({ children }) {
                 library,
                 setLibrary,
                 playlistIndex,
-                setPlaylistIndex
+                choosePlaylist,
+                songIndex,
+                setSongIndex,
+                chooseSong
             }}
         >
             {children}
