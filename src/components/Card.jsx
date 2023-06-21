@@ -1,5 +1,7 @@
 /* eslint react/prop-types: 0 */
 import "./Card.css"
+import { ThemeContext } from "../contexts/ThemeContext"
+import { useContext } from "react"
 /**
  * A generic Card class to display playlists in a library or songs
  * in a playlist. Not meant to be used on its own, is instead
@@ -13,12 +15,13 @@ import "./Card.css"
  * information of a playlist/song
  */
 function Card({ coverArt, metaData, cardClickHandler}) {
-
+    const { theme } = useContext(ThemeContext)
     return (
         <div
             onClick={cardClickHandler}
-            className="container-card bg-primary p-2 d-flex 
-                align-items-center rounded gap-2 bg-body-tertiary"
+            className="container-card   p-2 d-flex 
+                align-items-center rounded gap-2"
+            id={`card-${theme}`}
         >
             <img
                 src={coverArt.url}
