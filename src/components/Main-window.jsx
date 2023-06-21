@@ -12,7 +12,6 @@ import FileUpload from "./FileUpload";
 
 import returnImg from "../assets/return.svg"
 import "./main.css";
-import Container from "./Container.jsx";
 
 function Main() {
   const { userPlaylistSpotify } = useContext(Context)

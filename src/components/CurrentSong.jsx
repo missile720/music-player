@@ -9,7 +9,7 @@ function CurrentSong() {
     }
 
     return (
-        <div className="current-song-container">
+        <button className="current-song-container" data-bs-toggle="offcanvas" data-bs-target="#currentSongOffCanvas" aria-controls="currentSongOffCanvas">
             <div className="current-song-left-side col-6">
                 <div className="image-container col-4">
                     {/* Current Song picture */}
@@ -48,7 +48,7 @@ function CurrentSong() {
                     </svg>
                 </div>
             </div>
-        </div>
+        </button>
     )
 }
 
