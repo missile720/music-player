@@ -6,6 +6,7 @@ function MusicPlayerStateContextProvider({ children }) {
     const [library, setLibrary] = useState([])
     const [playlistIndex, setPlaylistIndex] = useState(0)
     const [songIndex, setSongIndex] = useState(-1)
+    const [libraryView, setLibraryView] = useState(true)
 
     /**
      * Sets the current playlist index of the music player, also
@@ -15,6 +16,7 @@ function MusicPlayerStateContextProvider({ children }) {
     function choosePlaylist(index) {
         setPlaylistIndex(index)
         setSongIndex(-1)
+        setLibraryView(false)
     }
 
     /**
@@ -34,7 +36,9 @@ function MusicPlayerStateContextProvider({ children }) {
                 choosePlaylist,
                 songIndex,
                 setSongIndex,
-                chooseSong
+                chooseSong,
+                libraryView,
+                setLibraryView
             }}
         >
             {children}

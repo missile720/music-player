@@ -16,7 +16,9 @@ function Main() {
   const {
     library,
     setLibrary,
-    playlistIndex
+    playlistIndex,
+    libraryView,
+    setLibraryView
   } = useContext(MusicPlayerStateContext)
 
   // Load the user's playlists from Spotify into the library whenever
@@ -33,7 +35,7 @@ function Main() {
       <div className="row h-100">
 
         {/* left column */}
-        <div className="col-12 col-md-6 d-none d-md-block">
+        <div className= {`col-12 col-md-6 ${libraryView ? "":"d-none"}`}>
           {/* Nav/search bar */}
           <div className="col-12 ns-bar text-center">
             <Nav />
@@ -60,7 +62,7 @@ function Main() {
         </div>
 
         {/* right column */}
-        <div className="col-12 col-md-6">
+        <div className={`col-12 col-md-6 ${!libraryView ? "":"d-none"}`}>
           <div className="col-12 cur-text">
             <h3>{library.length > 0 && library[playlistIndex].name}</h3>
           </div>
