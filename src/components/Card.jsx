@@ -11,17 +11,35 @@ import { useContext } from "react"
  * of the image for the alt text
  * @param {ReactComponentElement} metaData The React component displaying
  * the most relevant details of a playlist/song to be displayed
+ * @param {func} cardClickHandler The event handler to be used as the
+ * onClick handler for the Card
+ * @param {string} cardType The type of card. To be appended as a class
+ * name to the component.
  * @returns {ReactComponentElement} A Card meant to display relevant
  * information of a playlist/song
  */
-function Card({ coverArt, metaData, cardClickHandler}) {
-    const { theme } = useContext(ThemeContext)
+function Card({ coverArt, metaData, cardClickHandler, cardType }) {
+
+    /**
+     * 
+     * @param {string} cardType The type of card. To be appended as
+     * a class to the end of the card's classname
+     */
+    function getCardClassName(cardType) {
+        let className = `container-card bg-primary p-2 d-flex 
+            align-items-center rounded gap-2 bg-body-tertiary`
+
+        if (cardType) {
+            className += cardType
+        }
+
+        return className
+    }
+
     return (
         <div
             onClick={cardClickHandler}
-            className="container-card   p-2 d-flex 
-                align-items-center rounded gap-2"
-            id={`card-${theme}`}
+            className={getCardClassName(cardType)}
         >
             <img
                 src={coverArt.url}
