@@ -32,7 +32,7 @@ function Main() {
   return (
     <div className="container-fluid  h-100" id={theme}>
       <FileUpload />
-      <div className="row mh-100">
+      <div className="row h-100">
         {/* left column */}
         <div className="col-6">
           {/* Nav/search bar */}

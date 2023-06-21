@@ -1,6 +1,8 @@
 .container-fluid {
-    width: 100vw;
+    width: auto;
+    overflow: hidden;
 }
+
 #light {
     background-color: #fafafa;
     color: #323130;
