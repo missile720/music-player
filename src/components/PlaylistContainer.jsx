@@ -17,7 +17,6 @@ import SongCard from "./SongCard"
 function PlaylistContainer({ playlist, library, playlistIndex }) {
     const { getSpotifyPlaylistTracks } = useContext(Context)
     const [songCards, setSongCards] = useState([])
-
     // If playlist is from spotify, fetch the tracklist
     useEffect(() => {
         if (playlist.tracks && playlist.tracks.href) {

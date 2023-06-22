@@ -8,6 +8,7 @@ import LibraryContainer from "./LibraryContainer"
 import PlaylistContainer from "./PlaylistContainer"
 import SettingsBar from './SettingsBar'
 import CurrentSong from './CurrentSong'
+import Player from "./Player"
 import './main.css'
 
 
@@ -70,7 +71,8 @@ function Main() {
           </div>
           {/* Current song bar */}
           <div className='col-12 cur-song-bar '>
-            < CurrentSong />
+            {/* < CurrentSong /> */}
+            <Player/>
           </div>
         </div>
       </div>

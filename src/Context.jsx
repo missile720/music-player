@@ -17,7 +17,7 @@ function ContextProvider({ children }) {
 
         generateCodeChallenge(codeVerifier).then(codeChallenge => {
             let state = generateRandomString(16);
-            let scope = 'user-read-private user-read-email playlist-read-private';
+            let scope = 'user-read-private user-read-email playlist-read-private user-read-playback-state user-modify-playback-state streaming'
 
             localStorage.setItem('code_verifier', codeVerifier);
 
@@ -131,9 +131,73 @@ function ContextProvider({ children }) {
             }
         });
         const data = await response.json();
-
+        // console.log(data)
         return data
     }
+
+    async function getPlaybackState(){
+        const response = await fetch("https://api.spotify.com/v1/me/player",{
+            // method: 'GET',
+            headers: {
+                Authorization: 'Bearer ' + accessToken
+            }
+        })
+        const data = await response.json();
+        console.log(data)
+        return data
+    }
+    //   getPlaybackState()
+    async function transferPlayback(){
+        const response = await fetch('https://api.spotify.com/v1/me/player' , {
+            method: 'PUT',    
+            headers : {
+                Authorization: 'Bearer ' + accessToken,
+                'Content-Type' :'application.json'
+            },
+            // data: {
+            //     device_ids: [clientId]
+            // }
+            body: JSON.stringify({
+                device_ids: [clientId],
+              }),
+          
+        })
+     
+  
+  const data = await response.json();
+  console.log(data)
+  return data
+    }
+// transferPlayback()
+
+    async function startResumePlayback(){
+        const response = await fetch('https://api.spotify.com/v1/me/player/play' , {
+            method: 'PUT',    
+            headers : {
+                Authorization: 'Bearer ' + accessToken,
+            }
+        })
+        const data = await response.json();
+        // console.log(data)
+        return data
+    
+    }
+    async function getDevices(){
+        const response = await fetch('https://api.spotify.com/v1/me/player/devices' , {
+            method: 'GET',    
+            headers : {
+                Authorization: 'Bearer ' + accessToken,
+            }
+        })
+        const data = await response.json();
+        console.log(data)
+        return data
+    
+    }
+    setInterval(()=>{
+
+        getDevices()
+    }, 3000)
 
     useEffect(() => {
         // Check if the current URL contains the authorization code and state
@@ -197,7 +261,10 @@ function ContextProvider({ children }) {
             userProfileSpotify,
             userPlaylistSpotify,
             getSpotifyPlaylistTracks,
-            loginSpotify
+            loginSpotify,
+            startResumePlayback,
+            transferPlayback,
+            getPlaybackState
         }}>
             {children}
         </Context.Provider>
