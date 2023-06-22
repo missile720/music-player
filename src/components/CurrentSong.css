@@ -36,3 +36,6 @@ li {
   flex-direction: column;
   justify-content: center;
 }
+.current-song-container:active{
+  background-color: #dfe0e9;
+}

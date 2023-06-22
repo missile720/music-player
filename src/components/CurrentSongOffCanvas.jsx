@@ -1,17 +1,44 @@
+import {useState} from "react"
+import defaultCardArtImg from "../assets/defaultCardArt.svg"
+import rewindImg from "../assets/rewind.svg"
+import playImg from "../assets/play.svg"
+import fastforwardImg from "../assets/fastforward.svg"
+import "./CurrentSongOffCanvas.css"
+
+
+
 export default function CurrentSongOffCanvas(){
+    const [percentage, setPercentage] = useState(10)
+
+    function changePercent(event) {
+        setPercentage(event.target.value)
+    }
+
     return(
         <div 
-            className = "offcanvas offcanvas-bottom" 
+            className = "song-pop-up offcanvas offcanvas-bottom" 
             id="currentSongOffCanvas" 
             tabIndex="-1"
             aria-labelledby="currentSongOffCanvasLabel"
         >
-            <div className="offcanvas-header">
-                <h5 className="offcanvas-title" id="offcanvasLabel">Offcanvas</h5>
-                <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <div className="offcanvas-header d-flex">
+                <button type="button" className="btn-close align-left" data-bs-dismiss="offcanvas" aria-label="Close">
+                </button>
             </div>
-            <div className="offcanvas-body">
-                Content for the offcanvas goes here. You can place just about any Bootstrap component or custom elements here.
+            <div className="offcanvas-body gap-2 d-flex flex-column align-items-center">
+                <img className = "offcanvas-art" src = {defaultCardArtImg}></img>
+                <div className = "song-data d-flex flex-column align-items-center">
+                    <h2 className = "m-0">Song Title</h2>
+                    <h3 className = "m-0">Artist</h3>
+                </div>
+                <div className="song-bar">
+                    <input type="range" min="1" max="100" step="1" value={percentage} onChange={changePercent} id="range" className="custom-range" />
+                </div>
+                <div className="music-play-buttons w-100 d-flex justify-content-evenly">
+                    <img src = {rewindImg}></img>
+                    <img src = {playImg}></img>
+                    <img src = {fastforwardImg}></img>
+                </div>
             </div>
 
         </div>
