@@ -79,7 +79,7 @@ function Main() {
         {/* right column */}
         <div className={`col-12 col-md-6 ${!libraryView ? "":"d-none d-md-block"}`}>
           <div className="col-12 d-flex">
-            <button className="col-3 d-md-none" onClick={()=>setLibraryView(true)}>
+            <button className={`col-3 d-md-none button-${theme}`} onClick={()=>setLibraryView(true)}>
               <img src={returnImg} alt = "Return arrow"></img>
             </button>
             <div className="col-9 col-md-12 cur-text">
