@@ -3,8 +3,10 @@ import { Context } from "../contexts/Context"
 import SearchSong from './SearchSong';
 import defaultPfp from "../assets/defaultProfilePic.svg"
 import searchIcon from "../assets/searchIcon.svg"
+import { ThemeContext } from '../contexts/ThemeContext';
 
 function Nav() {
+    const { theme } = useContext(ThemeContext)
     const { userProfileSpotify, accessToken } = useContext(Context);
     const [search, setSearch] = useState("");
     const [songList, setSongList] = useState({})
@@ -51,7 +53,7 @@ function Nav() {
                 {/* search bar */}
                 <div className="input-group mb-3">
                     <input type="text" className="form-control" placeholder="Search Songs" aria-label="Search Songs" aria-describedby="button-addon2" onChange={updateText} value={search} />
-                    <button className="btn btn-outline-warning" type="button" id="button-addon2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" onClick={() => searchList(accessToken, search)}>
+                    <button className={`btn button-${theme}`} type="button" id="button-addon2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" onClick={() => searchList(accessToken, search)}>
                         <img src={searchIcon} width="16" height="16" className="bi bi-search" alt="Search Icon" />
                     </button>
                     <SearchSong data={songList} />

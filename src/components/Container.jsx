@@ -1,5 +1,7 @@
 /* eslint react/prop-types: 0 */
 import "./Container.css"
+import { useContext } from "react"
+import { ThemeContext } from "../contexts/ThemeContext"
 
 /**
  * Give props for cards to display, displays the cards in the container.
@@ -11,11 +13,13 @@ import "./Container.css"
  * the songs of a playlist or the playlists in a library
  */
 function Container({ cards }) {
+    const { theme } = useContext(ThemeContext)
     return (
         <section
-            className="mp-container container
-            bg-secondary-subtle h-100 w-100 p-3
+            className="mp-container container 
+            h-100 w-100 p-3
             d-flex flex-column gap-1"
+            id={`container-${theme}`}
         >
             {cards}
         </section>

@@ -1,30 +1,69 @@
 import { useState } from "react";
-import defaultSongImage from "../assets/song.svg";
 import "./FileUpload.css";
 
 const FileUpload = () => {
+
   const [playlistData, setPlaylistData] = useState({
-    coverImage: "",
-    playlistName: "",
+    images: [],
+    name: "",
     tracks: [],
+    source: 'local'
   });
 
-  function handlePLaylistCoverChange(event) {
-    const file = event.target.files[0];
-    const blob = new Blob([file], { type: "image/*" });
-    const imageUrl = URL.createObjectURL(blob);
+  function compressImage(base64String, callback) {
+    const image = new Image();
+    image.onload = () => {
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
+      canvas.width = 100;
+      canvas.height = 100;
 
-    setPlaylistData({
-      ...playlistData,
-      coverImage: imageUrl,
-    });
+      context.drawImage(image, 0, 0, 100, 100);
+
+      const compressedBase64String = canvas.toDataURL('image/jpeg', 0.8);
+      callback(compressedBase64String);
+    };
+
+    image.src = base64String;
   }
+
+  function handlePlaylistCoverChange(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      let base64String = reader.result;
+      compressImage(base64String, (compressedBase64String) => {
+        setPlaylistData({
+          ...playlistData,
+          images: [{ url: compressedBase64String }],
+        });
+      });
+    };
+
+    reader.readAsDataURL(file);
+  }
+
 
   function handlePlaylistChangeName(event) {
     setPlaylistData({
       ...playlistData,
-      playlistName: event.target.value,
+      name: event.target.value,
     });
+  }
+
+  // The song file is currently too big to be on local storage and since this is a web app
+  // we can't access a folder every time the user visits the site. We can either convert this to a 
+  // desktop application, or utilize a database to hold this data.
+  function convertAudioFileToString(file, callback) {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const base64String = reader.result;
+      callback(base64String);
+    }
+    reader.readAsDataURL(file)
+
   }
 
   function handleFileUpload(event) {
@@ -32,16 +71,12 @@ const FileUpload = () => {
     const files = [...event.target.files];
 
     const songFiles = files.map((song) => {
-      const blob = new Blob([song], { type: "audio/*" });
-      const songUrl = URL.createObjectURL(blob);
-
-      // Some of files uploaded may not have all the metadata provided when
-      // retrieved by jsmediatags, so they are given the following default values
       const songData = {
         name: song.name,
-        artist: "unknown",
-        songImage: defaultSongImage,
-        audioSource: songUrl,
+        artist: "Unknown Artist",
+        audioSource: convertAudioFileToString(song, (base64String) => (
+          base64String
+        )),
       };
 
       jsMediaTags.read(song, {
@@ -53,11 +88,18 @@ const FileUpload = () => {
             songData.artist = tag.tags.artist;
           }
           if (tag.tags.picture) {
-            const byteArray = new Uint8Array(tag.tags.picture.data);
-            const blob = new Blob([byteArray], { type: "image/*" });
-            const songPicture = URL.createObjectURL(blob);
+            const pictureData = tag.tags.picture.data;
+            const format = tag.tags.picture.format;
+            let convertedString = ''
 
-            songData.songImage = songPicture;
+            for (let i = 0; i < pictureData.length; i++) {
+              convertedString += String.fromCharCode(pictureData[i]);
+            }
+
+            let base64String = `data:${format};base64,${window.btoa(convertedString)}`;
+            compressImage(base64String, (compressedBase64String) => {
+              songData.songImage = compressedBase64String
+            });
           }
         },
         onError: function (error) {
@@ -76,10 +118,9 @@ const FileUpload = () => {
   function handleLocalStorage() {
     if (localStorage.getItem("Local Music")) {
       const localMusic = JSON.parse(localStorage.getItem("Local Music"));
-      console.log(localMusic);
       for (let i = 0; i < localMusic.length; i++) {
-        if (localMusic[i].playlistName === playlistData.playlistName) {
-          playlistData.playlistName += "(1)";
+        if (localMusic[i].name === playlistData.name) {
+          playlistData.name += "(1)";
           break;
         }
       }
@@ -93,8 +134,8 @@ const FileUpload = () => {
   function handleSubmit(event) {
     event.preventDefault();
     if (
-      playlistData.coverImage &&
-      playlistData.playlistName &&
+      playlistData.images &&
+      playlistData.name &&
       playlistData.tracks.length
     ) {
       handleLocalStorage();
@@ -131,7 +172,7 @@ const FileUpload = () => {
                 required
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
-                onChange={handlePLaylistCoverChange}
+                onChange={handlePlaylistCoverChange}
                 accept="image/*"
               />
             </div>

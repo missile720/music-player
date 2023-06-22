@@ -34,6 +34,9 @@ function SongCard({ song, index }) {
      * @returns {string} The url for a song's album art
      */
     function getSongArt(song) {
+        if (typeof song.songImage === 'string') {
+            return song.songImage
+        }
         if (song.album &&
             song.album.images &&
             song.album.images.length > 0) {
@@ -49,6 +52,9 @@ function SongCard({ song, index }) {
      * @returns {string} A string of the artists for a track
      */
     function getArtists(song) {
+        if (typeof song.artist === 'string') {
+            return song.artist
+        }
         if (song.artists &&
             song.artists.length > 0) {
             return song.artists.map(artist => artist.name)

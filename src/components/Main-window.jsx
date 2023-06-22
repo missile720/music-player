@@ -1,8 +1,8 @@
-import { useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import { Context } from "../contexts/Context.jsx"
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx"
-
+import { ThemeContext } from "../contexts/ThemeContext.jsx";
 import Nav from "./Navbar";
 import LibraryContainer from "./LibraryContainer";
 import PlaylistContainer from "./PlaylistContainer";
@@ -14,7 +14,12 @@ import returnImg from "../assets/return.svg"
 import "./main.css";
 
 function Main() {
+  console.log("render")
+
+  const { theme } = useContext(ThemeContext)
   const { userPlaylistSpotify } = useContext(Context)
+  const [localPlaylists, setLocalPlaylists] = useState(fetchLocalPlaylists());
+
   const {
     library,
     setLibrary,
@@ -26,13 +31,20 @@ function Main() {
   // Load the user's playlists from Spotify into the library whenever
   // it's updated
   useEffect(() => {
-    if (userPlaylistSpotify.items) {
+    if (localPlaylists && userPlaylistSpotify.items) {
+      const joinedPlaylists = [...userPlaylistSpotify.items, ...localPlaylists];
+      setLibrary(joinedPlaylists)
+    } else if (userPlaylistSpotify.items) {
       setLibrary(userPlaylistSpotify.items)
     }
-  }, [userPlaylistSpotify])
+  }, [userPlaylistSpotify, localPlaylists])
+
+  function fetchLocalPlaylists() {
+    return JSON.parse(localStorage.getItem("Local Music"));
+  }
 
   return (
-    <div className="container-fluid h-100">
+    <div className="container-fluid  h-100" id={theme}>
       <FileUpload />
       <div className="row h-100">
 
@@ -46,7 +58,7 @@ function Main() {
             <h3>Library</h3>
             <button
               type="button"
-              className="btn btn-secondary"
+              className={`btn button-${theme}`}
               data-bs-toggle="modal"
               data-bs-target="#file-upload"
             >
@@ -58,6 +70,7 @@ function Main() {
             {/* Library initialized as an array of the single playlist in the test data */}
             <LibraryContainer library={library} />
           </div>
+          <br></br>
           <div className="col-12 settings-bar">
             <SettingsBar />
           </div>
@@ -81,6 +94,7 @@ function Main() {
             />
           </div>
           {/* Current song bar */}
+          
           <div className="col-12 cur-song-bar ">
             <CurrentSong />
           </div>

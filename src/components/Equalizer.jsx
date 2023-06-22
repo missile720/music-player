@@ -1,19 +1,18 @@
-import { useState } from "react";
+import { useContext } from "react";
+import { SettingsStateContext } from "../contexts/SettingsStateContext";
 
 const EqualizerComponent = () => {
 
-    const [bass, setBass] = useState(50)
-    const [treble, setTreble] = useState(50)
-
+    const { bass, updateBass, treble, updateTreble } = useContext(SettingsStateContext)
 
     const handleBassChange = (event) => {
         const newBass = parseInt(event.target.value)
-        setBass(newBass)
+        updateBass(newBass)
     }
 
     const handleTrebleChange = (event) => {
         const newTreble = parseInt(event.target.value)
-        setTreble(newTreble)
+        updateTreble(newTreble)
         
     }
 
