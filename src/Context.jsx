@@ -194,10 +194,8 @@ function ContextProvider({ children }) {
         return data
     
     }
-    setInterval(()=>{
 
         getDevices()
-    }, 3000)
 
     useEffect(() => {
         // Check if the current URL contains the authorization code and state
