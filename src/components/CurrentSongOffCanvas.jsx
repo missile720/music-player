@@ -38,10 +38,10 @@ export default function CurrentSongOffCanvas(){
                 <div className="song-bar">
                     <input type="range" min="1" max="100" step="1" value={percentage} onChange={changePercent} id="range" className="custom-range" />
                 </div>
-                <div className="music-play-buttons w-100 d-flex justify-content-evenly">
-                    <img className = {`button-${theme}`} src = {rewindImg}></img>
-                    <img className = {`button-${theme}`} src = {playImg}></img>
-                    <img className = {`button-${theme}`} src = {fastforwardImg}></img>
+                <div className="music-buttons w-100 d-flex justify-content-evenly">
+                    <img className = {`music-button-${theme}`} src = {rewindImg}></img>
+                    <img className = {`music-button-${theme}`} src = {playImg}></img>
+                    <img className = {`music-button-${theme}`} src = {fastforwardImg}></img>
                 </div>
             </div>
 
