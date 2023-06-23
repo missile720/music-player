@@ -1,9 +1,10 @@
 import { useContext, useState } from 'react';
 import { Context } from "../contexts/Context"
+import { ThemeContext } from '../contexts/ThemeContext';
+
 import SearchSong from './SearchSong';
 import defaultPfp from "../assets/defaultProfilePic.svg"
 import searchIcon from "../assets/searchIcon.svg"
-import { ThemeContext } from '../contexts/ThemeContext';
 
 function Nav() {
     const { theme } = useContext(ThemeContext)

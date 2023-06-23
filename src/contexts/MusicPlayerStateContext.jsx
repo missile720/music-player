@@ -7,6 +7,7 @@ function MusicPlayerStateContextProvider({ children }) {
     const [playlistIndex, setPlaylistIndex] = useState(0)
     const [songIndex, setSongIndex] = useState(-1)
     const [libraryView, setLibraryView] = useState(true)
+    const [songProgress, setSongProgress] = useState(10)
 
     /**
      * Sets the current playlist index of the music player, also
@@ -27,6 +28,17 @@ function MusicPlayerStateContextProvider({ children }) {
         setSongIndex(index)
     }
 
+    /**
+     * Handles the playback scrubbing of a range input by setting the current
+     * songProgress as the scrubbed time
+     * @param {Event} event Range input event
+     */
+    function scrubSong(event) {
+        if (event.currentTarget == event.target) {
+            setSongProgress(event.target.value)
+        }
+    }
+
     return (
         <MusicPlayerStateContext.Provider
             value={{
@@ -38,7 +50,9 @@ function MusicPlayerStateContextProvider({ children }) {
                 setSongIndex,
                 chooseSong,
                 libraryView,
-                setLibraryView
+                setLibraryView,
+                songProgress,
+                scrubSong
             }}
         >
             {children}

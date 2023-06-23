@@ -1,5 +1,6 @@
 import { useState, useContext } from "react"
 import { ThemeContext } from "../contexts/ThemeContext.jsx";
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx";
 
 import defaultCardArtImg from "../assets/defaultCardArt.svg"
 import rewindImg from "../assets/rewind.svg"
@@ -12,11 +13,7 @@ import "./CurrentSongOffCanvas.css"
 
 export default function CurrentSongOffCanvas() {
     const { theme } = useContext(ThemeContext)
-    const [percentage, setPercentage] = useState(10)
-
-    function changePercent(event) {
-        setPercentage(event.target.value)
-    }
+    const { songProgress, scrubSong } = useContext(MusicPlayerStateContext)
 
     return (
         <div
@@ -36,7 +33,16 @@ export default function CurrentSongOffCanvas() {
                     <h3 className="m-0">Artist</h3>
                 </div>
                 <div className="song-bar">
-                    <input type="range" min="1" max="100" step="1" value={percentage} onChange={changePercent} id="range" className="custom-range" />
+                    <input
+                        type="range"
+                        min="1"
+                        max="100"
+                        step="1"
+                        value={songProgress}
+                        onChange={scrubSong}
+                        id="range"
+                        className="custom-range"
+                    />
                 </div>
                 <div className="music-buttons w-100 d-flex justify-content-evenly">
                     <img className={`music-button music-button-${theme}`} src={rewindImg}></img>

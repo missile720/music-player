@@ -1,5 +1,6 @@
-import { useState, useContext } from "react"
+import { useContext } from "react"
 import { ThemeContext } from "../contexts/ThemeContext.jsx";
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx";
 
 import defaultCardArtImg from "../assets/defaultCardArt.svg"
 import rewindImg from "../assets/rewind.svg"
@@ -9,8 +10,8 @@ import fastforwardImg from "../assets/fastforward.svg"
 import './CurrentSong.css'
 
 function CurrentSong() {
-    const [percentage, setPercentage] = useState(10)
     const { theme } = useContext(ThemeContext)
+    const { songProgress, scrubSong } = useContext(MusicPlayerStateContext)
 
     function changePercent(event) {
         setPercentage(event.target.value)
@@ -44,8 +45,8 @@ function CurrentSong() {
                         min="1"
                         max="100"
                         step="1"
-                        value={percentage}
-                        onChange={changePercent}
+                        value={songProgress}
+                        onChange={scrubSong}
                         id="range"
                         className="custom-range"
                     />
