@@ -1,9 +1,12 @@
 import { useContext, useState } from 'react';
 import { Context } from "../contexts/Context"
+import { ThemeContext } from '../contexts/ThemeContext';
+
 import SearchSong from './SearchSong';
 import defaultPfp from "../assets/defaultProfilePic.svg"
 import searchIcon from "../assets/searchIcon.svg"
-import { ThemeContext } from '../contexts/ThemeContext';
+
+import "./Navbar.css"
 
 function Nav() {
     const { theme } = useContext(ThemeContext)
@@ -46,15 +49,24 @@ function Nav() {
         <div className="row h-100 align-items-center">
             {/* user icon */}
             <div className="col-2">
-                <img src={getProfilePic()} width="80px" height="80px" alt="User's profile picture" />
+                <img
+                    className="user-profile-pic"
+                    src={getProfilePic()}
+                    alt="User's profile picture"
+                />
             </div>
 
-            <div className="col-9 align-self-center">
+            <div className="col-10 d-flex align-items-center justify-content-center">
                 {/* search bar */}
-                <div className="input-group mb-3">
+                <div className="input-group">
                     <input type="text" className="form-control" placeholder="Search Songs" aria-label="Search Songs" aria-describedby="button-addon2" onChange={updateText} value={search} />
                     <button className={`btn button-${theme}`} type="button" id="button-addon2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" onClick={() => searchList(accessToken, search)}>
-                        <img src={searchIcon} width="16" height="16" className="bi bi-search" alt="Search Icon" />
+                        <img
+                            src={searchIcon}
+                            width="16"
+                            height="16"
+                            className={`bi bi-search search-${theme}`}
+                            alt="Search Icon" />
                     </button>
                     <SearchSong data={songList} />
                 </div>

@@ -7,3 +7,11 @@
     overflow-y: auto;
     max-height: 80vh;
 }
+
+.playlist-container {
+    max-height: 80vh;
+}
+
+.library-container {
+    max-height: 70vh;
+}
