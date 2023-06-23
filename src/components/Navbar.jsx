@@ -61,7 +61,12 @@ function Nav() {
                 <div className="input-group">
                     <input type="text" className="form-control" placeholder="Search Songs" aria-label="Search Songs" aria-describedby="button-addon2" onChange={updateText} value={search} />
                     <button className={`btn button-${theme}`} type="button" id="button-addon2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" onClick={() => searchList(accessToken, search)}>
-                        <img src={searchIcon} width="16" height="16" className="bi bi-search" alt="Search Icon" />
+                        <img
+                            src={searchIcon}
+                            width="16"
+                            height="16"
+                            className={`bi bi-search search-${theme}`}
+                            alt="Search Icon" />
                     </button>
                     <SearchSong data={songList} />
                 </div>

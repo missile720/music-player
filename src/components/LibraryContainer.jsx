@@ -22,7 +22,10 @@ function LibraryContainer({ library }) {
             />)
     }
 
-    return <Container cards={playlistCards} />
+    return <Container
+        cards={playlistCards}
+        containerType=" library-container"
+    />
 }
 
 export default LibraryContainer

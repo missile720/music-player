@@ -15,7 +15,7 @@ function CurrentSong() {
 
     return (
         <div
-            className={`current-song-container current-song-container-${theme}`}
+            className={`current-song-container current-song-container-${theme} px-1 pe-2`}
             data-bs-toggle="offcanvas"
             data-bs-target="#currentSongOffCanvas"
             aria-controls="currentSongOffCanvas"
