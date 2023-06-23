@@ -36,3 +36,9 @@ li {
   flex-direction: column;
   justify-content: center;
 }
+.current-song-container-light:active{
+  background-color: #dfe0e9;
+}
+.current-song-container-dark:active{
+  background-color: #df9710;
+}
