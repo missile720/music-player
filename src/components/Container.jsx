@@ -16,7 +16,7 @@ function Container({ cards }) {
     const { theme } = useContext(ThemeContext)
     return (
         <section
-            className="mp-container container 
+            className="mp-container
             h-100 w-100 p-3
             d-flex flex-column gap-1"
             id={`container-${theme}`}

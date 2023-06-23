@@ -27,6 +27,10 @@ li {
   justify-content: space-between;
 }
 
+.music-button {
+  cursor: pointer;
+}
+
 #range {
   width: 100%;
 }
