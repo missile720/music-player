@@ -11,11 +11,7 @@ import './CurrentSong.css'
 
 function CurrentSong() {
     const { theme } = useContext(ThemeContext)
-    const { songProgress, scrubSong } = useContext(MusicPlayerStateContext)
-
-    function changePercent(event) {
-        setPercentage(event.target.value)
-    }
+    const { songProgress, scrubSong, libraryView } = useContext(MusicPlayerStateContext)
 
     return (
         <div
@@ -23,6 +19,7 @@ function CurrentSong() {
             data-bs-toggle="offcanvas"
             data-bs-target="#currentSongOffCanvas"
             aria-controls="currentSongOffCanvas"
+            disabled={libraryView}
         >
             <div className="current-song-left-side col-6">
                 <div className="image-container col-4 d-flex justify-content-center">
@@ -31,8 +28,7 @@ function CurrentSong() {
                 </div>
                 <div className="song-title-artist col-8">
                     <ul>
-                        <li>Song </li>
-                        <li>Title</li>
+                        <li>Song Title</li>
                         <li>Artist </li>
                     </ul>
                 </div>

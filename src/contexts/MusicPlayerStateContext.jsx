@@ -34,8 +34,9 @@ function MusicPlayerStateContextProvider({ children }) {
      * @param {Event} event Range input event
      */
     function scrubSong(event) {
-        if (event.currentTarget == event.target) {
+        if (event.currentTarget === event.target) {
             setSongProgress(event.target.value)
+            event.stopPropagation()
         }
     }
 

@@ -1,4 +1,4 @@
-import { useState, useContext } from "react"
+import { useContext } from "react"
 import { ThemeContext } from "../contexts/ThemeContext.jsx";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx";
 
