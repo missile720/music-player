@@ -29,7 +29,7 @@ export default function CurrentSongOffCanvas() {
                 <button type="button" className="btn-close align-left" data-bs-dismiss="offcanvas" aria-label="Close">
                 </button>
             </div>
-            <div className={`offcanvas-body gap-2 d-flex flex-column align-items-center offcanvas-body-${theme}`}>
+            <div className={`offcanvas-body gap-2 d-flex flex-column align-items-center justify-content-center offcanvas-body-${theme}`}>
                 <img className="offcanvas-art" src={defaultCardArtImg}></img>
                 <div className="song-data d-flex flex-column align-items-center">
                     <h2 className="m-0">Song Title</h2>

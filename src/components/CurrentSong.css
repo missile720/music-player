@@ -31,6 +31,18 @@ li {
   cursor: pointer;
 }
 
+.image-container {
+  width: 30%;
+  height: 100%;
+}
+
+.song-art {
+  width: 50%;
+  border-radius: .5rem;
+  background-color: #dfe0e9;
+  padding: .5rem;
+}
+
 #range {
   width: 100%;
 }
@@ -45,4 +57,10 @@ li {
 }
 .current-song-container-dark:active{
   background-color: #df9710;
+}
+
+@media (max-width: 767px) {
+  .song-art {
+    width: 100%;
+  }
 }
