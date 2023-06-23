@@ -1,15 +1,17 @@
-import { useState } from "react"
+import { useState, useContext } from "react"
+import { ThemeContext } from "../contexts/ThemeContext.jsx";
 import './CurrentSong.css'
 
 function CurrentSong() {
     const [percentage, setPercentage] = useState(10)
+    const { theme } = useContext(ThemeContext)
     
     function changePercent(event) {
         setPercentage(event.target.value)
     }
 
     return (
-        <div className="current-song-container" data-bs-toggle="offcanvas" data-bs-target="#currentSongOffCanvas" aria-controls="currentSongOffCanvas">
+        <div className={`current-song-container current-song-container-${theme}`} data-bs-toggle="offcanvas" data-bs-target="#currentSongOffCanvas" aria-controls="currentSongOffCanvas">
             <div className="current-song-left-side col-6">
                 <div className="image-container col-4">
                     {/* Current Song picture */}
