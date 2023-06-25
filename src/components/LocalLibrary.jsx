@@ -1,14 +1,47 @@
-import { useState } from "react";
-import "./FileUpload.css";
+import { useState, useContext, useEffect } from "react";
+import EditPlaylists from "./EditPlaylists";
+import CreatePlaylist from "./CreatePlaylist";
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
+import { nanoid } from "nanoid";
+import './LocalLibrary.css'
 
-const FileUpload = () => {
+const LocalLibraryControls = () => {
+
+  const {
+    library,
+    setLibrary,
+    playlistIndex
+  } = useContext(MusicPlayerStateContext);
 
   const [playlistData, setPlaylistData] = useState({
     images: [],
     name: "",
     tracks: [],
-    source: 'local'
+    source: 'local',
+    playlistId: nanoid(5)
   });
+
+  const [activeTab, setActiveTab] = useState('create');
+
+  useEffect(() => {
+    resetInputs();
+  }, [activeTab]);
+
+
+  // 
+  function handleChangeActiveTab(tabName) {
+    setActiveTab(tabName)
+  }
+
+  function resetInputs() {
+    setPlaylistData({
+      images: [],
+      name: "",
+      tracks: [],
+      source: 'local',
+      playlistId: nanoid(5)
+    })
+  }
 
   function compressImage(base64String, callback) {
     const image = new Image();
@@ -44,13 +77,13 @@ const FileUpload = () => {
     reader.readAsDataURL(file);
   }
 
-
   function handlePlaylistChangeName(event) {
     setPlaylistData({
       ...playlistData,
       name: event.target.value,
     });
   }
+
 
   // The song file is currently too big to be on local storage and since this is a web app
   // we can't access a folder every time the user visits the site. We can either convert this to a 
@@ -77,6 +110,7 @@ const FileUpload = () => {
         audioSource: convertAudioFileToString(song, (base64String) => (
           base64String
         )),
+        songId: nanoid(5)
       };
 
       jsMediaTags.read(song, {
@@ -115,6 +149,24 @@ const FileUpload = () => {
     });
   }
 
+  function handleSubmit(event) {
+    event.preventDefault();
+    if (activeTab === 'create') {
+      if (
+        playlistData.images &&
+        playlistData.name &&
+        playlistData.tracks.length
+      ) {
+        handleLocalStorage();
+      }
+      event.target.reset();
+    } else if (activeTab === 'edit') {
+      handleLocalStorage();
+    }
+
+
+  }
+
   function handleLocalStorage() {
     if (localStorage.getItem("Local Music")) {
       const localMusic = JSON.parse(localStorage.getItem("Local Music"));
@@ -131,17 +183,6 @@ const FileUpload = () => {
     }
   }
 
-  function handleSubmit(event) {
-    event.preventDefault();
-    if (
-      playlistData.images &&
-      playlistData.name &&
-      playlistData.tracks.length
-    ) {
-      handleLocalStorage();
-    }
-  }
-
   return (
     <form
       className="modal fade"
@@ -149,12 +190,13 @@ const FileUpload = () => {
       data-backdrop="static"
       aria-labelledby="file-upload-modal"
       aria-hidden="true"
+      onSubmit={handleSubmit}
     >
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
-              Upload Local Music
+              Local Playlist Controls
             </h5>
             <button
               type="button"
@@ -163,42 +205,52 @@ const FileUpload = () => {
               aria-label="Close"
             ></button>
           </div>
-          <div className="modal-body">
-            <div className="mb-3">
-              <span id="inputGroup-sizing-default">Playlist Cover Image</span>
-              <input
-                type="file"
-                className="form-control"
-                required
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
-                onChange={handlePlaylistCoverChange}
-                accept="image/*"
-              />
-            </div>
-            <div className=" mb-3">
-              <span id="inputGroup-sizing-default">Playlist Name</span>
-              <input
-                type="text"
-                className="form-control"
-                required
-                aria-label="Sizing example input"
-                aria-describedby="inputGroup-sizing-default"
-                value={playlistData.name}
-                onChange={handlePlaylistChangeName}
-              />
-            </div>
-            <div className="mb-3">
-              <span id="inputGroup-sizing-default">Songs</span>
-              <input
-                className="form-control"
-                type="file"
-                required
-                id="formFileMultiple"
-                accept="audio/*"
-                multiple
-                onChange={handleFileUpload}
-              />
+          <div className="modal-body" id="local-playlist-controls">
+            <div className="d-flex align-items-start">
+              <div className="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button
+                  className="nav-link active"
+                  id="v-pills-create-tab"
+                  onClick={() => handleChangeActiveTab('create')}
+                  data-bs-toggle="pill"
+                  data-bs-target="#v-pills-create"
+                  type="button" role="tab"
+                  aria-controls="v-pills-create"
+                  aria-selected="true">
+                  Create Local Playlist
+                </button>
+                <button
+                  className="nav-link"
+                  id="v-pills-edit-tab"
+                  onClick={() => handleChangeActiveTab('edit')}
+                  data-bs-toggle="pill"
+                  data-bs-target="#v-pills-edit"
+                  type="button" role="tab"
+                  aria-controls="v-pills-edit"
+                  aria-selected="false">
+                  Edit Local Playlists
+                </button>
+              </div>
+              <div className="tab-content" id="v-pills-tabContent">
+                <div className="tab-pane fade show active" id="v-pills-create" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                  <CreatePlaylist
+                    playlistData={playlistData}
+                    handleFileUpload={handleFileUpload}
+                    handlePlaylistChangeName={handlePlaylistChangeName}
+                    handlePlaylistCoverChange={handlePlaylistCoverChange}
+                    library={library}
+                  />
+                </div>
+                <div className="tab-pane fade" id="v-pills-edit" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                  <EditPlaylists
+                    playlistData={playlistData}
+                    handleFileUpload={handleFileUpload}
+                    handlePlaylistChangeName={handlePlaylistChangeName}
+                    handlePlaylistCoverChange={handlePlaylistCoverChange}
+                    library={library}
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div className="modal-footer">
@@ -213,7 +265,6 @@ const FileUpload = () => {
               type="submit"
               form="file-upload"
               className="btn btn-primary"
-              onClick={handleSubmit}
             >
               Submit
             </button>
@@ -224,4 +275,4 @@ const FileUpload = () => {
   );
 };
 
-export default FileUpload;
+export default LocalLibraryControls;

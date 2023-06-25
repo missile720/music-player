@@ -8,8 +8,9 @@ import LibraryContainer from "./LibraryContainer";
 import PlaylistContainer from "./PlaylistContainer";
 import SettingsBar from "./SettingsBar";
 import CurrentSong from "./CurrentSong";
-import FileUpload from "./FileUpload";
+import LocalLibraryControls from "./LocalLibrary.jsx";
 import "./main.css";
+
 
 function Main() {
   console.log("render")
@@ -41,7 +42,7 @@ function Main() {
 
   return (
     <div className="container-fluid  h-100" id={theme}>
-      <FileUpload />
+      <LocalLibraryControls />
       <div className="row h-100">
         {/* left column */}
         <div className="col-6">
@@ -57,7 +58,7 @@ function Main() {
               data-bs-toggle="modal"
               data-bs-target="#file-upload"
             >
-              Create Playlist From Local Music
+              Local Playlists
             </button>
           </div>
           {/* Library playlist */}
@@ -84,7 +85,7 @@ function Main() {
             />
           </div>
           {/* Current song bar */}
-          
+
           <div className="col-12 cur-song-bar ">
             <CurrentSong />
           </div>
