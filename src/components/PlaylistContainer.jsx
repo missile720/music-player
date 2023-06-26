@@ -24,14 +24,19 @@ function PlaylistContainer({ playlist }) {
         if (playlist.tracks && playlist.tracks.href) {
             getSpotifyPlaylistTracks(playlist.tracks.href)
                 .then(tracks =>
-                    setSongCards(tracks.items.map(
-                        (song, index) =>
+                    setSongCards(tracks.items
+                        // Only make a song card if the song is
+                        // playable
+                        .filter(song =>
+                            song.track
+                        )
+                        .map((song, index) =>
                             <SongCard
                                 key={index}
                                 index={index}
                                 song={song.track}
                             />
-                    )))
+                        )))
         }
         if (playlist.source === 'local') {
             setSongCards(playlist.tracks.map(

@@ -15,8 +15,6 @@ import returnImg from "../assets/return.svg"
 import "./main.css";
 
 function Main() {
-  console.log("render")
-
   const { theme } = useContext(ThemeContext)
   const { userPlaylistSpotify } = useContext(Context)
   const [localPlaylists, setLocalPlaylists] = useState(fetchLocalPlaylists());
@@ -89,7 +87,6 @@ function Main() {
           </div>
           {/* Current playlist */}
           <div className="col-12 cur-list">
-            {/* Uses the single playlist in the test data to demo the playlist container */}
             <PlaylistContainer
               playlist={library.length > 0 ? library[playlistIndex] : []}
             />

@@ -10,7 +10,6 @@ import fastforwardImg from "../assets/fastforward.svg"
 import "./CurrentSongOffCanvas.css"
 
 
-
 export default function CurrentSongOffCanvas() {
     const { theme } = useContext(ThemeContext)
     const { songProgress, scrubSong } = useContext(MusicPlayerStateContext)
