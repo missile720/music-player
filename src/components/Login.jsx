@@ -9,7 +9,7 @@ function Login() {
   const { loginSpotify } = useContext(Context)
   const { theme } = useContext(ThemeContext)
 
-  function getLoginTheme() {
+  function getLoginClass() {
     let baseClass = `container-fluid d-flex 
       align-items-center justify-content-center 
       h-100 p-3`
@@ -19,7 +19,7 @@ function Login() {
 
   return (
     <div
-      className={getLoginTheme()}
+      className={getLoginClass()}
       id={theme}
     >
       <div className='login d-flex align-items-center flex-column h-100'>
