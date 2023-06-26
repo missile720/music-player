@@ -19,6 +19,7 @@ import { useContext } from "react"
  * information of a playlist/song
  */
 function Card({ coverArt, metaData, cardClickHandler, cardType }) {
+    const { theme } = useContext(ThemeContext)
 
     /**
      * 
@@ -40,6 +41,7 @@ function Card({ coverArt, metaData, cardClickHandler, cardType }) {
         <div
             onClick={cardClickHandler}
             className={getCardClassName(cardType)}
+            id={`card-${theme}`}
         >
             <img
                 src={coverArt.url}

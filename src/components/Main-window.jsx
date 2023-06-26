@@ -48,7 +48,7 @@ function Main() {
       <div className="row h-100">
 
         {/* left column */}
-        <div className={`col-12 col-md-6 ${libraryView ? "" : "d-none d-md-block"}`}>
+        <div className={`col-12 col-md-6 h-100 ${libraryView ? "" : "d-none d-md-block"}`}>
           {/* Nav/search bar */}
           <div className="col-12 ns-bar text-center">
             <Nav />
@@ -75,12 +75,12 @@ function Main() {
         </div>
 
         {/* right column */}
-        <div className={`col-12 col-md-6 ${!libraryView ? "" : "d-none d-md-block"}`}>
-          <div className="col-12 d-flex">
+        <div className={`col-12 col-md-6 h-100 ${!libraryView ? "" : "d-none d-md-block"}`}>
+          <div className="col-12 d-flex cur-text align-items-center">
             <button className={`col-2 d-md-none button-${theme}`} onClick={() => setLibraryView(true)}>
               <img src={returnImg} alt="Return arrow"></img>
             </button>
-            <div className="col-10 col-md-12 cur-text px-2">
+            <div className="col-10 col-md-12 px-2">
               <h3>{library.length > 0 && library[playlistIndex].name}</h3>
             </div>
           </div>
