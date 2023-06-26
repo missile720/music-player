@@ -2,6 +2,7 @@
 import "./Card.css"
 import { ThemeContext } from "../contexts/ThemeContext"
 import { useContext } from "react"
+
 /**
  * A generic Card class to display playlists in a library or songs
  * in a playlist. Not meant to be used on its own, is instead
@@ -22,7 +23,6 @@ function Card({ coverArt, metaData, cardClickHandler, cardType }) {
     const { theme } = useContext(ThemeContext)
 
     /**
-     * 
      * @param {string} cardType The type of card. To be appended as
      * a class to the end of the card's classname
      */
