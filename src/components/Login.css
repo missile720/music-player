@@ -1,7 +1,16 @@
 .login {
   width: 350px;
   border-radius: 20px;
-  background-color: aqua;
+}
+
+.login-light {
+  background-color: white;
+}
+
+.login-body {
+  height: 80%;
+  width: 90%;
+  background-color: white;
 }
 
 .login-header {
