@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import { Context } from "../contexts/Context.jsx"
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx"
 import { ThemeContext } from "../contexts/ThemeContext.jsx";
+
 import Nav from "./Navbar";
 import LibraryContainer from "./LibraryContainer";
 import PlaylistContainer from "./PlaylistContainer";
@@ -49,7 +50,7 @@ function Main() {
       <div className="row h-100">
 
         {/* left column */}
-        <div className= {`col-12 col-md-6 ${libraryView ? "":"d-none d-md-block"}`}>
+        <div className={`col-12 col-md-6 ${libraryView ? "" : "d-none d-md-block"}`}>
           {/* Nav/search bar */}
           <div className="col-12 ns-bar text-center">
             <Nav />
@@ -77,10 +78,10 @@ function Main() {
         </div>
 
         {/* right column */}
-        <div className={`col-12 col-md-6 ${!libraryView ? "":"d-none d-md-block"}`}>
+        <div className={`col-12 col-md-6 ${!libraryView ? "" : "d-none d-md-block"}`}>
           <div className="col-12 d-flex">
-            <button className={`col-3 d-md-none button-${theme}`} onClick={()=>setLibraryView(true)}>
-              <img src={returnImg} alt = "Return arrow"></img>
+            <button className={`col-3 d-md-none button-${theme}`} onClick={() => setLibraryView(true)}>
+              <img src={returnImg} alt="Return arrow"></img>
             </button>
             <div className="col-9 col-md-12 cur-text">
               <h3>{library.length > 0 && library[playlistIndex].name}</h3>
@@ -94,7 +95,7 @@ function Main() {
             />
           </div>
           {/* Current song bar */}
-          
+
           <div className="col-12 cur-song-bar ">
             <CurrentSong />
           </div>
