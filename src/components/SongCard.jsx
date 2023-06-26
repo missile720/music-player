@@ -77,6 +77,12 @@ function SongCard({ song, index }) {
         return "Unknown Album"
     }
 
+    /**
+     * @param {Number} songIndex Index of the song
+     * in the playlist
+     * @returns {string} Class names to append to base
+     * Card's classes
+     */
     function getCardType(songIndex) {
         let cardType = " song-card "
 
