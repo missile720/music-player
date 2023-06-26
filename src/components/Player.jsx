@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import SpotifyPlayer from "react-spotify-web-playback"
 
 import { useContext, useState } from "react"
@@ -6,51 +6,31 @@ import { useContext, useState } from "react"
 import { Context } from "../Context"
 
 export default function Player() {
-    const {accessToken, getPlaybackState, startResumePlayback, transferPlayback} = useContext(Context)
-    const [volume, setVolume] = useState(.5)
+    const {accessToken, transferPlayback, getDevices} = useContext(Context)
+    const [volume, setVolume] = useState(.3)
     const [play, setPlay] = useState(false)
-
-    function changeVolume(event) {
-        setVolume(event.target.value)
-        console.log(volume)
-    }
-
+    const [deviceId, setDeviceId] = useState('');
     
-    // window.onSpotifyWebPlaybackSDKReady = () => {
-    //     console.log("The Web Playback SDK is ready. We have access to Spotify.Player");
-    //     // console.log(window.Spotify.Player);
-    //     const token = accessToken;
-    //     const player = new Spotify.Player({
-    //         name: "React-Spotify-test",
-    //         getOAuthToken: cb => {cb(token)},
-    //         // volume: 0.5
-    //     })
-    //     // Ready
-    //     player.addListener('ready', ({ device_id }) => {
-    //         console.log('Ready with Device ID', device_id);
-    //     });
-        
-    //     // Not Ready
-    //     player.addListener('not_ready', ({ device_id }) => {
-    //         console.log('Device ID has gone offline', device_id);
-    //     });
-        // player.connect().then(success => {
-        //   if (success) {
-        //     console.log('The Web Playback SDK successfully connected to Spotify!');
-        //   }
-        // })}
-
-      
-      
+    setTimeout(()=>{ // grabs device id from active devices
+      getDevices().then((data)=>{
+      if (data.devices.length > 0) {
+        setDeviceId(data.devices[0].id);
+        transferPlayback(deviceId)
+      }})
+    }, 2000)
+    
+    // console.log(deviceId)      
   return (
     <div>
       <SpotifyPlayer
+        name='Syntax Samurai Player'
         styles={{}}
         token={accessToken}
         initialVolume={volume}
         callback={state => {
-            if (!state.isPlaying) setPlay(false)
+            if (!state.isPlaying) setPlay((prev)=>{!prev})
           }}
+        play={true}
         // uris={}
 />
     </div>

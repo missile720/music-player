@@ -137,7 +137,7 @@ function ContextProvider({ children }) {
 
     async function getPlaybackState(){
         const response = await fetch("https://api.spotify.com/v1/me/player",{
-            // method: 'GET',
+            method: 'GET',
             headers: {
                 Authorization: 'Bearer ' + accessToken
             }
@@ -146,24 +146,19 @@ function ContextProvider({ children }) {
         console.log(data)
         return data
     }
-    //   getPlaybackState()
-    async function transferPlayback(){
+// getPlaybackState()
+    async function transferPlayback(deviceId){ 
         const response = await fetch('https://api.spotify.com/v1/me/player' , {
             method: 'PUT',    
             headers : {
                 Authorization: 'Bearer ' + accessToken,
                 'Content-Type' :'application.json'
             },
-            // data: {
-            //     device_ids: [clientId]
-            // }
             body: JSON.stringify({
-                device_ids: [clientId],
+                device_ids: [deviceId],
               }),
           
         })
-     
-  
   const data = await response.json();
   console.log(data)
   return data
@@ -194,8 +189,6 @@ function ContextProvider({ children }) {
         return data
     
     }
-
-        getDevices()
 
     useEffect(() => {
         // Check if the current URL contains the authorization code and state
@@ -262,7 +255,8 @@ function ContextProvider({ children }) {
             loginSpotify,
             startResumePlayback,
             transferPlayback,
-            getPlaybackState
+            getPlaybackState,
+            getDevices
         }}>
             {children}
         </Context.Provider>
