@@ -5,12 +5,12 @@
     background-color: none;
     background: none;
     box-shadow: none;
-    
+    z-index: 1000 !important;
 }
   
 .popover-content {
     position: absolute;
-    top: -100%; /* Adjust as needed */
+    top: -50%; /* Adjust as needed */
     
 }
 

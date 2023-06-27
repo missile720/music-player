@@ -3,7 +3,6 @@ import { Context } from "../contexts/Context"
 import { ThemeContext } from "../contexts/ThemeContext"
 
 import "./Login.css"
-import "./main.css"
 
 function Login() {
   const { loginSpotify } = useContext(Context)
