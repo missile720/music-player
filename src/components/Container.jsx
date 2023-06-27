@@ -12,13 +12,24 @@ import { ThemeContext } from "../contexts/ThemeContext"
  * @returns {ReactComponentElement} Container component displaying either
  * the songs of a playlist or the playlists in a library
  */
-function Container({ cards }) {
+function Container({ cards, containerType }) {
     const { theme } = useContext(ThemeContext)
+
+    function getContainerClass(containerType) {
+        let className = `mp-container
+        h-100 w-100 p-3
+        d-flex flex-column gap-1`
+
+        if (containerType) {
+            className += containerType
+        }
+
+        return className
+    }
+
     return (
         <section
-            className="mp-container container 
-            h-100 w-100 p-3
-            d-flex flex-column gap-1"
+            className={getContainerClass(containerType)}
             id={`container-${theme}`}
         >
             {cards}

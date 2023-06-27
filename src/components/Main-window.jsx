@@ -9,6 +9,8 @@ import PlaylistContainer from "./PlaylistContainer";
 import SettingsBar from "./SettingsBar";
 import CurrentSong from "./CurrentSong";
 import PlaylistControls from "./PlaylistControls.jsx";
+
+import returnImg from "../assets/return.svg";
 import "./main.css";
 
 function Main() {
@@ -18,9 +20,8 @@ function Main() {
   const { userPlaylistSpotify } = useContext(Context);
   const [localPlaylists, setLocalPlaylists] = useState(fetchLocalPlaylists());
 
-  const { library, setLibrary, playlistIndex } = useContext(
-    MusicPlayerStateContext
-  );
+  const { library, setLibrary, playlistIndex, libraryView, setLibraryView } =
+    useContext(MusicPlayerStateContext);
 
   // Load the user's playlists from Spotify into the library whenever
   // it's updated
@@ -42,7 +43,11 @@ function Main() {
       <PlaylistControls />
       <div className="row h-100">
         {/* left column */}
-        <div className="col-6">
+        <div
+          className={`col-12 col-md-6 ${
+            libraryView ? "" : "d-none d-md-block"
+          }`}
+        >
           {/* Nav/search bar */}
           <div className="col-12 ns-bar text-center">
             <Nav />
@@ -70,9 +75,21 @@ function Main() {
         </div>
 
         {/* right column */}
-        <div className="col-6">
-          <div className="col-12 cur-text">
-            <h3>{library.length > 0 && library[playlistIndex].name}</h3>
+        <div
+          className={`col-12 col-md-6 ${
+            !libraryView ? "" : "d-none d-md-block"
+          }`}
+        >
+          <div className="col-12 d-flex">
+            <button
+              className={`col-3 d-md-none button-${theme}`}
+              onClick={() => setLibraryView(true)}
+            >
+              <img src={returnImg} alt="Return arrow"></img>
+            </button>
+            <div className="col-9 col-md-12 cur-text">
+              <h3>{library.length > 0 && library[playlistIndex].name}</h3>
+            </div>
           </div>
           {/* Current playlist */}
           <div className="col-12 cur-list">

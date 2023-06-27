@@ -58,7 +58,29 @@
     background-color: #e09200;
     border: 2px solid #fafafa;
 }
-  
+
+.offcanvas-header-light{
+    background-color: #d4d4d4;
+    color: #323130;
+}
+.offcanvas-header-dark{
+    background-color: #e09200;
+    color: #fafafa;
+}
+.offcanvas-body-light{
+    background-color: #d4d4d4;
+    color: #323130;
+}
+.offcanvas-body-dark{
+    background-color: #e09200;
+    color: #fafafa;
+}
+.music-button-light{
+    filter: invert(14%) sepia(7%) saturate(129%) hue-rotate(349deg) brightness(91%) contrast(84%);
+}
+.music-button-dark{
+    filter: invert(93%) sepia(4%) saturate(22%) hue-rotate(79deg) brightness(112%) contrast(96%);
+}
   
 
 .lib-list {

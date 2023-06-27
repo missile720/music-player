@@ -44,7 +44,10 @@ function PlaylistContainer({ playlist }) {
         }
     }, [library, playlistIndex])
 
-    return <Container cards={songCards} />
+    return <Container
+        cards={songCards}
+        containerType=" playlist-container"
+    />
 }
 
 export default PlaylistContainer

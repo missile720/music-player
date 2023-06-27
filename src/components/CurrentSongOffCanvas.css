@@ -1,0 +1,10 @@
+.song-pop-up{
+    background-color: #fff;
+    height: 80vh !important;
+}
+.offcanvas-art{
+    width:70%;
+    background-color:#dfe0e9;
+    padding:1rem;
+    border-radius: 0.5rem;
+}

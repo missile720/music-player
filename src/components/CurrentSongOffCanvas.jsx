@@ -7,34 +7,31 @@ import rewindImg from "../assets/rewind.svg"
 import playImg from "../assets/play.svg"
 import fastforwardImg from "../assets/fastforward.svg"
 
-import './CurrentSong.css'
+import "./CurrentSongOffCanvas.css"
 
-function CurrentSong() {
+
+
+export default function CurrentSongOffCanvas() {
     const { theme } = useContext(ThemeContext)
-    const { songProgress, scrubSong, libraryView } = useContext(MusicPlayerStateContext)
+    const { songProgress, scrubSong } = useContext(MusicPlayerStateContext)
 
     return (
         <div
-            className={`current-song-container current-song-container-${theme} px-1 pe-2`}
-            data-bs-toggle="offcanvas"
-            data-bs-target="#currentSongOffCanvas"
-            aria-controls="currentSongOffCanvas"
-            disabled={libraryView}
+            className="song-pop-up offcanvas offcanvas-bottom"
+            id="currentSongOffCanvas"
+            tabIndex="-1"
+            aria-labelledby="currentSongOffCanvasLabel"
         >
-            <div className="current-song-left-side col-6">
-                <div className="image-container col-4 d-flex justify-content-center">
-                    {/* Current Song picture */}
-                    <img className="song-art" src={defaultCardArtImg}></img>
-                </div>
-                <div className="song-title-artist col-8">
-                    <ul>
-                        <li>Song Title</li>
-                        <li>Artist </li>
-                    </ul>
-                </div>
+            <div className={`offcanvas-header d-flex offcanvas-header-${theme}`}>
+                <button type="button" className="btn-close align-left" data-bs-dismiss="offcanvas" aria-label="Close">
+                </button>
             </div>
-
-            <div className="current-song-right-side col-6">
+            <div className={`offcanvas-body gap-2 d-flex flex-column align-items-center justify-content-center offcanvas-body-${theme}`}>
+                <img className="offcanvas-art" src={defaultCardArtImg}></img>
+                <div className="song-data d-flex flex-column align-items-center">
+                    <h2 className="m-0">Song Title</h2>
+                    <h3 className="m-0">Artist</h3>
+                </div>
                 <div className="song-bar">
                     <input
                         type="range"
@@ -47,17 +44,13 @@ function CurrentSong() {
                         className="custom-range"
                     />
                 </div>
-                <div className="music-play-buttons">
-                    {/* skip backwards */}
+                <div className="music-buttons w-100 d-flex justify-content-evenly">
                     <img className={`music-button music-button-${theme}`} src={rewindImg}></img>
-                    {/* Play */}
                     <img className={`music-button music-button-${theme}`} src={playImg}></img>
-                    {/* skip forward  */}
                     <img className={`music-button music-button-${theme}`} src={fastforwardImg}></img>
                 </div>
             </div>
+
         </div>
     )
 }
-
-export default CurrentSong
