@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState, useContext } from "react"
+import { ThemeContext } from "../contexts/ThemeContext.jsx"
+
 import "./FileUpload.css";
 
 const FileUpload = () => {
-
+  const { theme } = useContext(ThemeContext)
   const [playlistData, setPlaylistData] = useState({
     images: [],
     name: "",
@@ -151,7 +153,7 @@ const FileUpload = () => {
       aria-hidden="true"
     >
       <div className="modal-dialog">
-        <div className="modal-content">
+        <div className={`modal-content modal-${theme}`}>
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
               Upload Local Music
@@ -168,7 +170,7 @@ const FileUpload = () => {
               <span id="inputGroup-sizing-default">Playlist Cover Image</span>
               <input
                 type="file"
-                className="form-control"
+                className={`form-control file-input-${theme}`}
                 required
                 aria-label="Sizing example input"
                 aria-describedby="inputGroup-sizing-default"
@@ -204,7 +206,7 @@ const FileUpload = () => {
           <div className="modal-footer">
             <button
               type="button"
-              className="btn btn-secondary"
+              className={`btn button-${theme}`}
               data-bs-dismiss="modal"
             >
               Close
@@ -212,7 +214,7 @@ const FileUpload = () => {
             <button
               type="submit"
               form="file-upload"
-              className="btn btn-primary"
+              className={`btn button-${theme}`}
               onClick={handleSubmit}
             >
               Submit
