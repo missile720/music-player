@@ -34,7 +34,7 @@ function CurrentSong() {
                 </div>
             </div>
 
-            <div className="current-song-right-side col-6">
+            <div className="current-song-right-side col-6 h-100">
                 <div className="song-bar">
                     <input
                         type="range"
@@ -43,6 +43,7 @@ function CurrentSong() {
                         step="1"
                         value={songProgress}
                         onChange={scrubSong}
+                        data-bs-toggle="offcanvas"
                         id="range"
                         className="custom-range"
                     />
