@@ -131,7 +131,7 @@ function ContextProvider({ children }) {
             }
         });
         const data = await response.json();
-        // console.log(data)
+        console.log(data)
         return data
     }
 
@@ -143,7 +143,7 @@ function ContextProvider({ children }) {
             }
         })
         const data = await response.json();
-        console.log(data)
+        // console.log(data)
         return data
     }
 // getPlaybackState()
@@ -160,10 +160,9 @@ function ContextProvider({ children }) {
           
         })
   const data = await response.json();
-  console.log(data)
+//   console.log(data)
   return data
     }
-// transferPlayback()
 
     async function startResumePlayback(){
         const response = await fetch('https://api.spotify.com/v1/me/player/play' , {

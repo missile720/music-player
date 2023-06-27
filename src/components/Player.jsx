@@ -6,9 +6,8 @@ import { useContext, useState } from "react"
 import { Context } from "../Context"
 
 export default function Player() {
-    const {accessToken, transferPlayback, getDevices} = useContext(Context)
+    const {accessToken, transferPlayback, getDevices, userPlayListSpotify} = useContext(Context)
     const [volume, setVolume] = useState(.3)
-    const [play, setPlay] = useState(false)
     const [deviceId, setDeviceId] = useState('');
     
     setTimeout(()=>{ // grabs device id from active devices
@@ -17,9 +16,11 @@ export default function Player() {
         setDeviceId(data.devices[0].id);
         transferPlayback(deviceId)
       }})
-    }, 2000)
+    }, 1000)
     
-    // console.log(deviceId)      
+    // console.log(userPlayListSpotify)
+    // console.log(userPlayListSpotify.items)
+
   return (
     <div>
       <SpotifyPlayer
@@ -27,11 +28,8 @@ export default function Player() {
         styles={{}}
         token={accessToken}
         initialVolume={volume}
-        callback={state => {
-            if (!state.isPlaying) setPlay((prev)=>{!prev})
-          }}
         play={true}
-        // uris={}
+        uris={"spotify:track:7k97NZTpES8UV88YahNgEB"}
 />
     </div>
   )
