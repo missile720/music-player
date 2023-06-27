@@ -12,10 +12,12 @@ import trashHover from '../assets/trashSelected.svg'
  * Component for displaying songs in a playlist
  * @param {Object} song A song object
  * @param {Number} index The index of a song in the playlist
+ * @param {func} cardClickHandler The function to be used as the onClick
+ * handler for the SongCard
  * @returns A Card component displaying the details of a
  * given song
  */
-function SongCard({ song, index }) {
+function SongCard({ song, index, cardClickHandler }) {
     const [hover, setHover] = useState(false);
     const { deletePlaylistTrack, currentPlaylist } = useContext(Context)
     const { chooseSong, songIndex } = useContext(MusicPlayerStateContext)
@@ -111,7 +113,7 @@ function SongCard({ song, index }) {
     return <Card
         coverArt={{ url: getSongArt(song), title: getAlbum(song) }}
         metaData={songData}
-        cardClickHandler={() => chooseSong(index)}
+        cardClickHandler={cardClickHandler}
         cardType={getCardType(songIndex)}
     />
 }

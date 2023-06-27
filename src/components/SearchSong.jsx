@@ -1,7 +1,10 @@
-import './SearchSong.css'
 import { useContext } from "react"
 import { Context } from "../contexts/Context"
 import { ThemeContext } from '../contexts/ThemeContext'
+
+import SongCard from "./SongCard"
+
+import "./SearchSong.css"
 
 import PropTypes from 'prop-types'
 
