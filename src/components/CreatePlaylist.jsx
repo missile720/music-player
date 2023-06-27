@@ -6,7 +6,6 @@ const CreatePlaylist = ({ playlistData, handlePlaylistChangeName, handlePlaylist
                 <input
                     type="file"
                     className="form-control"
-                    required
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-default"
                     onChange={handlePlaylistCoverChange}
@@ -18,7 +17,6 @@ const CreatePlaylist = ({ playlistData, handlePlaylistChangeName, handlePlaylist
                 <input
                     type="text"
                     className="form-control"
-                    required
                     aria-label="Sizing example input"
                     aria-describedby="inputGroup-sizing-default"
                     value={playlistData.name}
@@ -30,7 +28,6 @@ const CreatePlaylist = ({ playlistData, handlePlaylistChangeName, handlePlaylist
                 <input
                     className="form-control"
                     type="file"
-                    required
                     id="formFileMultiple"
                     accept="audio/*"
                     multiple

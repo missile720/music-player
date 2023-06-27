@@ -6,29 +6,28 @@ import { nanoid } from "nanoid";
 import './LocalLibrary.css'
 
 const LocalLibraryControls = () => {
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState('');
+  const [selectedPlaylistSource, setSelectedPlaylistSource] = useState('');
+  const [activeTab, setActiveTab] = useState('create');
 
-  const {
-    library,
-    setLibrary,
-    playlistIndex
-  } = useContext(MusicPlayerStateContext);
+  const { library, setLibrary } = useContext(MusicPlayerStateContext);
 
   const [playlistData, setPlaylistData] = useState({
-    images: [],
-    name: "",
-    tracks: [],
+    // Some of the functionality is based on whether the playlist was made locally or has been pulled from Spotify so giving it a
+    // source of 'local' will help differentiate the two.
     source: 'local',
-    playlistId: nanoid(5)
+    id: nanoid(5)
   });
-
-  const [activeTab, setActiveTab] = useState('create');
 
   useEffect(() => {
     resetInputs();
   }, [activeTab]);
 
+  useEffect(() => {
+    console.log(library)
+    setSelectedPlaylistSource();
+  }, [selectedPlaylistId]);
 
-  // 
   function handleChangeActiveTab(tabName) {
     setActiveTab(tabName)
   }
@@ -39,7 +38,7 @@ const LocalLibraryControls = () => {
       name: "",
       tracks: [],
       source: 'local',
-      playlistId: nanoid(5)
+      id: nanoid(5)
     })
   }
 
@@ -84,7 +83,6 @@ const LocalLibraryControls = () => {
     });
   }
 
-
   // The song file is currently too big to be on local storage and since this is a web app
   // we can't access a folder every time the user visits the site. We can either convert this to a 
   // desktop application, or utilize a database to hold this data.
@@ -110,7 +108,7 @@ const LocalLibraryControls = () => {
         audioSource: convertAudioFileToString(song, (base64String) => (
           base64String
         )),
-        songId: nanoid(5)
+        id: nanoid(5)
       };
 
       jsMediaTags.read(song, {
@@ -152,35 +150,51 @@ const LocalLibraryControls = () => {
   function handleSubmit(event) {
     event.preventDefault();
     if (activeTab === 'create') {
-      if (
-        playlistData.images &&
-        playlistData.name &&
-        playlistData.tracks.length
-      ) {
+      if (playlistData.images && playlistData.name && playlistData.tracks.length) {
         handleLocalStorage();
       }
       event.target.reset();
     } else if (activeTab === 'edit') {
+      console.log(playlistData)
       handleLocalStorage();
     }
+  }
 
-
+  function handleSelectionChange(event) {
+    setSelectedPlaylistId(event.target.value);
   }
 
   function handleLocalStorage() {
     if (localStorage.getItem("Local Music")) {
       const localMusic = JSON.parse(localStorage.getItem("Local Music"));
       for (let i = 0; i < localMusic.length; i++) {
+        // Making sure there aren't playlists with duplicate names
         if (localMusic[i].name === playlistData.name) {
           playlistData.name += "(1)";
           break;
         }
       }
-      localMusic.push(playlistData);
+      if (activeTab === 'create') {
+        localMusic.push(playlistData);
+      } else if (activeTab === 'edit') {
+        for (let i = 0; i < localMusic.length; i++) {
+          if (localMusic[i].id === selectedPlaylistId) {
+            localMusic[i] =
+            {
+              ...localMusic[i],
+              name: playlistData.name.length > 0 ? playlistData.name : localMusic[i].name,
+              images: playlistData.images.length > 0 ? playlistData.images : localMusic[i].images,
+              tracks: playlistData.tracks.length > 0 ? [...localMusic[i].tracks, ...playlistData.tracks] : localMusic[i].tracks,
+            }
+          }
+          console.log(localMusic[i])
+        }
+      }
       localStorage.setItem(`Local Music`, JSON.stringify(localMusic));
     } else {
       localStorage.setItem(`Local Music`, JSON.stringify([playlistData]));
     }
+    resetInputs();
   }
 
   return (
@@ -192,7 +206,7 @@ const LocalLibraryControls = () => {
       aria-hidden="true"
       onSubmit={handleSubmit}
     >
-      <div className="modal-dialog">
+      <div className="modal-dialog" >
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
@@ -205,7 +219,7 @@ const LocalLibraryControls = () => {
               aria-label="Close"
             ></button>
           </div>
-          <div className="modal-body" id="local-playlist-controls">
+          <div className="modal-body" id="local-playlist-controls-body">
             <div className="d-flex align-items-start">
               <div className="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <button
@@ -247,6 +261,7 @@ const LocalLibraryControls = () => {
                     handleFileUpload={handleFileUpload}
                     handlePlaylistChangeName={handlePlaylistChangeName}
                     handlePlaylistCoverChange={handlePlaylistCoverChange}
+                    handleSelectionChange={handleSelectionChange}
                     library={library}
                   />
                 </div>
