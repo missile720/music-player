@@ -1,22 +1,24 @@
 import { useState, useContext, useEffect } from "react";
 import EditPlaylists from "./EditPlaylists";
 import CreatePlaylist from "./CreatePlaylist";
-import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext";
 import { nanoid } from "nanoid";
-import './LocalLibrary.css'
+import "./PlaylistControls.css";
+import { Context } from "../contexts/Context";
 
-const LocalLibraryControls = () => {
-  const [selectedPlaylistId, setSelectedPlaylistId] = useState('');
-  const [selectedPlaylistSource, setSelectedPlaylistSource] = useState('');
-  const [activeTab, setActiveTab] = useState('create');
+const PlaylistControls = () => {
+  const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
+  const [selectedPlaylistSource, setSelectedPlaylistSource] = useState("");
+  const [activeTab, setActiveTab] = useState("create");
 
   const { library, setLibrary } = useContext(MusicPlayerStateContext);
+  const { updatePlaylistName } = useContext(Context);
 
+  // Some of the functionality is based on whether the playlist was made locally or has been pulled from Spotify so giving it a
+  // source of 'local' will help differentiate the two.
   const [playlistData, setPlaylistData] = useState({
-    // Some of the functionality is based on whether the playlist was made locally or has been pulled from Spotify so giving it a
-    // source of 'local' will help differentiate the two.
-    source: 'local',
-    id: nanoid(5)
+    source: "local",
+    id: nanoid(5),
   });
 
   useEffect(() => {
@@ -24,12 +26,19 @@ const LocalLibraryControls = () => {
   }, [activeTab]);
 
   useEffect(() => {
-    console.log(library)
-    setSelectedPlaylistSource();
+    for (let song of library) {
+      if (song.id === selectedPlaylistId) {
+        if (song.source === "local") {
+          setSelectedPlaylistSource("local");
+        } else {
+          setSelectedPlaylistSource("spotify");
+        }
+      }
+    }
   }, [selectedPlaylistId]);
 
   function handleChangeActiveTab(tabName) {
-    setActiveTab(tabName)
+    setActiveTab(tabName);
   }
 
   function resetInputs() {
@@ -37,9 +46,9 @@ const LocalLibraryControls = () => {
       images: [],
       name: "",
       tracks: [],
-      source: 'local',
-      id: nanoid(5)
-    })
+      source: "local",
+      id: nanoid(5),
+    });
   }
 
   function compressImage(base64String, callback) {
@@ -52,7 +61,7 @@ const LocalLibraryControls = () => {
 
       context.drawImage(image, 0, 0, 100, 100);
 
-      const compressedBase64String = canvas.toDataURL('image/jpeg', 0.8);
+      const compressedBase64String = canvas.toDataURL("image/jpeg", 0.8);
       callback(compressedBase64String);
     };
 
@@ -84,7 +93,7 @@ const LocalLibraryControls = () => {
   }
 
   // The song file is currently too big to be on local storage and since this is a web app
-  // we can't access a folder every time the user visits the site. We can either convert this to a 
+  // we can't access a folder every time the user visits the site. We can either convert this to a
   // desktop application, or utilize a database to hold this data.
   function convertAudioFileToString(file, callback) {
     const reader = new FileReader();
@@ -92,9 +101,8 @@ const LocalLibraryControls = () => {
     reader.onloadend = () => {
       const base64String = reader.result;
       callback(base64String);
-    }
-    reader.readAsDataURL(file)
-
+    };
+    reader.readAsDataURL(file);
   }
 
   function handleFileUpload(event) {
@@ -105,10 +113,11 @@ const LocalLibraryControls = () => {
       const songData = {
         name: song.name,
         artist: "Unknown Artist",
-        audioSource: convertAudioFileToString(song, (base64String) => (
-          base64String
-        )),
-        id: nanoid(5)
+        audioSource: convertAudioFileToString(
+          song,
+          (base64String) => base64String
+        ),
+        id: nanoid(5),
       };
 
       jsMediaTags.read(song, {
@@ -122,15 +131,17 @@ const LocalLibraryControls = () => {
           if (tag.tags.picture) {
             const pictureData = tag.tags.picture.data;
             const format = tag.tags.picture.format;
-            let convertedString = ''
+            let convertedString = "";
 
             for (let i = 0; i < pictureData.length; i++) {
               convertedString += String.fromCharCode(pictureData[i]);
             }
 
-            let base64String = `data:${format};base64,${window.btoa(convertedString)}`;
+            let base64String = `data:${format};base64,${window.btoa(
+              convertedString
+            )}`;
             compressImage(base64String, (compressedBase64String) => {
-              songData.songImage = compressedBase64String
+              songData.songImage = compressedBase64String;
             });
           }
         },
@@ -149,14 +160,21 @@ const LocalLibraryControls = () => {
 
   function handleSubmit(event) {
     event.preventDefault();
-    if (activeTab === 'create') {
-      if (playlistData.images && playlistData.name && playlistData.tracks.length) {
+    if (activeTab === "create") {
+      if (
+        playlistData.images &&
+        playlistData.name &&
+        playlistData.tracks.length
+      ) {
         handleLocalStorage();
       }
       event.target.reset();
-    } else if (activeTab === 'edit') {
-      console.log(playlistData)
-      handleLocalStorage();
+    } else if (activeTab === "edit") {
+      if (selectedPlaylistSource === "local") {
+        handleLocalStorage();
+      } else if (selectedPlaylistSource === "spotify") {
+        updatePlaylistName(selectedPlaylistId, playlistData.name);
+      }
     }
   }
 
@@ -174,20 +192,27 @@ const LocalLibraryControls = () => {
           break;
         }
       }
-      if (activeTab === 'create') {
+      if (activeTab === "create") {
         localMusic.push(playlistData);
-      } else if (activeTab === 'edit') {
+      } else if (activeTab === "edit") {
         for (let i = 0; i < localMusic.length; i++) {
           if (localMusic[i].id === selectedPlaylistId) {
-            localMusic[i] =
-            {
+            localMusic[i] = {
               ...localMusic[i],
-              name: playlistData.name.length > 0 ? playlistData.name : localMusic[i].name,
-              images: playlistData.images.length > 0 ? playlistData.images : localMusic[i].images,
-              tracks: playlistData.tracks.length > 0 ? [...localMusic[i].tracks, ...playlistData.tracks] : localMusic[i].tracks,
-            }
+              name:
+                playlistData.name.length > 0
+                  ? playlistData.name
+                  : localMusic[i].name,
+              images:
+                playlistData.images.length > 0
+                  ? playlistData.images
+                  : localMusic[i].images,
+              tracks:
+                playlistData.tracks.length > 0
+                  ? [...localMusic[i].tracks, ...playlistData.tracks]
+                  : localMusic[i].tracks,
+            };
           }
-          console.log(localMusic[i])
         }
       }
       localStorage.setItem(`Local Music`, JSON.stringify(localMusic));
@@ -206,7 +231,7 @@ const LocalLibraryControls = () => {
       aria-hidden="true"
       onSubmit={handleSubmit}
     >
-      <div className="modal-dialog" >
+      <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
             <h5 className="modal-title" id="exampleModalLabel">
@@ -221,32 +246,46 @@ const LocalLibraryControls = () => {
           </div>
           <div className="modal-body" id="local-playlist-controls-body">
             <div className="d-flex align-items-start">
-              <div className="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+              <div
+                className="nav flex-column nav-pills me-3"
+                id="v-pills-tab"
+                role="tablist"
+                aria-orientation="vertical"
+              >
                 <button
                   className="nav-link active"
                   id="v-pills-create-tab"
-                  onClick={() => handleChangeActiveTab('create')}
+                  onClick={() => handleChangeActiveTab("create")}
                   data-bs-toggle="pill"
                   data-bs-target="#v-pills-create"
-                  type="button" role="tab"
+                  type="button"
+                  role="tab"
                   aria-controls="v-pills-create"
-                  aria-selected="true">
+                  aria-selected="true"
+                >
                   Create Local Playlist
                 </button>
                 <button
                   className="nav-link"
                   id="v-pills-edit-tab"
-                  onClick={() => handleChangeActiveTab('edit')}
+                  onClick={() => handleChangeActiveTab("edit")}
                   data-bs-toggle="pill"
                   data-bs-target="#v-pills-edit"
-                  type="button" role="tab"
+                  type="button"
+                  role="tab"
                   aria-controls="v-pills-edit"
-                  aria-selected="false">
+                  aria-selected="false"
+                >
                   Edit Local Playlists
                 </button>
               </div>
               <div className="tab-content" id="v-pills-tabContent">
-                <div className="tab-pane fade show active" id="v-pills-create" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                <div
+                  className="tab-pane fade show active"
+                  id="v-pills-create"
+                  role="tabpanel"
+                  aria-labelledby="v-pills-home-tab"
+                >
                   <CreatePlaylist
                     playlistData={playlistData}
                     handleFileUpload={handleFileUpload}
@@ -255,13 +294,19 @@ const LocalLibraryControls = () => {
                     library={library}
                   />
                 </div>
-                <div className="tab-pane fade" id="v-pills-edit" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+                <div
+                  className="tab-pane fade"
+                  id="v-pills-edit"
+                  role="tabpanel"
+                  aria-labelledby="v-pills-profile-tab"
+                >
                   <EditPlaylists
                     playlistData={playlistData}
                     handleFileUpload={handleFileUpload}
                     handlePlaylistChangeName={handlePlaylistChangeName}
                     handlePlaylistCoverChange={handlePlaylistCoverChange}
                     handleSelectionChange={handleSelectionChange}
+                    selectedPlaylistSource={selectedPlaylistSource}
                     library={library}
                   />
                 </div>
@@ -290,4 +335,4 @@ const LocalLibraryControls = () => {
   );
 };
 
-export default LocalLibraryControls;
+export default PlaylistControls;
