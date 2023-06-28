@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from "react"
 import { Context } from "../contexts/Context.jsx";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx";
 import { ThemeContext } from "../contexts/ThemeContext.jsx";
+
 import Nav from "./Navbar";
 import LibraryContainer from "./LibraryContainer";
 import PlaylistContainer from "./PlaylistContainer";
@@ -14,8 +15,6 @@ import returnImg from "../assets/return.svg";
 import "./main.css";
 
 function Main() {
-  console.log("render");
-
   const { theme } = useContext(ThemeContext);
   const { userPlaylistSpotify } = useContext(Context);
   const [localPlaylists, setLocalPlaylists] = useState(fetchLocalPlaylists());
