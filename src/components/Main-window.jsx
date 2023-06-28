@@ -23,8 +23,8 @@ function Main() {
   const { library, setLibrary, playlistIndex, libraryView, setLibraryView } =
     useContext(MusicPlayerStateContext);
 
-  // Load the user's playlists from Spotify into the library whenever
-  // it's updated
+  // Load the user's playlists from Spotify and local storage into the
+  // library whenever it's updated
   useEffect(() => {
     if (localPlaylists && userPlaylistSpotify.items) {
       const joinedPlaylists = [...userPlaylistSpotify.items, ...localPlaylists];
@@ -40,7 +40,7 @@ function Main() {
 
   return (
     <div className="container-fluid  h-100" id={theme}>
-      <PlaylistControls />
+      <PlaylistControls setLocalPlaylists={setLocalPlaylists} />
       <div className="row h-100">
         {/* left column */}
         <div
