@@ -10,6 +10,7 @@ function ContextProvider({ children }) {
   const [userProfileSpotify, setUserProfileSpotify] = useState({});
   const [userPlaylistSpotify, setUserPlaylistSpotify] = useState({});
   const [currentPlaylist, setCurrentPlaylist] = useState("");
+  const [currentPlayingSongData,setCurrentPlayingSongData] = useState({});
   const clientId = "146d22c1a56f4060939214df2f8b8ab4";
   const redirectUri = "http://localhost:5173/callback";
 
@@ -125,6 +126,17 @@ function ContextProvider({ children }) {
 
     const data = await response.json();
     setUserPlaylistSpotify(data);
+  }
+
+  async function getSongAudioAnalysis(trackId) {
+    const response = await fetch(`https://api.spotify.com/v1/audio-analysis/${trackId}`, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+
+    const data = await response.json();
+    setCurrentPlayingSongData(data);
   }
 
   /**
@@ -284,12 +296,14 @@ function ContextProvider({ children }) {
         userProfileSpotify,
         userPlaylistSpotify,
         currentPlaylist,
+        currentPlayingSongData,
         getSpotifyPlaylistTracks,
         loginSpotify,
         deletePlaylistTrack,
         addPlaylistTrack,
         currentPlaylistId,
         updatePlaylistName,
+        getSongAudioAnalysis
       }}
     >
       {children}
