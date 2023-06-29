@@ -38,7 +38,7 @@ const Settings = ({ handleClick }) => {
                 id="staticBackdrop"
                 aria-labelledby="staticBackdropLabel"
             >
-                <div className={`offcanvas-header secondary-${theme}-${mode}`}>
+                <div className={`offcanvas-header secondary-offcanvas-${theme}-${mode}`}>
                     <h5 className="offcanvas-title" id="staticBackdropLabel">Settings</h5>
                     <button
                         type="button"
@@ -48,7 +48,7 @@ const Settings = ({ handleClick }) => {
                         onClick={handleClick}
                     ></button>
                 </div>
-                <div className={`offcanvas-body secondary-${theme}-${mode}`}>
+                <div className={`offcanvas-body secondary-offcanvas-${theme}-${mode}`}>
                     <div>
                         <label htmlFor='themeSelection'>Choose Theme</label>
                         <select 
@@ -57,7 +57,8 @@ const Settings = ({ handleClick }) => {
                             aria-label=".form-select-lg example"
                             value={formData.themeSelection}
                             onChange={handleThemeSelection}>
-                                <option value="royal">Royal</option>                                    <option value="bvt">BVT!!!</option>
+                                <option value="royal">Royal</option>                                    
+                                <option value="bvt">BVT!!!</option>
                         </select> 
                     </div>
                 </div>
