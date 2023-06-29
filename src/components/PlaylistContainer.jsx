@@ -14,6 +14,10 @@ import SongCard from "./SongCard"
  * @returns {Container} A Container that displays SongCard
  * elements for songs in a playlist
  */
+<<<<<<< HEAD
+function PlaylistContainer({ playlist, library, playlistIndex, chooseSong }) {
+    const { getSpotifyPlaylistTracks } = useContext(Context)
+=======
 function PlaylistContainer({ playlist }) {
     const { getSpotifyPlaylistTracks, currentPlaylistId } = useContext(Context)
     const {
@@ -21,6 +25,7 @@ function PlaylistContainer({ playlist }) {
         playlistIndex,
         chooseSong
     } = useContext(MusicPlayerStateContext)
+>>>>>>> development
     const [songCards, setSongCards] = useState([])
     // If playlist is from spotify, fetch the tracklist
     useEffect(() => {
@@ -39,6 +44,11 @@ function PlaylistContainer({ playlist }) {
                                 key={index}
                                 index={index}
                                 song={song.track}
+<<<<<<< HEAD
+                                chooseSong={chooseSong}
+                                />
+                    )))
+=======
                                 cardClickHandler={() => chooseSong(index)}
                             />
                         )))
@@ -52,6 +62,7 @@ function PlaylistContainer({ playlist }) {
                         song={song}
                         cardClickHandler={() => chooseSong(index)}
                     />))
+>>>>>>> development
         }
     }, [library, playlistIndex])
 
