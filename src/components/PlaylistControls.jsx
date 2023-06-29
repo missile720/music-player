@@ -16,7 +16,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   const [activeTab, setActiveTab] = useState("create");
 
   const { library, playlistIndex, choosePlaylist } = useContext(MusicPlayerStateContext);
-  const { theme } = useContext(ThemeContext);
+  const { theme, mode } = useContext(ThemeContext);
   const { updatePlaylistName } = useContext(Context);
 
   // Some of the functionality is based on whether the playlist was made locally or has been pulled from Spotify so giving it a
@@ -303,7 +303,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
         onSubmit={handleSubmit}
       >
         <div className="modal-dialog">
-          <div className={`modal-content modal-${theme}`}>
+          <div className={`modal-content primary-${theme}-${mode}`}>
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
                 Local Playlist Controls
@@ -386,7 +386,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
             <div className="modal-footer">
               <button
                 type="button"
-                className={`btn button-${theme}`}
+                className={`btn element-${theme}-${mode}`}
                 data-bs-dismiss="modal"
               >
                 Close
@@ -394,7 +394,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
               <button
                 type="submit"
                 form="file-upload"
-                className={`btn button-${theme}`}
+                className={`btn element-${theme}-${mode}`}
                 data-bs-dismiss="modal"
               >
                 Submit

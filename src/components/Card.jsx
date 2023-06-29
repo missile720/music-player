@@ -20,15 +20,15 @@ import { useContext } from "react"
  * information of a playlist/song
  */
 function Card({ coverArt, metaData, cardClickHandler, cardType }) {
-    const { theme } = useContext(ThemeContext)
+    const { theme, mode } = useContext(ThemeContext)
 
     /**
      * @param {string} cardType The type of card. To be appended as
      * a class to the end of the card's classname
      */
     function getCardClassName(cardType) {
-        let className = `container-card p-2 d-flex 
-            align-items-center rounded gap-2`
+        let className = `${theme}-${mode}-container-card p-2 d-flex 
+            align-items-center rounded gap-2 shared-code`
 
         if (cardType) {
             className += cardType
@@ -41,7 +41,7 @@ function Card({ coverArt, metaData, cardClickHandler, cardType }) {
         <div
             onClick={cardClickHandler}
             className={getCardClassName(cardType)}
-            id={`card-${theme}`}
+            id={`tertiary-${theme}-${mode}`}
         >
             <img
                 src={coverArt.url}

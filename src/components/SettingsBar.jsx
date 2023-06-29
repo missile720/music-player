@@ -8,8 +8,8 @@ import { ThemeContext } from '../contexts/ThemeContext';
 import "./SettingsBar.css";
 
 const SettingsBar = () => {
-  const { theme, toggleDarkMode } = useContext(ThemeContext)
-  const [dark, setDark] = useState(theme === 'dark' ? true : false)
+  const { mode, toggleDarkMode } = useContext(ThemeContext)
+  const [dark, setDark] = useState(mode === 'dark' ? true : false)
   const [settingsActive, setSettingsActive] = useState(false)
 
   const handleSettingsActive = () => {

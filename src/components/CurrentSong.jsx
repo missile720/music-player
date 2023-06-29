@@ -10,12 +10,12 @@ import fastforwardImg from "../assets/fastforward.svg"
 import './CurrentSong.css'
 
 function CurrentSong() {
-    const { theme } = useContext(ThemeContext)
+    const { theme, mode } = useContext(ThemeContext)
     const { songProgress, scrubSong, libraryView } = useContext(MusicPlayerStateContext)
 
     return (
         <div
-            className={`current-song-container current-song-container-${theme} px-1 pe-2`}
+            className={`current-song-container current-song-container-${mode} px-1 pe-2`}
             data-bs-toggle="offcanvas"
             data-bs-target="#currentSongOffCanvas"
             aria-controls="currentSongOffCanvas"
@@ -50,11 +50,11 @@ function CurrentSong() {
                 </div>
                 <div className="music-play-buttons">
                     {/* skip backwards */}
-                    <img className={`music-button music-button-${theme}`} src={rewindImg}></img>
+                    <img className={`music-button music-button-${theme}-${mode}`} src={rewindImg}></img>
                     {/* Play */}
-                    <img className={`music-button music-button-${theme}`} src={playImg}></img>
+                    <img className={`music-button music-button-${theme}-${mode}`} src={playImg}></img>
                     {/* skip forward  */}
-                    <img className={`music-button music-button-${theme}`} src={fastforwardImg}></img>
+                    <img className={`music-button music-button-${theme}-${mode}`} src={fastforwardImg}></img>
                 </div>
             </div>
         </div>
