@@ -3,6 +3,7 @@ import { useState, useEffect, useContext } from "react";
 import { Context } from "../contexts/Context.jsx";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx";
 import { ThemeContext } from "../contexts/ThemeContext.jsx";
+
 import Nav from "./Navbar";
 import LibraryContainer from "./LibraryContainer";
 import PlaylistContainer from "./PlaylistContainer";
@@ -14,11 +15,9 @@ import returnImg from "../assets/return.svg";
 import "./main.css";
 
 function Main() {
-  console.log("render");
-
   const { theme } = useContext(ThemeContext);
   const { userPlaylistSpotify } = useContext(Context);
-  const [localPlaylists, setLocalPlaylists] = useState(fetchLocalPlaylists());
+  const [localPlaylistsState, setLocalPlaylistsState] = useState(() => fetchLocalPlaylists());
 
   const { library, setLibrary, playlistIndex, libraryView, setLibraryView } =
     useContext(MusicPlayerStateContext);
@@ -26,13 +25,13 @@ function Main() {
   // Load the user's playlists from Spotify and local storage into the
   // library whenever it's updated
   useEffect(() => {
-    if (localPlaylists && userPlaylistSpotify.items) {
-      const joinedPlaylists = [...userPlaylistSpotify.items, ...localPlaylists];
+    if (localPlaylistsState && userPlaylistSpotify.items) {
+      const joinedPlaylists = [...userPlaylistSpotify.items, ...localPlaylistsState];
       setLibrary(joinedPlaylists);
     } else if (userPlaylistSpotify.items) {
       setLibrary(userPlaylistSpotify.items);
     }
-  }, [userPlaylistSpotify, localPlaylists]);
+  }, [userPlaylistSpotify, localPlaylistsState]);
 
   function fetchLocalPlaylists() {
     return JSON.parse(localStorage.getItem("Local Music"));
@@ -40,13 +39,12 @@ function Main() {
 
   return (
     <div className="container-fluid  h-100" id={theme}>
-      <PlaylistControls setLocalPlaylists={setLocalPlaylists} />
+      <PlaylistControls setLocalPlaylistsState={setLocalPlaylistsState} fetchLocalPlaylists={fetchLocalPlaylists} />
       <div className="row h-100">
         {/* left column */}
         <div
-          className={`col-12 col-md-6 ${
-            libraryView ? "" : "d-none d-md-block"
-          }`}
+          className={`col-12 col-md-6 ${libraryView ? "" : "d-none d-md-block"
+            }`}
         >
           {/* Nav/search bar */}
           <div className="col-12 ns-bar text-center">
@@ -76,9 +74,8 @@ function Main() {
 
         {/* right column */}
         <div
-          className={`col-12 col-md-6 ${
-            !libraryView ? "" : "d-none d-md-block"
-          }`}
+          className={`col-12 col-md-6 ${!libraryView ? "" : "d-none d-md-block"
+            }`}
         >
           <div className="col-12 d-flex">
             <button
@@ -88,7 +85,11 @@ function Main() {
               <img src={returnImg} alt="Return arrow"></img>
             </button>
             <div className="col-9 col-md-12 cur-text">
-              <h3>{library.length > 0 && library[playlistIndex].name}</h3>
+              <h3>
+                {library.length > 0 &&
+                  library[playlistIndex] &&
+                  library[playlistIndex].name}
+              </h3>
             </div>
           </div>
           {/* Current playlist */}

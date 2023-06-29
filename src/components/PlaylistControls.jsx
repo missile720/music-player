@@ -1,12 +1,15 @@
 import { useState, useContext, useEffect } from "react";
-import EditPlaylists from "./EditPlaylists";
-import CreatePlaylist from "./CreatePlaylist";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext";
 import { nanoid } from "nanoid";
-import "./PlaylistControls.css";
 import { Context } from "../contexts/Context";
 
-const PlaylistControls = ({ setLocalPlaylists }) => {
+import EditPlaylists from "./EditPlaylists";
+import CreatePlaylist from "./CreatePlaylist";
+
+import "./PlaylistControls.css";
+
+
+const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
   const [selectedPlaylistSource, setSelectedPlaylistSource] = useState("");
   const [activeTab, setActiveTab] = useState("create");
@@ -38,8 +41,19 @@ const PlaylistControls = ({ setLocalPlaylists }) => {
     }
   }, [selectedPlaylistId]);
 
+
+  // ========================================================================================================================
+  // Helper Functions
+  function setLocalStoragePlaylists(item) {
+    localStorage.setItem("Local Music", JSON.stringify(item));
+  }
+
   function handleChangeActiveTab(tabName) {
     setActiveTab(tabName);
+  }
+
+  function handleSelectionChange(event) {
+    setSelectedPlaylistId(event.target.value);
   }
 
   function resetInputs() {
@@ -69,6 +83,8 @@ const PlaylistControls = ({ setLocalPlaylists }) => {
     image.src = base64String;
   }
 
+  // ========================================================================================================================
+
   function handlePlaylistCoverChange(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -93,9 +109,6 @@ const PlaylistControls = ({ setLocalPlaylists }) => {
     });
   }
 
-  // The song file is currently too big to be on local storage and since this is a web app
-  // we can't access a folder every time the user visits the site. We can either convert this to a
-  // desktop application, or utilize a database to hold this data.
   function convertAudioFileToString(file, callback) {
     const reader = new FileReader();
 
@@ -159,6 +172,18 @@ const PlaylistControls = ({ setLocalPlaylists }) => {
     });
   }
 
+  function handleDeletePlaylist() {
+    if (selectedPlaylistSource === 'local') {
+      const localStorage = fetchLocalPlaylists();
+      const updatedLocalStorage = localStorage.filter(playlist => playlist.id !== selectedPlaylistId);
+      // This updates the local storage
+      setLocalStoragePlaylists(updatedLocalStorage);
+      // This updates the state of what the local storage is so that the useEffect in the parent component
+      // can re-render the library with the changes
+      setLocalPlaylistsState(fetchLocalPlaylists())
+    }
+  }
+
   function handleSubmit(event) {
     event.preventDefault();
     if (activeTab === "create") {
@@ -179,13 +204,9 @@ const PlaylistControls = ({ setLocalPlaylists }) => {
     }
   }
 
-  function handleSelectionChange(event) {
-    setSelectedPlaylistId(event.target.value);
-  }
-
   function handleLocalStorage() {
     if (localStorage.getItem("Local Music")) {
-      const localMusic = JSON.parse(localStorage.getItem("Local Music"));
+      const localMusic = fetchLocalPlaylists();
       for (let i = 0; i < localMusic.length; i++) {
         // Making sure there aren't playlists with duplicate names
         if (localMusic[i].name === playlistData.name) {
@@ -216,12 +237,12 @@ const PlaylistControls = ({ setLocalPlaylists }) => {
           }
         }
       }
-      localStorage.setItem(`Local Music`, JSON.stringify(localMusic));
+      setLocalStoragePlaylists(localMusic)
     } else {
-      localStorage.setItem(`Local Music`, JSON.stringify([playlistData]));
+      setLocalStoragePlaylists([playlistData])
     }
     resetInputs();
-    setLocalPlaylists(JSON.parse(localStorage.getItem("Local Music")));
+    setLocalPlaylistsState(fetchLocalPlaylists());
   }
 
   return (
@@ -230,13 +251,13 @@ const PlaylistControls = ({ setLocalPlaylists }) => {
       <div
         className="modal fade"
         id="delete-playlist-modal"
-        tabindex="-1"
+        tabIndex="-1"
         aria-labelledby="staticBackdropLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog">
           <div className="modal-content">
-            <div class="modal-header">
+            <div className="modal-header">
               <h1 className="modal-title fs-5">Delete Playlist</h1>
               <button
                 type="button"
@@ -254,11 +275,12 @@ const PlaylistControls = ({ setLocalPlaylists }) => {
                 type="button"
                 className="btn btn-primary"
                 data-bs-dismiss="modal"
+                data-bs-toggle="modal"
                 data-bs-target="#file-upload"
               >
                 No
               </button>
-              <button type="button" className="btn btn-danger">
+              <button type="button" data-bs-dismiss="modal" className="btn btn-danger" onClick={handleDeletePlaylist}>
                 Yes
               </button>
             </div>
@@ -368,6 +390,7 @@ const PlaylistControls = ({ setLocalPlaylists }) => {
                 type="submit"
                 form="file-upload"
                 className="btn btn-primary"
+                data-bs-dismiss="modal"
               >
                 Submit
               </button>
