@@ -8,31 +8,31 @@ import Nav from "./Navbar";
 import LibraryContainer from "./LibraryContainer";
 import PlaylistContainer from "./PlaylistContainer";
 import SettingsBar from "./SettingsBar";
-import CurrentSong from "./CurrentSong";
+// import CurrentSong from "./CurrentSong";
+import Player from "./Player.jsx";
 import PlaylistControls from "./PlaylistControls.jsx";
-import Player from "./Player"
 
 import returnImg from "../assets/return.svg";
 import "./main.css";
 
 function Main() {
   const { theme } = useContext(ThemeContext);
-  const { userPlaylistSpotify, accessToken, getSpotifyPlaylistTracks } = useContext(Context);
-  const [localPlaylists, setLocalPlaylists] = useState(fetchLocalPlaylists());
+  const { userPlaylistSpotify ,accessToken, getSpotifyPlaylistTracks} = useContext(Context);
+  const [localPlaylistsState, setLocalPlaylistsState] = useState(() => fetchLocalPlaylists());
 
-  const { library, setLibrary, playlistIndex, libraryView, setLibraryView, chooseSong, currentSongIndex } =
+  const { library, setLibrary, playlistIndex, libraryView, setLibraryView, currentSongIndex } =
     useContext(MusicPlayerStateContext);
 
-  // Load the user's playlists whenever their Spotify or Local 
-  // playlists are updated
+  // Load the user's playlists from Spotify and local storage into the
+  // library whenever it's updated
   useEffect(() => {
-    if (localPlaylists && userPlaylistSpotify.items) {
-      const joinedPlaylists = [...userPlaylistSpotify.items, ...localPlaylists];
+    if (localPlaylistsState && userPlaylistSpotify.items) {
+      const joinedPlaylists = [...userPlaylistSpotify.items, ...localPlaylistsState];
       setLibrary(joinedPlaylists);
     } else if (userPlaylistSpotify.items) {
       setLibrary(userPlaylistSpotify.items);
     }
-  }, [userPlaylistSpotify, localPlaylists]);
+  }, [userPlaylistSpotify, localPlaylistsState]);
 
   function fetchLocalPlaylists() {
     return JSON.parse(localStorage.getItem("Local Music"));
@@ -40,7 +40,7 @@ function Main() {
 
   return (
     <div className="container-fluid  h-100" id={theme}>
-      <PlaylistControls />
+      <PlaylistControls setLocalPlaylistsState={setLocalPlaylistsState} fetchLocalPlaylists={fetchLocalPlaylists} />
       <div className="row h-100">
         {/* left column */}
         <div className={`col-12 col-md-6 h-100 ${libraryView ? "" : "d-none d-md-block"}`}>
@@ -76,16 +76,17 @@ function Main() {
               <img src={returnImg} alt="Return arrow"></img>
             </button>
             <div className="col-10 col-md-12 px-2">
-              <h3>{library.length > 0 && library[playlistIndex].name}</h3>
+              <h3>
+                {library.length > 0 &&
+                  library[playlistIndex] &&
+                  library[playlistIndex].name}
+              </h3>
             </div>
           </div>
           {/* Current playlist */}
           <div className="col-12 cur-list">
             <PlaylistContainer
               playlist={library.length > 0 ? library[playlistIndex] : []}
-              library={library}
-              playlistIndex={playlistIndex}
-              chooseSong={chooseSong}
             />
           </div>
           {/* Current song bar */}
