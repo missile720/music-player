@@ -69,7 +69,6 @@ function Main() {
               library={library}
               playlistIndex={playlistIndex}
               chooseSong={chooseSong}
-            currentSongIndex={currentSongIndex}
             />
 
           </div>
@@ -78,6 +77,7 @@ function Main() {
             {/* < CurrentSong /> */}
             <Player
             playlist={library.length > 0 ? library[playlistIndex] : []}
+            currentSongIndex={currentSongIndex}
             />
           </div>
         </div>

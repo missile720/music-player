@@ -24,8 +24,7 @@ function useMusicPlayerState() {
     }
 
     function chooseSong(index){
-        // setCurrentSongIndex(index)
-        console.log(index)
+        setCurrentSongIndex(index)
     }
 
     return {

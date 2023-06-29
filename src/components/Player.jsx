@@ -5,36 +5,37 @@ import { useContext, useState } from "react"
 
 import { Context } from "../Context"
 
-function Player({playlist}) {
+function Player({playlist, currentSongIndex}) {
     const {accessToken, getSpotifyPlaylistTracks} = useContext(Context)
     const [volume, setVolume] = useState(.05)
-    const [currentSong, setCurrentSong] = useState(null)
-    const [currentIndex, setCurrentIndex] = useState(0)
-    
+    const [currentSong, setCurrentSong] = useState('')
     useEffect(() => {
       if (playlist.tracks && playlist.tracks.href) {
         getSpotifyPlaylistTracks(playlist.tracks.href)
         .then(tracks =>
-          setCurrentSong(tracks.items[currentIndex].track.uri)
+          setCurrentSong(tracks.items[currentSongIndex].track.uri)
           )}
-}, [playlist])
-
-// const handleItemClick = (index) => {
-//   setCurrentSong(playlist.tracks.items[index].track.uri);
-// };   
+}, [playlist, currentSongIndex])
 
   return (
     <div>
       <SpotifyPlayer
         name='Syntax Samurai Player'
-        styles={{}}
+        styles={{ activeColor: '#fff',
+        // bgColor: '#333',
+        color: '#333',
+        loaderColor: '#fff',
+        sliderColor: '#1cb954',
+        // trackArtistColor: '#fff',
+        // trackNameColor: '#fff',
+      }}
         token={accessToken}
         layout='responsive'
         initialVolume={volume}
         inlineVolume={true}
         play={true}
-        uris={playlist.uri}
-        // uris={currentSong}
+        persistDeviceSelection={true}
+        uris={currentSongIndex == 0 ? playlist.uri : currentSong}
 />
     </div>
   )
