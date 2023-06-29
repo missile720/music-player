@@ -3,98 +3,153 @@
     overflow: hidden;
 }
 
-#light {
+#primary-royal-light, .primary-royal-light {
     background-color: #fafafa;
     color: #323130;
 }
   
-#dark {
+#primary-royal-dark, .primary-royal-dark {
+    background-color: #10074A;
+    color: #fafafa;
+}
+
+#primary-bvt-light, .primary-bvt-light {
     background-color: #ffa600;
     color: #fafafa;
 }
-
-#card-light {
-    background-color: #d4d4d4;
-    color: #323130;
-    border: 1px solid #e09200;
-}
   
-#card-dark {
-    background-color: #e09200;
-    color: #fafafa;
-    border: 1px solid #d4d4d4;
+#primary-bvt-dark, .primary-bvt-dark {
+    background-color: #000000;
+    color: #FF5531;
 }
+/*  */
 
-#container-light {
+#secondary-royal-light, .secondary-royal-light {
     background-color: #e0e0e0;
     color: #323130;
-    border-radius: 20px;
+    /* border-radius: 20px; */
 }
   
-#container-dark {
-    background-color: #f09c00;
+#secondary-royal-dark, .secondary-royal-dark {
+    background: linear-gradient(#170873 0 65%, #FFFFFF);
     color: #fafafa;
-    border-radius: 20px;
 }
 
-.button-light {
+#secondary-bvt-light, .secondary-bvt-light {
+    background-color: #f09c00;
+    color: #323130;
+}
+  
+#secondary-bvt-dark, .secondary-bvt-dark {
+    background-color: #FF5531;
+    background: linear-gradient(#FF5531 0 65%, #291B1B);
+    color: #fafafa;
+}
+/*  */
+
+#secondary-offcanvas-royal-light, .secondary-offcanvas-royal-light {
+    background-color: #e0e0e0;
+    color: #323130;
+}
+  
+#secondary-offcanvas-royal-dark, .secondary-offcanvas-royal-dark {
+    background-color: #170873;
+    color: #fafafa;
+}
+
+#secondary-offcanvas-bvt-light, .secondary-offcanvas-bvt-light {
+    background-color: #f09c00;
+    color: #323130;
+
+}
+  
+#secondary-offcanvas-bvt-dark, .secondary-offcanvas-bvt-dark {
+    background-color: #FF5531;
+    color: #fafafa;
+}
+
+/*  */
+
+#tertiary-royal-light, .tertiary-royal-light {
+    background-color: #FFFFFF;
+    color: #323130;
+    border: 1px solid #170873;
+}
+  
+#tertiary-royal-dark, .tertiary-royal-dark {
+    background-color: #FFFFFF;
+    color: #323130;
+    border: 1px solid #323130;
+}
+
+#tertiary-bvt-light, .tertiary-bvt-light {
     background-color: #d4d4d4;
     color: #323130;
-    border: 2px solid #e09200;
 }
   
-.button-dark {
-    background-color: #e09200;
+#tertiary-bvt-dark, .tertiary-bvt-dark {
+    background-color: #d4d4d4;
+    color: #323130;
+}
+/*  */
+
+#element-royal-light, .element-royal-light {
+    background-color: #d4d4d4;
+    color: #323130;
+    
+}
+  
+#element-royal-dark, .element-royal-dark {
+    background-color: #170873;
     color: #fafafa;
-    border: 2px solid #323130;
 }
 
-.button-light:hover {
+.element-royal-light:hover {
     background-color: #d4d4d4;
-    border: 2px solid #323130;
+    border: 2px solid #170873;
 }
   
-.button-dark:hover {
-    background-color: #e09200;
+.element-royal-dark:hover {
+    background-color: #170873;
     border: 2px solid #fafafa;
 }
 
-.offcanvas-header-light{
+#element-bvt-light, .element-bvt-light {
     background-color: #d4d4d4;
     color: #323130;
 }
-
-.offcanvas-header-dark{
-    background-color: #e09200;
+  
+#element-bvt-dark, .element-bvt-dark {
+    background-color: #FF5531;
     color: #fafafa;
 }
 
-.offcanvas-body-light{
+.element-bvt-light:hover {
     background-color: #d4d4d4;
     color: #323130;
+    border: 2px solid #323130;
 }
-
-.offcanvas-body-dark{
-    background-color: #e09200;
+  
+.element-bvt-dark:hover {
+    background-color: #FF5531;
+    border: 2px solid #fafafa;
     color: #fafafa;
 }
 
-.music-button-light{
+.music-button-royal-light{
     filter: invert(14%) sepia(7%) saturate(129%) hue-rotate(349deg) brightness(91%) contrast(84%);
 }
 
-.music-button-dark{
+.music-button-royal-dark{
     filter: invert(93%) sepia(4%) saturate(22%) hue-rotate(79deg) brightness(112%) contrast(96%);
 }
 
-.modal-light {
-    background-color: #fafafa;
-    color: #323130;
-}  
+.music-button-bvt-light{
+    filter: invert(96%) sepia(72%) saturate(7469%) hue-rotate(190deg) brightness(132%) contrast(96%);
+}
 
-.modal-dark {
-    background-color: #ffa600;
-    color: #fafafa;
+.music-button-bvt-dark{
+    filter: invert(37%) sepia(30%) saturate(2464%) hue-rotate(336deg) brightness(113%) contrast(104%);
 }
 
 .lib-list {
