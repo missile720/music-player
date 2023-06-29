@@ -116,7 +116,7 @@ function SongCard({ song, index, cardClickHandler }) {
     cardClickHandler={cardClickHandler}
     cardType={getCardType(songIndex)}
   />
-  );
+
 }
 
 export default SongCard;

@@ -4,8 +4,6 @@ import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext";
 import { ThemeContext } from "../contexts/ThemeContext"
 import { nanoid } from "nanoid";
 
-
-
 import EditPlaylists from "./EditPlaylists";
 import CreatePlaylist from "./CreatePlaylist";
 
