@@ -13,6 +13,7 @@ import { useState } from "react"
 function useMusicPlayerState() {
     const [library, setLibrary] = useState([])
     const [playlistIndex, setPlaylistIndex] = useState(0)
+    const [currentSongIndex, setCurrentSongIndex] = useState(0)
 
     /**
      * Sets the current playlistIndex to the given index
@@ -22,11 +23,18 @@ function useMusicPlayerState() {
         setPlaylistIndex(index)
     }
 
+    function chooseSong(index){
+        // setCurrentSongIndex(index)
+        console.log(index)
+    }
+
     return {
         library,
         setLibrary,
         playlistIndex,
-        choosePlaylist
+        choosePlaylist,
+        currentSongIndex,
+        chooseSong
     }
 }
 

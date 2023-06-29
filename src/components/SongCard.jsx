@@ -8,7 +8,7 @@ import defaultSongArt from "../assets/defaultCardArt.svg"
  * @returns A Card component displaying the details of a
  * given song
  */
-function SongCard({ song }) {
+function SongCard({ song, chooseSong, index }) {
     /**
      * Get the art for a song
      * @param {Object} song Track object from Spotify API
@@ -62,6 +62,8 @@ function SongCard({ song }) {
     return <Card
         coverArt={{ url: getSongArt(song), title: getAlbum(song) }}
         metaData={songData}
+        cardClickHandler={() => chooseSong(index)}
+
     />
 }
 

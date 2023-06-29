@@ -19,7 +19,9 @@ function Main() {
     library,
     setLibrary,
     playlistIndex,
-    choosePlaylist
+    choosePlaylist,
+    chooseSong,
+    currentSongIndex
   } = useMusicPlayerState()
 
   useEffect(() => {
@@ -66,6 +68,8 @@ function Main() {
               playlist={library.length > 0 ? library[playlistIndex] : []}
               library={library}
               playlistIndex={playlistIndex}
+              chooseSong={chooseSong}
+            currentSongIndex={currentSongIndex}
             />
 
           </div>

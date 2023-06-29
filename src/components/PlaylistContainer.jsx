@@ -14,7 +14,7 @@ import SongCard from "./SongCard"
  * @returns {Container} A Container that displays SongCard
  * elements for songs in a playlist
  */
-function PlaylistContainer({ playlist, library, playlistIndex }) {
+function PlaylistContainer({ playlist, library, playlistIndex, chooseSong }) {
     const { getSpotifyPlaylistTracks } = useContext(Context)
     const [songCards, setSongCards] = useState([])
     // If playlist is from spotify, fetch the tracklist
@@ -28,7 +28,8 @@ function PlaylistContainer({ playlist, library, playlistIndex }) {
                                 key={index}
                                 index={index}
                                 song={song.track}
-                            />
+                                chooseSong={chooseSong}
+                                />
                     )))
         }
     }, [library, playlistIndex])
