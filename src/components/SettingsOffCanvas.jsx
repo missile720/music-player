@@ -1,10 +1,24 @@
 /* eslint react/prop-types: 0 */
 import { SettingsIcon } from './icons'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { ThemeContext } from '../contexts/ThemeContext'
 
 const Settings = ({ handleClick }) => {
-    const { theme } = useContext(ThemeContext)
+    const { theme, mode, toggleTheme } = useContext(ThemeContext)
+    const [formData, setFormData] = useState({
+        themeSelection: theme, 
+    })
+
+    const handleThemeSelection = (event) => {
+        const { name, value } = event.target
+        toggleTheme(value)
+        setFormData(prevFormData => {
+            return {
+                ...prevFormData,
+                [name]: value
+            } 
+        })
+    }
 
     return (
         <div>
@@ -24,7 +38,7 @@ const Settings = ({ handleClick }) => {
                 id="staticBackdrop"
                 aria-labelledby="staticBackdropLabel"
             >
-                <div className={`offcanvas-header offcanvas-header-${theme}`}>
+                <div className={`offcanvas-header secondary-${theme}-${mode}`}>
                     <h5 className="offcanvas-title" id="staticBackdropLabel">Settings</h5>
                     <button
                         type="button"
@@ -34,9 +48,17 @@ const Settings = ({ handleClick }) => {
                         onClick={handleClick}
                     ></button>
                 </div>
-                <div className={`offcanvas-body offcanvas-body-${theme}`}>
+                <div className={`offcanvas-body secondary-${theme}-${mode}`}>
                     <div>
-                        Setting Stuff here
+                        <label htmlFor='themeSelection'>Choose Theme</label>
+                        <select 
+                            name='themeSelection' 
+                            className="form-select form-select-lg mb-3" 
+                            aria-label=".form-select-lg example"
+                            value={formData.themeSelection}
+                            onChange={handleThemeSelection}>
+                                <option value="royal">Royal</option>                                    <option value="bvt">BVT!!!</option>
+                        </select> 
                     </div>
                 </div>
             </div>

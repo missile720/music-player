@@ -11,7 +11,7 @@ import "./CurrentSongOffCanvas.css"
 
 
 export default function CurrentSongOffCanvas() {
-    const { theme } = useContext(ThemeContext)
+    const { theme, mode } = useContext(ThemeContext)
     const { songProgress, scrubSong } = useContext(MusicPlayerStateContext)
 
     return (
@@ -21,11 +21,11 @@ export default function CurrentSongOffCanvas() {
             tabIndex="-1"
             aria-labelledby="currentSongOffCanvasLabel"
         >
-            <div className={`offcanvas-header d-flex offcanvas-header-${theme}`}>
+            <div className={`offcanvas-header d-flex secondary-${theme}-${mode}`}>
                 <button type="button" className="btn-close align-left" data-bs-dismiss="offcanvas" aria-label="Close">
                 </button>
             </div>
-            <div className={`offcanvas-body gap-2 d-flex flex-column align-items-center justify-content-center offcanvas-body-${theme}`}>
+            <div className={`offcanvas-body gap-2 d-flex flex-column align-items-center justify-content-center secondary-${theme}-${mode}`}>
                 <img className="offcanvas-art" src={defaultCardArtImg}></img>
                 <div className="song-data d-flex flex-column align-items-center">
                     <h2 className="m-0">Song Title</h2>
@@ -44,9 +44,9 @@ export default function CurrentSongOffCanvas() {
                     />
                 </div>
                 <div className="music-buttons w-100 d-flex justify-content-evenly">
-                    <img className={`music-button music-button-${theme}`} src={rewindImg}></img>
-                    <img className={`music-button music-button-${theme}`} src={playImg}></img>
-                    <img className={`music-button music-button-${theme}`} src={fastforwardImg}></img>
+                    <img className={`music-button music-button-${theme}-${mode}`} src={rewindImg}></img>
+                    <img className={`music-button music-button-${theme}-${mode}`} src={playImg}></img>
+                    <img className={`music-button music-button-${theme}-${mode}`} src={fastforwardImg}></img>
                 </div>
             </div>
 

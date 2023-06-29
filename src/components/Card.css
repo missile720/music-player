@@ -6,20 +6,50 @@
     height: 4rem;
 }
 
-.container-card {
-    cursor: pointer;
-    text-align: left;
-}
+
 
 .selected-card {
     background-color: #7b8cdb !important;
     color: #16161d !important;
 }
 
-.container-card:hover{
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
 .trashIcon {
     margin-left: auto;
+}
+
+.shared-code {
+    cursor: pointer;
+    text-align: left;
+}
+
+.royal-light-container-card {
+    border: 2px solid #d4d4d4;
+}
+.royal-dark-container-card {
+    border: 2px solid #d4d4d4;
+}
+
+.bvt-light-container-card {
+    border: 2px solid #d4d4d4;
+}
+.bvt-dark-container-card {
+    border: 2px solid #d4d4d4;
+}
+
+.royal-light-container-card:hover{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border: 2px solid #323130;
+}
+.royal-dark-container-card:hover{
+    box-shadow: rgba(255, 255, 255, 0.664) 0px 3px 8px;
+    border: 2px solid white;
+}
+
+.bvt-light-container-card:hover{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    border: 2px solid #323130;
+}
+.bvt-dark-container-card:hover{
+    box-shadow: rgba(255, 255, 255, 0.664) 0px 3px 8px;
+    border: 2px solid white;
 }

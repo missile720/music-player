@@ -15,7 +15,7 @@ import returnImg from "../assets/return.svg";
 import "./main.css";
 
 function Main() {
-  const { theme } = useContext(ThemeContext);
+  const { theme, mode } = useContext(ThemeContext);
   const { userPlaylistSpotify } = useContext(Context);
   const [localPlaylists, setLocalPlaylists] = useState(fetchLocalPlaylists());
 
@@ -38,7 +38,7 @@ function Main() {
   }
 
   return (
-    <div className="container-fluid  h-100" id={theme}>
+    <div className="container-fluid  h-100" id={`primary-${theme}-${mode}`}>
       <PlaylistControls />
       <div className="row h-100">
         {/* left column */}
@@ -51,7 +51,7 @@ function Main() {
             <h3>Library</h3>
             <button
               type="button"
-              className={`btn button-${theme}`}
+              className={`btn element-${theme}-${mode}`}
               data-bs-toggle="modal"
               data-bs-target="#file-upload"
             >
@@ -71,7 +71,7 @@ function Main() {
         {/* right column */}
         <div className={`col-12 col-md-6 h-100 ${!libraryView ? "" : "d-none d-md-block"}`}>
           <div className="col-12 d-flex cur-text align-items-center">
-            <button className={`col-2 d-md-none button-${theme}`} onClick={() => setLibraryView(true)}>
+            <button className={`col-2 d-md-none button-${mode}`} onClick={() => setLibraryView(true)}>
               <img src={returnImg} alt="Return arrow"></img>
             </button>
             <div className="col-10 col-md-12 px-2">

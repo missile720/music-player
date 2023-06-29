@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 
 function SearchSong(props) {
     const { addPlaylistTrack, currentPlaylist } = useContext(Context)
-    const { theme } = useContext(ThemeContext)
+    const { theme, mode } = useContext(ThemeContext)
     let songs = [];
     let data = props.data;
 
@@ -31,7 +31,7 @@ function SearchSong(props) {
                 className={`playlist-card m-2 p-2 
                 d-flex align-items-center rounded gap-2 
                 songSearch`}
-                id={`card-${theme}`}
+                id={`card-${mode}`}
             >
                 <img
                     src={song.albumArt}
@@ -48,14 +48,14 @@ function SearchSong(props) {
 
     return (
         <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-            <div className={`offcanvas-header offcanvas-header-${theme}`}>
+            <div className={`offcanvas-header secondary-${theme}-${mode}`}>
                 <div>
                     <h4 className="offcanvas-title text-start" id="offcanvasExampleLabel">Songs</h4>
                     {songs.length > 0 ? <p>Click song to add to current playlist</p> : <p className='text-danger'>Search field was empty</p>}
                 </div>
                 <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
-            <div className={`offcanvas-body offcanvas-body-${theme}`}>
+            <div className={`offcanvas-body secondary-${theme}-${mode}`}>
                 {/* Place for song lists */}
                 {cards}
             </div>

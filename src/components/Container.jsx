@@ -13,7 +13,7 @@ import { ThemeContext } from "../contexts/ThemeContext"
  * the songs of a playlist or the playlists in a library
  */
 function Container({ cards, containerType }) {
-    const { theme } = useContext(ThemeContext)
+    const { theme, mode } = useContext(ThemeContext)
 
     function getContainerClass(containerType) {
         let className = `mp-container
@@ -30,7 +30,7 @@ function Container({ cards, containerType }) {
     return (
         <section
             className={getContainerClass(containerType)}
-            id={`container-${theme}`}
+            id={`secondary-${theme}-${mode}`}
         >
             {cards}
         </section>
