@@ -146,7 +146,6 @@ function ContextProvider({ children }) {
         // console.log(data)
         return data
     }
-// getPlaybackState()
     async function transferPlayback(deviceId){ 
         const response = await fetch('https://api.spotify.com/v1/me/player' , {
             method: 'PUT',    
