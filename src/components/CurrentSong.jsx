@@ -8,8 +8,6 @@ import playImg from "../assets/play.svg"
 import fastforwardImg from "../assets/fastforward.svg"
 
 import './CurrentSong.css'
-import { Context } from "../Context"
-// import SpotifyPlayer from "react-spotify-web-playback"
 
 function CurrentSong() {
     const { theme } = useContext(ThemeContext)

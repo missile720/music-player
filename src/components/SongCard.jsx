@@ -17,9 +17,6 @@ import trashHover from '../assets/trashSelected.svg'
  * @returns A Card component displaying the details of a
  * given song
  */
-<<<<<<< HEAD
-function SongCard({ song, chooseSong, index }) {
-=======
 function SongCard({ song, index, cardClickHandler }) {
     const [hover, setHover] = useState(false);
     const { deletePlaylistTrack, currentPlaylist } = useContext(Context)
@@ -33,7 +30,6 @@ function SongCard({ song, index, cardClickHandler }) {
         setHover(false);
     }
 
->>>>>>> development
     /**
      * Get the art for a song
      * @param {Object} song Track object from Spotify API
@@ -117,13 +113,8 @@ function SongCard({ song, index, cardClickHandler }) {
     return <Card
         coverArt={{ url: getSongArt(song), title: getAlbum(song) }}
         metaData={songData}
-<<<<<<< HEAD
-        cardClickHandler={() => chooseSong(index)}
-
-=======
         cardClickHandler={cardClickHandler}
         cardType={getCardType(songIndex)}
->>>>>>> development
     />
 }
 

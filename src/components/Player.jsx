@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react'
 import SpotifyPlayer from "react-spotify-web-playback"
 
-import { useContext, useState } from "react"
+import { useState } from "react"
 
-import { Context } from "../Context"
 
-function Player({playlist, currentSongIndex}) {
-    const {accessToken, getSpotifyPlaylistTracks} = useContext(Context)
-    const [volume, setVolume] = useState(.05)
+function Player({playlist, currentSongIndex, accessToken, getSpotifyPlaylistTracks}) {
+
+  const [volume, setVolume] = useState(.05)
     const [currentSong, setCurrentSong] = useState('')
 
     useEffect(() => {
