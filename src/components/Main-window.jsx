@@ -90,13 +90,13 @@ function Main() {
           </div>
           {/* Current song bar */}
           <div className='col-12 cur-song-bar '>
-            < CurrentSong />
-            {/* <Player
+            {/* < CurrentSong /> */}
+            <Player
             playlist={library.length > 0 ? library[playlistIndex] : []}
             currentSongIndex={currentSongIndex}
             accessToken = {accessToken}
             getSpotifyPlaylistTracks = {getSpotifyPlaylistTracks}
-            /> */}
+            />
           </div>
         </div>
       </div>
