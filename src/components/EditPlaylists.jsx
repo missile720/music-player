@@ -25,6 +25,17 @@ const EditPlaylists = ({
           {playlistsToEditOptions}
         </select>
       </div>
+      <div className=" mb-3">
+        <span id="inputGroup-sizing-default">Edit Playlist Name</span>
+        <input
+          type="text"
+          className="form-control"
+          aria-label="Sizing example input"
+          aria-describedby="inputGroup-sizing-default"
+          value={playlistData.name}
+          onChange={handlePlaylistChangeName}
+        />
+      </div>
       {selectedPlaylistSource === "local" && (
         <>
           <div className="mb-3">
@@ -52,19 +63,15 @@ const EditPlaylists = ({
               onChange={handleFileUpload}
             />
           </div>
+          <button
+            className="btn btn-sm btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#delete-playlist-modal"
+          >
+            Delete Playlist
+          </button>
         </>
       )}
-      <div className=" mb-3">
-        <span id="inputGroup-sizing-default">Edit Playlist Name</span>
-        <input
-          type="text"
-          className="form-control"
-          aria-label="Sizing example input"
-          aria-describedby="inputGroup-sizing-default"
-          value={playlistData.name}
-          onChange={handlePlaylistChangeName}
-        />
-      </div>
     </>
   );
 };
