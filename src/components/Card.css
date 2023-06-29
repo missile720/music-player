@@ -8,4 +8,18 @@
 
 .container-card {
     cursor: pointer;
+    text-align: left;
+}
+
+.selected-card {
+    background-color: #7b8cdb !important;
+    color: #16161d !important;
+}
+
+.container-card:hover{
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.trashIcon {
+    margin-left: auto;
 }

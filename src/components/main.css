@@ -1,24 +1,130 @@
-.col-12 {
-    border: 1px dotted red;
-}
 .container-fluid {
-    width: 100vw;
+    width: auto;
+    overflow: hidden;
+}
+
+#light {
+    background-color: #fafafa;
+    color: #323130;
+}
+  
+#dark {
+    background-color: #ffa600;
+    color: #fafafa;
+}
+
+#card-light {
+    background-color: #d4d4d4;
+    color: #323130;
+    border: 1px solid #e09200;
+}
+  
+#card-dark {
+    background-color: #e09200;
+    color: #fafafa;
+    border: 1px solid #d4d4d4;
+}
+
+#container-light {
+    background-color: #e0e0e0;
+    color: #323130;
+    border-radius: 20px;
+}
+  
+#container-dark {
+    background-color: #f09c00;
+    color: #fafafa;
+    border-radius: 20px;
+}
+
+.button-light {
+    background-color: #d4d4d4;
+    color: #323130;
+    border: 2px solid #e09200;
+}
+  
+.button-dark {
+    background-color: #e09200;
+    color: #fafafa;
+    border: 2px solid #323130;
+}
+
+.button-light:hover {
+    background-color: #d4d4d4;
+    border: 2px solid #323130;
+}
+  
+.button-dark:hover {
+    background-color: #e09200;
+    border: 2px solid #fafafa;
+}
+
+.offcanvas-header-light{
+    background-color: #d4d4d4;
+    color: #323130;
+}
+
+.offcanvas-header-dark{
+    background-color: #e09200;
+    color: #fafafa;
+}
+
+.offcanvas-body-light{
+    background-color: #d4d4d4;
+    color: #323130;
+}
+
+.offcanvas-body-dark{
+    background-color: #e09200;
+    color: #fafafa;
+}
+
+.music-button-light{
+    filter: invert(14%) sepia(7%) saturate(129%) hue-rotate(349deg) brightness(91%) contrast(84%);
+}
+
+.music-button-dark{
+    filter: invert(93%) sepia(4%) saturate(22%) hue-rotate(79deg) brightness(112%) contrast(96%);
+}
+
+.modal-light {
+    background-color: #fafafa;
+    color: #323130;
+}  
+
+.modal-dark {
+    background-color: #ffa600;
+    color: #fafafa;
 }
 
 .lib-list {
-    height: 70%
+    height: 70%;
+    overflow: auto;
 }
+
 .cur-list {
     height: 80%;
 }
 
-.settings-bar, .cur-song-bar {
+.settings-bar,
+.cur-song-bar {
     height: 15%;
 }
 
 .ns-bar {
     height: 10%;
 }
-.lib-text, .cur-text {
+
+.lib-text,
+.cur-text {
     height: 5%;
+}
+
+.playlist-bar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1%;
 }

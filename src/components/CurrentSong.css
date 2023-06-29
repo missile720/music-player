@@ -1,5 +1,4 @@
 .current-song-container {
-  width: 500px;
   display: flex;
   align-items: center;
   height: 100%;
@@ -27,6 +26,22 @@ li {
   justify-content: space-between;
 }
 
+.music-button {
+  cursor: pointer;
+}
+
+.image-container {
+  width: 30%;
+  height: 100%;
+}
+
+.song-art {
+  width: 50%;
+  border-radius: .5rem;
+  background-color: #dfe0e9;
+  padding: .5rem;
+}
+
 #range {
   width: 100%;
 }
@@ -35,4 +50,18 @@ li {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+@media (max-width: 767px) {
+  .song-art {
+    width: 100%;
+  }
+
+  .current-song-container-light:active{
+    background-color: #dfe0e9;
+  }
+  
+  .current-song-container-dark:active{
+    background-color: #df9710;
+  }
 }

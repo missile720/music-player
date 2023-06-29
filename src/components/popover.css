@@ -5,20 +5,18 @@
     background-color: none;
     background: none;
     box-shadow: none;
-    
+    z-index: 1000 !important;
 }
   
 .popover-content {
     position: absolute;
-    top: -100%; /* Adjust as needed */
+    top: -50%; /* Adjust as needed */
     
 }
 
 .volume, .bass, .treble {
     transform: rotate(270deg);
     width: 80px;
-    
-
 }
 
 .volume-component, .equalizer-component{
@@ -47,4 +45,14 @@
 }
 .value-text {
     font-size: 12px;
+}
+
+.hide-from-screen {
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    height: 1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
 }

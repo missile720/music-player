@@ -1,9 +1,22 @@
+<<<<<<< HEAD
 import { useContext, useState } from "react"
+=======
+import { useContext } from "react"
+import { ThemeContext } from "../contexts/ThemeContext.jsx";
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx";
+
+import defaultCardArtImg from "../assets/defaultCardArt.svg"
+import rewindImg from "../assets/rewind.svg"
+import playImg from "../assets/play.svg"
+import fastforwardImg from "../assets/fastforward.svg"
+
+>>>>>>> development
 import './CurrentSong.css'
 import { Context } from "../Context"
 // import SpotifyPlayer from "react-spotify-web-playback"
 
 function CurrentSong() {
+<<<<<<< HEAD
     const {accessToken, getPlaybackState, startResumePlayback, transferPlayback} = useContext(Context)
 //  const test1 =  getPlaybackState().then((res)=>{
 //         // console.log(res.item.href)
@@ -22,25 +35,33 @@ function CurrentSong() {
     function changePercent(event) {
         setPercentage(event.target.value)
     }
+=======
+    const { theme } = useContext(ThemeContext)
+    const { songProgress, scrubSong, libraryView } = useContext(MusicPlayerStateContext)
+>>>>>>> development
 
     return (
-        <div className="current-song-container">
-            <div className="current-song-left-side col-3">
-                <div className="image-container col-2">
+        <div
+            className={`current-song-container current-song-container-${theme} px-1 pe-2`}
+            data-bs-toggle="offcanvas"
+            data-bs-target="#currentSongOffCanvas"
+            aria-controls="currentSongOffCanvas"
+            disabled={libraryView}
+        >
+            <div className="current-song-left-side col-6">
+                <div className="image-container col-4 d-flex justify-content-center">
                     {/* Current Song picture */}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" className="bi bi-file-earmark-music" viewBox="0 0 16 16">
-                        <path d="M11 6.64a1 1 0 0 0-1.243-.97l-1 .25A1 1 0 0 0 8 6.89v4.306A2.572 2.572 0 0 0 7 11c-.5 0-.974.134-1.338.377-.36.24-.662.628-.662 1.123s.301.883.662 1.123c.364.243.839.377 1.338.377.5 0 .974-.134 1.338-.377.36-.24.662-.628.662-1.123V8.89l2-.5V6.64z" />
-                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2zM9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5v2z" />
-                    </svg>                </div>
-                <div className="song-title-artist col-10">
+                    <img className="song-art" src={defaultCardArtImg}></img>
+                </div>
+                <div className="song-title-artist col-8">
                     <ul>
-                        <li>Song </li>
-                        <li>Title</li>
+                        <li>Song Title</li>
                         <li>Artist </li>
                     </ul>
                 </div>
             </div>
 
+<<<<<<< HEAD
             <div className="current-song-right-side col-4">
                 {/* <div className="song-bar">
                     <input type="range" min="1" max="100" step="1" value={percentage} onChange={changePercent} id="range" className="custom-range" />
@@ -76,6 +97,29 @@ function CurrentSong() {
                 
                 }}
                     /> */}
+=======
+            <div className="current-song-right-side col-6 h-100">
+                <div className="song-bar">
+                    <input
+                        type="range"
+                        min="1"
+                        max="100"
+                        step="1"
+                        value={songProgress}
+                        onChange={scrubSong}
+                        data-bs-toggle="offcanvas"
+                        id="range"
+                        className="custom-range"
+                    />
+                </div>
+                <div className="music-play-buttons">
+                    {/* skip backwards */}
+                    <img className={`music-button music-button-${theme}`} src={rewindImg}></img>
+                    {/* Play */}
+                    <img className={`music-button music-button-${theme}`} src={playImg}></img>
+                    {/* skip forward  */}
+                    <img className={`music-button music-button-${theme}`} src={fastforwardImg}></img>
+>>>>>>> development
                 </div>
             </div>
         </div>

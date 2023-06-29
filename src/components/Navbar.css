@@ -1,0 +1,13 @@
+.user-profile-pic {
+    width: 100%;
+    max-width: 5rem;
+    border-radius: 1rem;
+}
+
+.search-light {
+    filter: invert(14%) sepia(7%) saturate(129%) hue-rotate(349deg) brightness(91%) contrast(84%);
+}
+
+.search-dark {
+    filter: invert(93%) sepia(4%) saturate(22%) hue-rotate(79deg) brightness(112%) contrast(96%);
+}
