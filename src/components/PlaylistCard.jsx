@@ -28,8 +28,6 @@ function PlaylistCard({ playlist, index }) {
 
         return defaultPlaylistArt
     }
-<<<<<<< HEAD
-=======
 
     /**
      * @param {Number} playlistIndex 
@@ -46,7 +44,6 @@ function PlaylistCard({ playlist, index }) {
         return baseCardType
     }
 
->>>>>>> development
     const playlistArtURL = getPlaylistArt(playlist);
 
     const playlistTitle = <h4>{playlist.name}</h4>
