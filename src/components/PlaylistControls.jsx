@@ -15,7 +15,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   const [selectedPlaylistSource, setSelectedPlaylistSource] = useState("");
   const [activeTab, setActiveTab] = useState("create");
 
-  const { library } = useContext(MusicPlayerStateContext);
+  const { library, playlistIndex, choosePlaylist } = useContext(MusicPlayerStateContext);
   const { theme } = useContext(ThemeContext);
   const { updatePlaylistName } = useContext(Context);
 
@@ -175,6 +175,9 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   }
 
   function handleDeletePlaylist() {
+    if (library[playlistIndex].id === selectedPlaylistId) {
+      choosePlaylist(playlistIndex - 1);
+    }
     if (selectedPlaylistSource === 'local') {
       const localStorage = fetchLocalPlaylists();
       const updatedLocalStorage = localStorage.filter(playlist => playlist.id !== selectedPlaylistId);
