@@ -8,7 +8,8 @@ import Nav from "./Navbar";
 import LibraryContainer from "./LibraryContainer";
 import PlaylistContainer from "./PlaylistContainer";
 import SettingsBar from "./SettingsBar";
-import CurrentSong from "./CurrentSong";
+// import CurrentSong from "./CurrentSong";
+import Player from "./Player.jsx";
 import PlaylistControls from "./PlaylistControls.jsx";
 
 import returnImg from "../assets/return.svg";
@@ -16,10 +17,10 @@ import "./main.css";
 
 function Main() {
   const { theme } = useContext(ThemeContext);
-  const { userPlaylistSpotify } = useContext(Context);
+  const { userPlaylistSpotify ,accessToken, getSpotifyPlaylistTracks} = useContext(Context);
   const [localPlaylistsState, setLocalPlaylistsState] = useState(() => fetchLocalPlaylists());
 
-  const { library, setLibrary, playlistIndex, libraryView, setLibraryView } =
+  const { library, setLibrary, playlistIndex, libraryView, setLibraryView, currentSongIndex } =
     useContext(MusicPlayerStateContext);
 
   // Load the user's playlists from Spotify and local storage into the
@@ -89,8 +90,14 @@ function Main() {
             />
           </div>
           {/* Current song bar */}
-          <div className="col-12 cur-song-bar ">
-            <CurrentSong />
+          <div className='col-12 cur-song-bar '>
+            {/* < CurrentSong /> */}
+            <Player
+            playlist={library.length > 0 ? library[playlistIndex] : []}
+            currentSongIndex={currentSongIndex}
+            accessToken = {accessToken}
+            getSpotifyPlaylistTracks = {getSpotifyPlaylistTracks}
+            />
           </div>
         </div>
       </div>
