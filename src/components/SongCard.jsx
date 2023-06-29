@@ -12,13 +12,15 @@ import trashHover from "../assets/trashSelected.svg";
  * Component for displaying songs in a playlist
  * @param {Object} song A song object
  * @param {Number} index The index of a song in the playlist
+ * @param {func} cardClickHandler The function to be used as the onClick
+ * handler for the SongCard
  * @returns A Card component displaying the details of a
  * given song
  */
-function SongCard({ song, index }) {
+function SongCard({ song, index, cardClickHandler }) {
   const [hover, setHover] = useState(false);
-  const { deletePlaylistTrack, currentPlaylist } = useContext(Context);
-  const { chooseSong, songIndex } = useContext(MusicPlayerStateContext);
+  const { deletePlaylistTrack, currentPlaylist } = useContext(Context)
+  const { chooseSong, songIndex } = useContext(MusicPlayerStateContext)
 
   function handleMouseEnter() {
     setHover(true);
@@ -73,8 +75,14 @@ function SongCard({ song, index }) {
     return "Unknown Album";
   }
 
+  /**
+   * @param {Number} songIndex Index of the song
+   * in the playlist
+   * @returns {string} Class names to append to base
+   * Card's classes
+   */
   function getCardType(songIndex) {
-    let cardType = " song-card ";
+    let cardType = " song-card "
 
     if (songIndex == index) {
       cardType += " selected-card ";
@@ -102,13 +110,12 @@ function SongCard({ song, index }) {
     </>
   );
 
-  return (
-    <Card
-      coverArt={{ url: getSongArt(song), title: getAlbum(song) }}
-      metaData={songData}
-      cardClickHandler={() => chooseSong(index)}
-      cardType={getCardType(songIndex)}
-    />
+  return <Card
+    coverArt={{ url: getSongArt(song), title: getAlbum(song) }}
+    metaData={songData}
+    cardClickHandler={cardClickHandler}
+    cardType={getCardType(songIndex)}
+  />
   );
 }
 

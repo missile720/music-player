@@ -32,7 +32,11 @@ function MusicPlayerStateContextProvider({ children }) {
     function choosePlaylist(index) {
         setPlaylistIndex(index)
         setSongIndex(-1)
-        setLibraryView(false)
+
+        // Only allow user to go to playlist view on mobile
+        if (typeof window !== "undefined" && window.innerWidth < 768) {
+            setLibraryView(false)
+        }
     }
 
     /**
@@ -49,10 +53,8 @@ function MusicPlayerStateContextProvider({ children }) {
      * @param {Event} event Range input event
      */
     function scrubSong(event) {
-        if (event.currentTarget === event.target) {
-            setSongProgress(event.target.value)
-            event.stopPropagation()
-        }
+        setSongProgress(event.target.value)
+        event.stopPropagation()
     }
 
     /**

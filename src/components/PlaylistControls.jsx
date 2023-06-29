@@ -1,7 +1,10 @@
 import { useState, useContext, useEffect } from "react";
-import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext";
-import { nanoid } from "nanoid";
 import { Context } from "../contexts/Context";
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext";
+import { ThemeContext } from "../contexts/ThemeContext"
+import { nanoid } from "nanoid";
+
+
 
 import EditPlaylists from "./EditPlaylists";
 import CreatePlaylist from "./CreatePlaylist";
@@ -15,6 +18,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   const [activeTab, setActiveTab] = useState("create");
 
   const { library } = useContext(MusicPlayerStateContext);
+  const { theme } = useContext(ThemeContext);
   const { updatePlaylistName } = useContext(Context);
 
   // Some of the functionality is based on whether the playlist was made locally or has been pulled from Spotify so giving it a
@@ -298,7 +302,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
         onSubmit={handleSubmit}
       >
         <div className="modal-dialog">
-          <div className="modal-content">
+          <div className={`modal-content modal-${theme}`}>
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
                 Local Playlist Controls
@@ -381,7 +385,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
             <div className="modal-footer">
               <button
                 type="button"
-                className="btn btn-secondary"
+                className={`btn button-${theme}`}
                 data-bs-dismiss="modal"
               >
                 Close
@@ -389,7 +393,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
               <button
                 type="submit"
                 form="file-upload"
-                className="btn btn-primary"
+                className={`btn button-${theme}`}
                 data-bs-dismiss="modal"
               >
                 Submit

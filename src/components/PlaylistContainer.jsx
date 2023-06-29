@@ -16,7 +16,11 @@ import SongCard from "./SongCard"
  */
 function PlaylistContainer({ playlist }) {
     const { getSpotifyPlaylistTracks, currentPlaylistId } = useContext(Context)
-    const { library, playlistIndex } = useContext(MusicPlayerStateContext)
+    const {
+        library,
+        playlistIndex,
+        chooseSong
+    } = useContext(MusicPlayerStateContext)
     const [songCards, setSongCards] = useState([])
     // If playlist is from spotify, fetch the tracklist
     useEffect(() => {
@@ -24,14 +28,20 @@ function PlaylistContainer({ playlist }) {
         if (playlist.tracks && playlist.tracks.href) {
             getSpotifyPlaylistTracks(playlist.tracks.href)
                 .then(tracks =>
-                    setSongCards(tracks.items.map(
-                        (song, index) =>
+                    setSongCards(tracks.items
+                        // Only make a song card if the song is
+                        // playable
+                        .filter(song =>
+                            song.track
+                        )
+                        .map((song, index) =>
                             <SongCard
                                 key={index}
                                 index={index}
                                 song={song.track}
+                                cardClickHandler={() => chooseSong(index)}
                             />
-                    )))
+                        )))
         }
         if (playlist.source === 'local') {
             setSongCards(playlist.tracks.map(
@@ -40,6 +50,7 @@ function PlaylistContainer({ playlist }) {
                         key={index}
                         index={index}
                         song={song}
+                        cardClickHandler={() => chooseSong(index)}
                     />))
         }
     }, [library, playlistIndex])
