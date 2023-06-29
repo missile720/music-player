@@ -9,6 +9,7 @@ function Player({playlist, currentSongIndex}) {
     const {accessToken, getSpotifyPlaylistTracks} = useContext(Context)
     const [volume, setVolume] = useState(.05)
     const [currentSong, setCurrentSong] = useState('')
+
     useEffect(() => {
       if (playlist.tracks && playlist.tracks.href) {
         getSpotifyPlaylistTracks(playlist.tracks.href)
@@ -34,7 +35,7 @@ function Player({playlist, currentSongIndex}) {
         initialVolume={volume}
         inlineVolume={true}
         play={true}
-        persistDeviceSelection={true}
+        persistDeviceSelection={false}
         uris={currentSongIndex == 0 ? playlist.uri : currentSong}
 />
     </div>
