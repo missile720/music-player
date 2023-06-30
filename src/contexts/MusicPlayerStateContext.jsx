@@ -8,7 +8,6 @@ function MusicPlayerStateContextProvider({ children }) {
     const [songIndex, setSongIndex] = useState(-1)
     const [libraryView, setLibraryView] = useState(true)
     const [songProgress, setSongProgress] = useState(10)
-    const [currentSongIndex, setCurrentSongIndex] = useState(0)
 
     // Effects
     /**
@@ -45,7 +44,7 @@ function MusicPlayerStateContextProvider({ children }) {
      * @param {Number} index The index of a song in a playlist
      */
     function chooseSong(index) {
-        setCurrentSongIndex(index)
+        setSongIndex(index)
     }
 
     /**
@@ -79,7 +78,6 @@ function MusicPlayerStateContextProvider({ children }) {
                 songIndex,
                 setSongIndex,
                 chooseSong,
-                currentSongIndex,
                 libraryView,
                 setLibraryView,
                 songProgress,

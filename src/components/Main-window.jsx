@@ -17,7 +17,7 @@ import "./main.css";
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
-  const { userPlaylistSpotify ,accessToken, getSpotifyPlaylistTracks} = useContext(Context);
+  const { userPlaylistSpotify, accessToken, getSpotifyPlaylistTracks } = useContext(Context);
   const [localPlaylistsState, setLocalPlaylistsState] = useState(() => fetchLocalPlaylists());
 
   const { library, setLibrary, playlistIndex, libraryView, setLibraryView, currentSongIndex } =
@@ -93,10 +93,7 @@ function Main() {
           <div className='col-12 cur-song-bar '>
             {/* < CurrentSong /> */}
             <Player
-            playlist={library.length > 0 ? library[playlistIndex] : []}
-            currentSongIndex={currentSongIndex}
-            accessToken = {accessToken}
-            getSpotifyPlaylistTracks = {getSpotifyPlaylistTracks}
+              playlist={library.length > 0 ? library[playlistIndex] : []}
             />
           </div>
         </div>
