@@ -105,9 +105,6 @@ function Main() {
             {currentSongSource === 'spotify' ?
               <Player
                 playlist={library.length > 0 ? library[playlistIndex] : []}
-                currentSongIndex={currentSongIndex}
-                accessToken={accessToken}
-                getSpotifyPlaylistTracks={getSpotifyPlaylistTracks}
               />
               :
               <LocalMusicPlayer />
