@@ -8,6 +8,7 @@ function MusicPlayerStateContextProvider({ children }) {
     const [songIndex, setSongIndex] = useState(0)
     const [libraryView, setLibraryView] = useState(true)
     const [songProgress, setSongProgress] = useState(10)
+    const [currentTracklist, setCurrentTracklist] = useState([])
 
     // Effects
     /**
@@ -81,7 +82,9 @@ function MusicPlayerStateContextProvider({ children }) {
                 libraryView,
                 setLibraryView,
                 songProgress,
-                scrubSong
+                scrubSong,
+                currentTracklist,
+                setCurrentTracklist
             }}
         >
             {children}

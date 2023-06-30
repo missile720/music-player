@@ -6,18 +6,14 @@ import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
 
 
 function Player({ playlist }) {
-  const { songIndex } = useContext(MusicPlayerStateContext)
+  const { songIndex, currentTracklist } = useContext(MusicPlayerStateContext)
   const { accessToken, getSpotifyPlaylistTracks } = useContext(Context)
 
   const [volume, setVolume] = useState(.05)
-  const [currentSong, setCurrentSong] = useState('')
 
   useEffect(() => {
     if (playlist.tracks && playlist.tracks.href) {
       getSpotifyPlaylistTracks(playlist.tracks.href)
-        .then(tracks =>
-          setCurrentSong(tracks.items[songIndex].track.uri)
-        )
     }
   }, [playlist, songIndex])
 
@@ -38,9 +34,10 @@ function Player({ playlist }) {
         layout='responsive'
         initialVolume={volume}
         inlineVolume={true}
+        offset={songIndex}
         play={true}
         persistDeviceSelection={false}
-        uris={songIndex == 0 ? playlist.uri : currentSong}
+        uris={currentTracklist}
       />
     </div>
   )
