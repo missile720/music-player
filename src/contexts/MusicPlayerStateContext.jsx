@@ -5,7 +5,7 @@ const MusicPlayerStateContext = createContext()
 function MusicPlayerStateContextProvider({ children }) {
     const [library, setLibrary] = useState([])
     const [playlistIndex, setPlaylistIndex] = useState(0)
-    const [songIndex, setSongIndex] = useState(-1)
+    const [songIndex, setSongIndex] = useState(0)
     const [libraryView, setLibraryView] = useState(true)
     const [songProgress, setSongProgress] = useState(10)
 
@@ -31,7 +31,7 @@ function MusicPlayerStateContextProvider({ children }) {
      */
     function choosePlaylist(index) {
         setPlaylistIndex(index)
-        setSongIndex(-1)
+        setSongIndex(0)
 
         // Only allow user to go to playlist view on mobile
         if (typeof window !== "undefined" && window.innerWidth < 768) {

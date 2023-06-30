@@ -1,10 +1,8 @@
-import React, { useContext, useEffect } from "react"
+import React, { useState, useContext, useEffect } from "react"
 import SpotifyPlayer from "react-spotify-web-playback"
 
 import { Context } from "../contexts/Context"
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
-
-import { useState } from "react"
 
 
 function Player({ playlist }) {
