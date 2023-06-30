@@ -1,24 +1,22 @@
 import { useState, useEffect, useContext } from 'react'
 import SpotifyPlayer from "react-spotify-web-playback"
-import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx";
+
+import { Context } from "../contexts/Context"
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
 
 
-function Player({ playlist, currentSongIndex, accessToken, getSpotifyPlaylistTracks }) {
+function Player({ playlist }) {
+  const { songIndex, currentTracklist } = useContext(MusicPlayerStateContext)
+  const { accessToken, getSpotifyPlaylistTracks } = useContext(Context)
 
   const [volume, setVolume] = useState(.05)
-  const [currentSong, setCurrentSong] = useState('')
-
-  const { currentPlaylistSource } =
-    useContext(MusicPlayerStateContext);
+  const { currentPlaylistSource } = useContext(MusicPlayerStateContext);
 
   useEffect(() => {
     if (playlist.tracks && playlist.tracks.href) {
       getSpotifyPlaylistTracks(playlist.tracks.href)
-        .then(tracks =>
-          setCurrentSong(tracks.items[currentSongIndex].track.uri)
-        )
     }
-  }, [playlist, currentSongIndex])
+  }, [playlist, songIndex])
 
   return (
     <div>
@@ -37,9 +35,10 @@ function Player({ playlist, currentSongIndex, accessToken, getSpotifyPlaylistTra
         layout='responsive'
         initialVolume={volume}
         inlineVolume={true}
+        offset={songIndex}
         play={true}
         persistDeviceSelection={false}
-        uris={currentSongIndex == 0 ? playlist.uri : currentSong}
+        uris={currentTracklist}
       />
     </div>
   )
