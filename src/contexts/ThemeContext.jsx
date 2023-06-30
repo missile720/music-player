@@ -9,9 +9,12 @@ const ThemeContextProvider = ({ children }) => {
 
     useEffect(() => {
         const lastMode = localStorage.getItem("mode")
+        const lastTheme = localStorage.getItem('theme')
         if (lastMode !== null) {
             setMode(lastMode)
+            setTheme(lastTheme)
         }
+        
     }, [])
 
     const toggleDarkMode = () => {
@@ -22,6 +25,7 @@ const ThemeContextProvider = ({ children }) => {
 
     const toggleTheme = (chosenTheme) => {
         setTheme(chosenTheme)
+        localStorage.setItem("theme", chosenTheme)
     }
 
     const values = {
