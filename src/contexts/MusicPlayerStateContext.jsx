@@ -9,6 +9,7 @@ function MusicPlayerStateContextProvider({ children }) {
     const [libraryView, setLibraryView] = useState(true)
     const [songProgress, setSongProgress] = useState(10)
     const [currentTracklist, setCurrentTracklist] = useState([])
+    const [currentSongSource, setCurrentSongSource] = useState('')
 
     // Effects
     /**
@@ -23,6 +24,15 @@ function MusicPlayerStateContextProvider({ children }) {
 
         return () => window.removeEventListener("resize", setAsLibraryView)
     }, [])
+
+    /**
+     * Side effect for setting the source of the currently selected song
+     */
+    useEffect(() => {
+        if (library[playlistIndex]) {
+            setCurrentSongSource(library[playlistIndex].source ? 'local' : 'spotify')
+        }
+    }, [songIndex])
 
     // Functions
     /**
@@ -84,7 +94,8 @@ function MusicPlayerStateContextProvider({ children }) {
                 songProgress,
                 scrubSong,
                 currentTracklist,
-                setCurrentTracklist
+                setCurrentTracklist,
+                currentSongSource
             }}
         >
             {children}

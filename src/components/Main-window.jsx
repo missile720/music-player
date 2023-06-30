@@ -14,13 +14,14 @@ import PlaylistControls from "./PlaylistControls.jsx";
 
 import returnImg from "../assets/return.svg";
 import "./main.css";
+import LocalMusicPlayer from "./LocalMusicPlayer.jsx";
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
   const { userPlaylistSpotify } = useContext(Context);
   const [localPlaylistsState, setLocalPlaylistsState] = useState(() => fetchLocalPlaylists());
 
-  const { library, setLibrary, playlistIndex, libraryView, setLibraryView } =
+  const { library, setLibrary, playlistIndex, libraryView, setLibraryView, currentSongSource } =
     useContext(MusicPlayerStateContext);
 
   // Load the user's playlists from Spotify and local storage into the
@@ -101,9 +102,14 @@ function Main() {
           {/* Current song bar */}
           <div className='col-12 cur-song-bar '>
             {/* < CurrentSong /> */}
-            <Player
-              playlist={library.length > 0 ? library[playlistIndex] : []}
-            />
+            {currentSongSource === 'spotify' ?
+              <Player
+                playlist={library.length > 0 ? library[playlistIndex] : []}
+              />
+              :
+              <LocalMusicPlayer />
+            }
+
           </div>
         </div>
       </div>

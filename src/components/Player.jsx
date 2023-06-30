@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react"
+import { useState, useEffect, useContext } from 'react'
 import SpotifyPlayer from "react-spotify-web-playback"
 
 import { Context } from "../contexts/Context"
@@ -10,6 +10,7 @@ function Player({ playlist }) {
   const { accessToken, getSpotifyPlaylistTracks } = useContext(Context)
 
   const [volume, setVolume] = useState(.05)
+  const { currentPlaylistSource } = useContext(MusicPlayerStateContext);
 
   useEffect(() => {
     if (playlist.tracks && playlist.tracks.href) {
