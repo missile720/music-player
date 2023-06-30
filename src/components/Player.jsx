@@ -1,34 +1,38 @@
-import React, { useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import SpotifyPlayer from "react-spotify-web-playback"
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx";
 
-import { useState } from "react"
 
-
-function Player({playlist, currentSongIndex, accessToken, getSpotifyPlaylistTracks}) {
+function Player({ playlist, currentSongIndex, accessToken, getSpotifyPlaylistTracks }) {
 
   const [volume, setVolume] = useState(.05)
-    const [currentSong, setCurrentSong] = useState('')
+  const [currentSong, setCurrentSong] = useState('')
 
-    useEffect(() => {
-      if (playlist.tracks && playlist.tracks.href) {
-        getSpotifyPlaylistTracks(playlist.tracks.href)
+  const { currentPlaylistSource } =
+    useContext(MusicPlayerStateContext);
+
+  useEffect(() => {
+    if (playlist.tracks && playlist.tracks.href) {
+      getSpotifyPlaylistTracks(playlist.tracks.href)
         .then(tracks =>
           setCurrentSong(tracks.items[currentSongIndex].track.uri)
-          )}
-}, [playlist, currentSongIndex])
+        )
+    }
+  }, [playlist, currentSongIndex])
 
   return (
     <div>
       <SpotifyPlayer
         name='Syntax Samurai Player'
-        styles={{ activeColor: '#fff',
-        // bgColor: '#333',
-        color: '#333',
-        loaderColor: '#fff',
-        sliderColor: '#1cb954',
-        // trackArtistColor: '#fff',
-        // trackNameColor: '#fff',
-      }}
+        styles={{
+          activeColor: '#fff',
+          // bgColor: '#333',
+          color: '#333',
+          loaderColor: '#fff',
+          sliderColor: '#1cb954',
+          // trackArtistColor: '#fff',
+          // trackNameColor: '#fff',
+        }}
         token={accessToken}
         layout='responsive'
         initialVolume={volume}
@@ -36,7 +40,7 @@ function Player({playlist, currentSongIndex, accessToken, getSpotifyPlaylistTrac
         play={true}
         persistDeviceSelection={false}
         uris={currentSongIndex == 0 ? playlist.uri : currentSong}
-/>
+      />
     </div>
   )
 }
