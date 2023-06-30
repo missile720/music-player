@@ -5,10 +5,10 @@ const MusicPlayerStateContext = createContext()
 function MusicPlayerStateContextProvider({ children }) {
     const [library, setLibrary] = useState([])
     const [playlistIndex, setPlaylistIndex] = useState(0)
-    const [songIndex, setSongIndex] = useState(-1)
+    const [songIndex, setSongIndex] = useState(0)
     const [libraryView, setLibraryView] = useState(true)
     const [songProgress, setSongProgress] = useState(10)
-    const [currentSongIndex, setCurrentSongIndex] = useState(0)
+    const [currentTracklist, setCurrentTracklist] = useState([])
 
     // Effects
     /**
@@ -32,7 +32,7 @@ function MusicPlayerStateContextProvider({ children }) {
      */
     function choosePlaylist(index) {
         setPlaylistIndex(index)
-        setSongIndex(-1)
+        setSongIndex(0)
 
         // Only allow user to go to playlist view on mobile
         if (typeof window !== "undefined" && window.innerWidth < 768) {
@@ -45,7 +45,7 @@ function MusicPlayerStateContextProvider({ children }) {
      * @param {Number} index The index of a song in a playlist
      */
     function chooseSong(index) {
-        setCurrentSongIndex(index)
+        setSongIndex(index)
     }
 
     /**
@@ -79,11 +79,12 @@ function MusicPlayerStateContextProvider({ children }) {
                 songIndex,
                 setSongIndex,
                 chooseSong,
-                currentSongIndex,
                 libraryView,
                 setLibraryView,
                 songProgress,
-                scrubSong
+                scrubSong,
+                currentTracklist,
+                setCurrentTracklist
             }}
         >
             {children}

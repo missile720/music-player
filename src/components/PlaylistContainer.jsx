@@ -19,7 +19,8 @@ function PlaylistContainer({ playlist }) {
     const {
         library,
         playlistIndex,
-        chooseSong
+        chooseSong,
+        setCurrentTracklist
     } = useContext(MusicPlayerStateContext)
     const [songCards, setSongCards] = useState([])
     // If playlist is from spotify, fetch the tracklist
@@ -27,13 +28,15 @@ function PlaylistContainer({ playlist }) {
         currentPlaylistId(playlist.id)
         if (playlist.tracks && playlist.tracks.href) {
             getSpotifyPlaylistTracks(playlist.tracks.href)
-                .then(tracks =>
-                    setSongCards(tracks.items
-                        // Only make a song card if the song is
-                        // playable
-                        .filter(song =>
-                            song.track
-                        )
+                .then(tracks => {
+                    const validTracks = tracks.items.filter(song => song.track)
+
+                    setCurrentTracklist(
+                        validTracks
+                            .map(song => song.track.uri)
+                    )
+
+                    setSongCards(validTracks
                         .map((song, index) =>
                             <SongCard
                                 key={index}
@@ -41,7 +44,9 @@ function PlaylistContainer({ playlist }) {
                                 song={song.track}
                                 cardClickHandler={() => chooseSong(index)}
                             />
-                        )))
+                        )
+                    )
+                })
         }
         if (playlist.source === 'local') {
             setSongCards(playlist.tracks.map(

@@ -8,18 +8,12 @@ function Login() {
   const { loginSpotify } = useContext(Context)
   const { theme, mode } = useContext(ThemeContext)
 
-  function getLoginClass() {
-    let baseClass = `container-fluid d-flex 
-      align-items-center justify-content-center 
-      h-100 p-3`
-
-    return baseClass + ` login-${mode}`
-  }
-
   return (
     <div
-      className={getLoginClass()}
-      id={mode}
+      className="container-fluid d-flex 
+        align-items-center justify-content-center 
+        h-100 p-3"
+      id={`primary-${theme}-${mode}`}
     >
       <div className='login d-flex align-items-center flex-column h-100'>
         <h1 className="login-header">Login to account:</h1>
