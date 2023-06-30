@@ -17,10 +17,10 @@ import "./main.css";
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
-  const { userPlaylistSpotify, accessToken, getSpotifyPlaylistTracks } = useContext(Context);
+  const { userPlaylistSpotify } = useContext(Context);
   const [localPlaylistsState, setLocalPlaylistsState] = useState(() => fetchLocalPlaylists());
 
-  const { library, setLibrary, playlistIndex, libraryView, setLibraryView, currentSongIndex } =
+  const { library, setLibrary, playlistIndex, libraryView, setLibraryView } =
     useContext(MusicPlayerStateContext);
 
   // Load the user's playlists from Spotify and local storage into the
@@ -40,7 +40,10 @@ function Main() {
 
   return (
     <div className="container-fluid  h-100" id={`primary-${theme}-${mode}`}>
-      <PlaylistControls setLocalPlaylistsState={setLocalPlaylistsState} fetchLocalPlaylists={fetchLocalPlaylists} />
+      <PlaylistControls
+        setLocalPlaylistsState={setLocalPlaylistsState}
+        fetchLocalPlaylists={fetchLocalPlaylists}
+      />
       <div className="row h-100">
         {/* left column */}
         <div className={`col-12 col-md-6 h-100 ${libraryView ? "" : "d-none d-md-block"}`}>
@@ -72,8 +75,14 @@ function Main() {
         {/* right column */}
         <div className={`col-12 col-md-6 h-100 ${!libraryView ? "" : "d-none d-md-block"}`}>
           <div className="col-12 d-flex cur-text align-items-center">
-            <button className={`col-2 d-md-none button-${mode}`} onClick={() => setLibraryView(true)}>
-              <img src={returnImg} alt="Return arrow"></img>
+            <button
+              className={`col-2 d-md-none element-${theme}-${mode} rounded border-0`}
+              onClick={() => setLibraryView(true)}>
+              <img
+                src={returnImg}
+                alt="Return arrow"
+                className={`svg-${theme}-${mode}`}
+              ></img>
             </button>
             <div className="col-10 col-md-12 px-2">
               <h3>
