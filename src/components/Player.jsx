@@ -7,14 +7,14 @@ import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
 
 function Player({ playlist }) {
   const { songIndex, currentTracklist } = useContext(MusicPlayerStateContext)
-  const { accessToken, getSpotifyPlaylistTracks } = useContext(Context)
-
+  const { accessToken, getSpotifyPlaylistTracks, getSongAudioAnalysis } = useContext(Context)
   const [volume, setVolume] = useState(.05)
   const { currentPlaylistSource } = useContext(MusicPlayerStateContext);
 
   useEffect(() => {
     if (playlist.tracks && playlist.tracks.href) {
       getSpotifyPlaylistTracks(playlist.tracks.href)
+      getSongAudioAnalysis(currentTracklist[songIndex]);
     }
   }, [playlist, songIndex])
 

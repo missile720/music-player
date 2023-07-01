@@ -19,7 +19,7 @@ import LocalMusicPlayer from "./LocalMusicPlayer.jsx";
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
-  const { userPlaylistSpotify } = useContext(Context);
+  const { userPlaylistSpotify, currentPlayingSongData } = useContext(Context);
   const [localPlaylistsState, setLocalPlaylistsState] = useState(() => fetchLocalPlaylists());
 
   const { library, setLibrary, playlistIndex, libraryView, setLibraryView, currentSongSource } =
@@ -113,7 +113,7 @@ function Main() {
           </div>
           {/* Music Visualizer */}
           <div className="col-12 cur-vis">
-            <WaveformVisualizer />
+            {Object.prototype.hasOwnProperty.call(currentPlayingSongData,'track') && <WaveformVisualizer />}
           </div>
           {/* Current song bar */}
           <div className="col-12 cur-song-bar ">

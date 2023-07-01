@@ -128,7 +128,9 @@ function ContextProvider({ children }) {
     setUserPlaylistSpotify(data);
   }
 
-  async function getSongAudioAnalysis(trackId) {
+  async function getSongAudioAnalysis(href) {
+    let trackId = href.split(":")[2];
+    
     const response = await fetch(`https://api.spotify.com/v1/audio-analysis/${trackId}`, {
       headers: {
         Authorization: "Bearer " + accessToken,
