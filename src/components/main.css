@@ -136,19 +136,19 @@
     color: #fafafa;
 }
 
-.music-button-royal-light{
+.music-button-royal-light, .svg-royal-light{
     filter: invert(14%) sepia(7%) saturate(129%) hue-rotate(349deg) brightness(91%) contrast(84%);
 }
 
-.music-button-royal-dark{
+.music-button-royal-dark, .svg-royal-dark{
     filter: invert(93%) sepia(4%) saturate(22%) hue-rotate(79deg) brightness(112%) contrast(96%);
 }
 
-.music-button-bvt-light{
+.music-button-bvt-light, .svg-bvt-light{
     filter: invert(96%) sepia(72%) saturate(7469%) hue-rotate(190deg) brightness(132%) contrast(96%);
 }
 
-.music-button-bvt-dark{
+.music-button-bvt-dar, .svg-bvt-dark{
     filter: invert(37%) sepia(30%) saturate(2464%) hue-rotate(336deg) brightness(113%) contrast(104%);
 }
 

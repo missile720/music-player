@@ -15,22 +15,15 @@ import WaveformVisualizer from "./WaveformVisualizer.jsx";
 
 import returnImg from "../assets/return.svg";
 import "./main.css";
+import LocalMusicPlayer from "./LocalMusicPlayer.jsx";
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
-  const { userPlaylistSpotify, accessToken, getSpotifyPlaylistTracks } = useContext(Context);
-  const [localPlaylistsState, setLocalPlaylistsState] = useState(() =>
-    fetchLocalPlaylists()
-  );
+  const { userPlaylistSpotify } = useContext(Context);
+  const [localPlaylistsState, setLocalPlaylistsState] = useState(() => fetchLocalPlaylists());
 
-  const {
-    library,
-    setLibrary,
-    playlistIndex,
-    libraryView,
-    setLibraryView,
-    currentSongIndex,
-  } = useContext(MusicPlayerStateContext);
+  const { library, setLibrary, playlistIndex, libraryView, setLibraryView, currentSongSource } =
+    useContext(MusicPlayerStateContext);
 
   // Load the user's playlists from Spotify and local storage into the
   // library whenever it's updated
@@ -96,10 +89,13 @@ function Main() {
         >
           <div className="col-12 d-flex cur-text align-items-center">
             <button
-              className={`col-2 d-md-none button-${mode}`}
-              onClick={() => setLibraryView(true)}
-            >
-              <img src={returnImg} alt="Return arrow"></img>
+              className={`col-2 d-md-none element-${theme}-${mode} rounded border-0`}
+              onClick={() => setLibraryView(true)}>
+              <img
+                src={returnImg}
+                alt="Return arrow"
+                className={`svg-${theme}-${mode}`}
+              ></img>
             </button>
             <div className="col-10 col-md-12 px-2">
               <h3>
@@ -122,12 +118,14 @@ function Main() {
           {/* Current song bar */}
           <div className="col-12 cur-song-bar ">
             {/* < CurrentSong /> */}
-            <Player
-              playlist={library.length > 0 ? library[playlistIndex] : []}
-              currentSongIndex={currentSongIndex}
-              accessToken={accessToken}
-              getSpotifyPlaylistTracks={getSpotifyPlaylistTracks}
-            />
+            {currentSongSource === 'spotify' ?
+              <Player
+                playlist={library.length > 0 ? library[playlistIndex] : []}
+              />
+              :
+              <LocalMusicPlayer />
+            }
+
           </div>
         </div>
       </div>
