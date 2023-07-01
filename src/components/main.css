@@ -158,7 +158,11 @@
 }
 
 .cur-list {
-    height: 80%;
+    height: 60%;
+}
+
+.cur-vis{
+    height: 20%;
 }
 
 .settings-bar,
