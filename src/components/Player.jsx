@@ -15,23 +15,23 @@ function Player() {
   const { accessToken } = useContext(Context)
 
   // Used to track the react spotify player's playback state
-  const [callbackState, setCallbackState] = useState("")
+  const [playerCallback, setPlayerCallback] = useState("")
 
   // Updates the songIndex as the user uses the previous and next buttons
   // on the react spotify player, properly updating the songCards in the
   // playlistContainer.
   useEffect(() => {
     let currentUri = "";
-    if (callbackState && callbackState.track.uri) {
-      currentUri = callbackState.track.uri
+    if (playerCallback && playerCallback.track.uri) {
+      currentUri = playerCallback.track.uri
     } else {
       return
     }
     const lastUri = currentTracklist[songIndex]
 
     if (currentUri !== lastUri) {
-      const previousTracks = callbackState.previousTracks.map(track => track.uri)
-      const nextTracks = callbackState.nextTracks.map(track => track.uri)
+      const previousTracks = playerCallback.previousTracks.map(track => track.uri)
+      const nextTracks = playerCallback.nextTracks.map(track => track.uri)
 
       if (previousTracks && previousTracks.includes(lastUri)) {
         setSongIndex(prevIndex => prevIndex + 1)
@@ -41,7 +41,7 @@ function Player() {
         setSongIndex(prevIndex => prevIndex - 1)
       }
     }
-  }, [callbackState])
+  }, [playerCallback])
 
   return (
     <div className="d-flex justify-content-center flex-column align-items-center h-100">
@@ -56,7 +56,7 @@ function Player() {
           // trackArtistColor: '#fff',
           // trackNameColor: '#fff',
         }}
-        callback={setCallbackState}
+        callback={setPlayerCallback}
         token={accessToken}
         layout='responsive'
         initialVolume={INITIAL_VOLUME}
