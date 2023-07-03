@@ -17,6 +17,8 @@ function Player() {
   // Used to track the react spotify player's playback state
   const [playerCallback, setPlayerCallback] = useState("")
 
+  console.log(songIndex)
+
   // Updates the songIndex as the user uses the previous and next buttons
   // on the react spotify player, properly updating the songCards in the
   // playlistContainer.
@@ -30,17 +32,23 @@ function Player() {
     const lastUri = currentTracklist[songIndex]
 
     if (currentUri !== lastUri) {
-      const previousTracks = playerCallback.previousTracks.map(track => track.uri)
+      const previousTracks = playerCallback
+        .previousTracks.map(track => track.uri)
       const nextTracks = playerCallback.nextTracks.map(track => track.uri)
 
       if (previousTracks && previousTracks.includes(lastUri)) {
-        setSongIndex(prevIndex => prevIndex + 1)
+        // If the nextIndex is out of range, the playback loops
+        setSongIndex(prevIndex => {
+          const nextIndex = prevIndex + 1
+          return nextIndex < currentTracklist.length ? nextIndex : 0
+        })
       }
 
       if (nextTracks && nextTracks.includes(lastUri)) {
         setSongIndex(prevIndex => prevIndex - 1)
       }
     }
+
   }, [playerCallback])
 
   return (
