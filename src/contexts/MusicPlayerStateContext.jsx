@@ -32,7 +32,7 @@ function MusicPlayerStateContextProvider({ children }) {
         if (library[playlistIndex]) {
             setCurrentSongSource(library[playlistIndex].source ? 'local' : 'spotify')
         }
-    }, [songIndex])
+    }, [songIndex, playlistIndex, library])
 
     // Functions
     /**
