@@ -62,7 +62,6 @@ function PlaylistContainer({ playlist }) {
 
     return <Container
         cards={songCards}
-        containerType=" playlist-container"
     />
 }
 

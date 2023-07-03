@@ -2,6 +2,8 @@ import { useState, useEffect, createContext } from "react"
 
 const MusicPlayerStateContext = createContext()
 
+const MEDIUM_SCREEN_BREAKPOINT = 768
+
 function MusicPlayerStateContextProvider({ children }) {
     const [library, setLibrary] = useState([])
     const [playlistIndex, setPlaylistIndex] = useState(0)
@@ -45,7 +47,8 @@ function MusicPlayerStateContextProvider({ children }) {
         setSongIndex(0)
 
         // Only allow user to go to playlist view on mobile
-        if (typeof window !== "undefined" && window.innerWidth < 768) {
+        if (typeof window !== "undefined" &&
+            window.innerWidth < MEDIUM_SCREEN_BREAKPOINT) {
             setLibraryView(false)
         }
     }
@@ -74,7 +77,8 @@ function MusicPlayerStateContextProvider({ children }) {
      * desktop view on mobile, library view is guaranteed to be true
      */
     function setAsLibraryView() {
-        if (typeof window !== "undefined" && window.innerWidth >= 768) {
+        if (typeof window !== "undefined" &&
+            window.innerWidth >= MEDIUM_SCREEN_BREAKPOINT) {
             setLibraryView(true)
         }
     }

@@ -44,7 +44,7 @@ function Player() {
   }, [callbackState])
 
   return (
-    <div>
+    <div className="d-flex justify-content-center flex-column align-items-center h-100">
       <SpotifyPlayer
         name='Syntax Samurai Player'
         styles={{
