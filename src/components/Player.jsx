@@ -41,8 +41,6 @@ function Player() {
         setSongIndex(prevIndex => prevIndex - 1)
       }
     }
-
-    console.log(callbackState)
   }, [callbackState])
 
   return (
