@@ -2,8 +2,10 @@ import { useContext, useEffect, useRef } from "react";
 import { Context } from "../contexts/Context";
 
 function WaveformVisualizer() {
-  const { currentPlayingSongData } = useContext(Context);
-  const duration = currentPlayingSongData.track.duration;
+  const { currentPlayingSongData, currentPlayingSongCallback } = useContext(Context);
+  const progressMs = currentPlayingSongCallback.progressMs;
+  const isPlaying = currentPlayingSongCallback.isPlaying;
+  const duration = currentPlayingSongCallback.track.durationMs;
   const timeSegments = currentPlayingSongData.segments.map((segment) => ({
     start: segment.start,
     duration: segment.duration,
@@ -13,7 +15,6 @@ function WaveformVisualizer() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
-    console.log("test")
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     // Clear the canvas
@@ -25,7 +26,7 @@ function WaveformVisualizer() {
     const waveformHeight = canvas.height;
 
     // Calculate the scale factor for x-coordinates
-    const scaleFactor = canvas.width / duration;
+    const scaleFactor = canvas.width / duration * 1000;
 
     // Draw the waveform
     ctx.beginPath();
@@ -45,7 +46,7 @@ function WaveformVisualizer() {
     ctx.stroke();
   }, [duration, timeSegments]);
 
-  return <canvas className="col-12" height="80%" ref={canvasRef} />;
+  return <canvas className="col-12 cur-vis-canvas" ref={canvasRef} />;
 }
 
 export default WaveformVisualizer;

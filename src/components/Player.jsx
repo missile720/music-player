@@ -12,17 +12,17 @@ function Player() {
     setSongIndex,
     currentTracklist
   } = useContext(MusicPlayerStateContext)
-  const { accessToken } = useContext(Context)
+  const { accessToken, getSongAudioAnalysis } = useContext(Context)
 
   // Used to track the react spotify player's playback state
-  const [playerCallback, setPlayerCallback] = useState("")
-
-  console.log(songIndex)
+  const [playerCallback, setPlayerCallback] = useState("");
 
   // Updates the songIndex as the user uses the previous and next buttons
   // on the react spotify player, properly updating the songCards in the
   // playlistContainer.
   useEffect(() => {
+    getSongAudioAnalysis(playerCallback);
+
     let currentUri = "";
     if (playerCallback && playerCallback.track.uri) {
       currentUri = playerCallback.track.uri

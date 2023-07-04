@@ -113,7 +113,7 @@ function Main() {
           </div>
           {/* Music Visualizer */}
           <div className="col-12 cur-vis">
-            {Object.prototype.hasOwnProperty.call(currentPlayingSongData,'track') && <WaveformVisualizer />}
+            {currentPlayingSongData && <WaveformVisualizer /> }
           </div>
           {/* Current song bar */}
           <div className="col-12 cur-song-bar ">
