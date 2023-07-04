@@ -24,7 +24,6 @@ function LibraryContainer({ library }) {
 
     return <Container
         cards={playlistCards}
-        containerType=" library-container"
     />
 }
 

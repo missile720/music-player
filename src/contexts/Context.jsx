@@ -19,8 +19,11 @@ function ContextProvider({ children }) {
 
     generateCodeChallenge(codeVerifier).then((codeChallenge) => {
       let state = generateRandomString(16);
-      let scope =
-        "user-read-private user-read-email playlist-read-private playlist-modify-public playlist-modify-private streaming";
+      let scope = `user-read-private user-read-email 
+        playlist-read-private playlist-modify-public 
+        playlist-modify-private streaming 
+        user-read-playback-state
+        user-modify-playback-state`;
 
       localStorage.setItem("code_verifier", codeVerifier);
 

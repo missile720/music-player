@@ -5,14 +5,6 @@
 .mp-container {
     /* Adds a scrollbar whenever it can't normally contain all cards */
     overflow-y: auto;
-    max-height: 80vh;
     border-radius: 20px;
 }
 
-.playlist-container {
-    max-height: 80vh;
-}
-
-.library-container {
-    max-height: 70vh;
-}

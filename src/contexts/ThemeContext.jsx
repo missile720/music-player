@@ -10,11 +10,9 @@ const ThemeContextProvider = ({ children }) => {
     useEffect(() => {
         const lastMode = localStorage.getItem("mode")
         const lastTheme = localStorage.getItem('theme')
-        if (lastMode !== null) {
-            setMode(lastMode)
-            setTheme(lastTheme)
-        }
-        
+
+        setMode(lastMode ? lastMode : mode)
+        setTheme(lastTheme ? lastTheme : theme)
     }, [])
 
     const toggleDarkMode = () => {
@@ -34,7 +32,7 @@ const ThemeContextProvider = ({ children }) => {
         mode,
         toggleDarkMode
     }
-    
+
 
     return (
         <ThemeContext.Provider value={values}>

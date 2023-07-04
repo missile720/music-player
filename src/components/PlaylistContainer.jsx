@@ -23,9 +23,11 @@ function PlaylistContainer({ playlist }) {
         setCurrentTracklist
     } = useContext(MusicPlayerStateContext)
     const [songCards, setSongCards] = useState([])
+
     // If playlist is from spotify, fetch the tracklist
     useEffect(() => {
         currentPlaylistId(playlist.id)
+
         if (playlist.tracks && playlist.tracks.href) {
             getSpotifyPlaylistTracks(playlist.tracks.href)
                 .then(tracks => {
@@ -48,6 +50,7 @@ function PlaylistContainer({ playlist }) {
                     )
                 })
         }
+
         if (playlist.source === 'local') {
             setSongCards(playlist.tracks.map(
                 (song, index) =>
@@ -62,7 +65,6 @@ function PlaylistContainer({ playlist }) {
 
     return <Container
         cards={songCards}
-        containerType=" playlist-container"
     />
 }
 

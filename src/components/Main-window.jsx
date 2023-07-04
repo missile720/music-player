@@ -119,9 +119,7 @@ function Main() {
           <div className="col-12 cur-song-bar ">
             {/* < CurrentSong /> */}
             {currentSongSource === 'spotify' ?
-              <Player
-                playlist={library.length > 0 ? library[playlistIndex] : []}
-              />
+              <Player />
               :
               <LocalMusicPlayer />
             }
