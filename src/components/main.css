@@ -136,29 +136,31 @@
     color: #fafafa;
 }
 
-.music-button-royal-light, .svg-royal-light{
+.music-button-royal-light, .svg-royal-light {
     filter: invert(14%) sepia(7%) saturate(129%) hue-rotate(349deg) brightness(91%) contrast(84%);
 }
 
-.music-button-royal-dark, .svg-royal-dark{
+.music-button-royal-dark, .svg-royal-dark {
     filter: invert(93%) sepia(4%) saturate(22%) hue-rotate(79deg) brightness(112%) contrast(96%);
 }
 
-.music-button-bvt-light, .svg-bvt-light{
+.music-button-bvt-light, .svg-bvt-light {
     filter: invert(96%) sepia(72%) saturate(7469%) hue-rotate(190deg) brightness(132%) contrast(96%);
 }
 
-.music-button-bvt-dar, .svg-bvt-dark{
+.music-button-bvt-dark {
     filter: invert(37%) sepia(30%) saturate(2464%) hue-rotate(336deg) brightness(113%) contrast(104%);
 }
 
+
 .lib-list {
     height: 70%;
-    overflow: auto;
+    max-height: 70vh;
 }
 
 .cur-list {
     height: 80%;
+    max-height: 80vh;
 }
 
 .settings-bar,
@@ -182,4 +184,20 @@
     justify-content: space-between;
     align-items: center;
     padding: 1%;
+}
+
+/* Reproportions Playlist view for mobile */
+@media (max-height: 988px) and (max-width: 767px) {
+    .cur-list {
+        height: 70%;
+        max-height: 70vh;
+    }
+
+    .cur-text {
+        height: 10%;
+    }
+
+    .cur-song-bar {
+        height: 20%;
+    }
 }
