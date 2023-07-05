@@ -197,8 +197,8 @@
 /* Reproportions Playlist view for mobile */
 @media (max-height: 988px) and (max-width: 767px) {
     .cur-list {
-        height: 70%;
-        max-height: 70vh;
+        height: 60%;
+        max-height: 60vh;
     }
 
     .cur-text {
