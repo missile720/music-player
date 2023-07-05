@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react"
+import { useState, useEffect, useContext } from "react";
 
 import { Context } from "../contexts/Context.jsx";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx";
@@ -11,6 +11,7 @@ import SettingsBar from "./SettingsBar";
 // import CurrentSong from "./CurrentSong";
 import Player from "./Player.jsx";
 import PlaylistControls from "./PlaylistControls.jsx";
+import WaveformVisualizer from "./WaveformVisualizer.jsx";
 
 import returnImg from "../assets/return.svg";
 import "./main.css";
@@ -18,7 +19,7 @@ import LocalMusicPlayer from "./LocalMusicPlayer.jsx";
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
-  const { userPlaylistSpotify } = useContext(Context);
+  const { userPlaylistSpotify, currentPlayingSongData } = useContext(Context);
   const [localPlaylistsState, setLocalPlaylistsState] = useState(() => fetchLocalPlaylists());
 
   const { library, setLibrary, playlistIndex, libraryView, setLibraryView, currentSongSource } =
@@ -28,7 +29,10 @@ function Main() {
   // library whenever it's updated
   useEffect(() => {
     if (localPlaylistsState && userPlaylistSpotify.items) {
-      const joinedPlaylists = [...userPlaylistSpotify.items, ...localPlaylistsState];
+      const joinedPlaylists = [
+        ...userPlaylistSpotify.items,
+        ...localPlaylistsState,
+      ];
       setLibrary(joinedPlaylists);
     } else if (userPlaylistSpotify.items) {
       setLibrary(userPlaylistSpotify.items);
@@ -47,7 +51,11 @@ function Main() {
       />
       <div className="row h-100">
         {/* left column */}
-        <div className={`col-12 col-md-6 h-100 ${libraryView ? "" : "d-none d-md-block"}`}>
+        <div
+          className={`col-12 col-md-6 h-100 ${
+            libraryView ? "" : "d-none d-md-block"
+          }`}
+        >
           {/* Nav/search bar */}
           <div className="col-12 ns-bar text-center">
             <Nav />
@@ -74,7 +82,11 @@ function Main() {
         </div>
 
         {/* right column */}
-        <div className={`col-12 col-md-6 h-100 ${!libraryView ? "" : "d-none d-md-block"}`}>
+        <div
+          className={`col-12 col-md-6 h-100 ${
+            !libraryView ? "" : "d-none d-md-block"
+          }`}
+        >
           <div className="col-12 d-flex cur-text align-items-center">
             <button
               className={`col-2 d-md-none element-${theme}-${mode} rounded border-0`}
@@ -99,8 +111,12 @@ function Main() {
               playlist={library.length > 0 ? library[playlistIndex] : []}
             />
           </div>
+          {/* Music Visualizer */}
+          <div className="col-12 cur-vis">
+            {currentPlayingSongData && <WaveformVisualizer /> }
+          </div>
           {/* Current song bar */}
-          <div className='col-12 cur-song-bar '>
+          <div className="col-12 cur-song-bar ">
             {/* < CurrentSong /> */}
             {currentSongSource === 'spotify' ?
               <Player />
