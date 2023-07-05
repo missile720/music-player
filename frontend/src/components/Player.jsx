@@ -42,9 +42,11 @@ function Player() {
           const nextIndex = prevIndex + 1
           return nextIndex < currentTracklist.length ? nextIndex : 0
         })
-      }
-
-      if (nextTracks && nextTracks.includes(lastUri)) {
+      } else if (previousTracks.length <= 0) {
+        // The specific case for if the user preses next on the last
+        // song on a playlist
+        setSongIndex(0)
+      } else if (nextTracks && nextTracks.includes(lastUri)) {
         setSongIndex(prevIndex => prevIndex - 1)
       }
     }
