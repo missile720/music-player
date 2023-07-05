@@ -39,12 +39,17 @@ function MusicPlayerStateContextProvider({ children }) {
     // Functions
     /**
      * Sets the current playlist index of the music player, also
-     * reseting the song index
+     * reseting the song index. Also toggles the player to playlist
+     * view on mobile.
      * @param {Number} index The index of a playlist in the library
      */
     function choosePlaylist(index) {
-        setPlaylistIndex(index)
-        setSongIndex(0)
+        // Only change playlist index and reset song index when given
+        // a new songIndex
+        if (index !== playlistIndex) {
+            setSongIndex(0)
+            setPlaylistIndex(index)
+        }
 
         // Only allow user to go to playlist view on mobile
         if (typeof window !== "undefined" &&
