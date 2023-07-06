@@ -14,13 +14,15 @@ import trashHover from "../assets/trashSelected.svg";
  * @param {Number} index The index of a song in the playlist
  * @param {func} cardClickHandler The function to be used as the onClick
  * handler for the SongCard
+ * @param {bool} isEditable bool for whether or not the user is able to
+ * edit the playlist the songs are from
  * @returns A Card component displaying the details of a
  * given song
  */
-function SongCard({ song, index, cardClickHandler }) {
+function SongCard({ song, index, cardClickHandler, isEditable }) {
   const [hover, setHover] = useState(false);
   const { deletePlaylistTrack, currentPlaylist } = useContext(Context)
-  const { chooseSong, songIndex } = useContext(MusicPlayerStateContext)
+  const { songIndex } = useContext(MusicPlayerStateContext)
 
   function handleMouseEnter() {
     setHover(true);
@@ -97,7 +99,8 @@ function SongCard({ song, index, cardClickHandler }) {
         <h4>{song.name}</h4>
         <h5>{getArtists(song)}</h5>
       </span>
-      <img
+
+      {isEditable && <img
         src={hover ? trashHover : trash}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -106,7 +109,7 @@ function SongCard({ song, index, cardClickHandler }) {
         }
         alt="trash icon"
         className="trashIcon"
-      />
+      />}
     </>
   );
 
