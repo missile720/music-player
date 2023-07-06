@@ -46,12 +46,17 @@ function PlaylistCard({ playlist, index }) {
 
     const playlistArtURL = getPlaylistArt(playlist);
 
-    const playlistTitle = <h4>{playlist.name}</h4>
+    const playlistMetaData = <div>
+        <h4>{playlist.name}</h4>
+        <h5 className="fs-6 fst-italic fw-light">
+            {playlist.source ? "Local" : "Spotify"}
+        </h5>
+    </div>
 
     return (
         <Card
             coverArt={{ url: playlistArtURL, title: playlist.name }}
-            metaData={playlistTitle}
+            metaData={playlistMetaData}
             cardClickHandler={() => choosePlaylist(index)}
             cardType={getCardType(playlistIndex)}
         />
