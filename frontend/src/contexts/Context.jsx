@@ -18,11 +18,17 @@ function ContextProvider({ children }) {
 
   async function loginSpotify() {
     try {
-      const response = await fetch(`${domain}/loginSpotify`);
+      const response = await fetch(`${domain}/loginSpotify`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
       const { codeVerifier, authorizationUri } = await response.json();
+      console.log(codeVerifier, authorizationUri)
       if (response.ok) {
         localStorage.setItem("code_verifier", codeVerifier)
-        window.location = authorizationUri;
+        //window.location = authorizationUri;
       } else {
         throw new Error("Failed to login with Spotify");
       }

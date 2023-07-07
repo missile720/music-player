@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const spotifyRoutes = require('./routes/spotifyRoutes');
+const port = process.env.PORT || 3000;
 
 dotenv.config();
 
@@ -18,7 +19,7 @@ app.get('/', (req, res) => {
 
 
 
-const port = process.env.PORT || 3000;
+
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
