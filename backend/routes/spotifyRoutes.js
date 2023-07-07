@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const spotifyController = require('../controllers/spotifyController');
 
-router.get("/exchangeAuthorizationCode", spotifyController.exchangeAuthorizationCode)
+router.post("/loginSpotify", spotifyController.loginSpotify)
+router.post("/exchangeAuthorizationCode", spotifyController.exchangeAuthorizationCode)
 router.get("/getProfile", spotifyController.getProfile);
 router.get('/getProfilePlaylist')
 router.get('/getSongAudioAnalysis')

@@ -14,59 +14,22 @@ function ContextProvider({ children }) {
   const [currentPlayingSongCallback, setCurrentPlayingSongCallback] = useState();
   const clientId = "146d22c1a56f4060939214df2f8b8ab4";
   const redirectUri = "http://localhost:5173/callback";
+  const domain = 'http://localhost:3000/api/spotify'
 
   async function loginSpotify() {
-    let codeVerifier = generateRandomString(128);
-
-    generateCodeChallenge(codeVerifier).then((codeChallenge) => {
-      let state = generateRandomString(16);
-      let scope = `user-read-private user-read-email 
-        playlist-read-private playlist-modify-public 
-        playlist-modify-private streaming 
-        user-read-playback-state
-        user-modify-playback-state`;
-
-      localStorage.setItem("code_verifier", codeVerifier);
-
-      let args = new URLSearchParams({
-        response_type: "code",
-        client_id: clientId,
-        scope: scope,
-        redirect_uri: redirectUri,
-        state: state,
-        code_challenge_method: "S256",
-        code_challenge: codeChallenge,
-      });
-
-      window.location = "https://accounts.spotify.com/authorize?" + args;
-    });
-  }
-
-  async function generateCodeChallenge(codeVerifier) {
-    function base64encode(string) {
-      return window
-        .btoa(String.fromCharCode.apply(null, new Uint8Array(string)))
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=+$/, "");
+    try {
+      const response = await fetch(`${domain}/loginSpotify`);
+      const { codeVerifier, authorizationUri } = await response.json();
+      if (response.ok) {
+        localStorage.setItem("code_verifier", codeVerifier)
+        window.location = authorizationUri;
+      } else {
+        throw new Error("Failed to login with Spotify");
+      }
+    } catch (error) {
+      console.log(error)
     }
 
-    const encoder = new TextEncoder();
-    const data = encoder.encode(codeVerifier);
-    const digest = await window.crypto.subtle.digest("SHA-256", data);
-
-    return base64encode(digest);
-  }
-
-  function generateRandomString(length) {
-    let text = "";
-    let possible =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (let i = 0; i < length; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
   }
 
   function currentPlaylistId(id) {
