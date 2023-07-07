@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react"
-import SpotifyPlayer, { spotifyApi } from "react-spotify-web-playback"
+import SpotifyPlayer from "react-spotify-web-playback"
 
 import { Context } from "../contexts/Context"
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
@@ -62,14 +62,6 @@ function Player() {
       }
     }
   }, [playerCallback])
-
-  useEffect(() => {
-    if (playerCallback) {
-      spotifyApi.getDevices(accessToken)
-        .then(res => res.devices.find(device => device.name === PLAYER_NAME))
-        .then(device => spotifyApi.setVolume(accessToken, volume, device.id))
-    }
-  }, [volume])
 
   return (
     <div className="d-flex justify-content-center flex-column align-items-center h-100">
