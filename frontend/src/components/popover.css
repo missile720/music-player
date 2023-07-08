@@ -14,6 +14,14 @@
     
 }
 
+/* 
+ * Used to disable the popovers when using SpotifyPlayer
+ */
+.disabled-popover {
+    pointer-events: none;
+    filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(216deg) brightness(103%) contrast(103%)
+}
+
 .volume, .bass, .treble {
     transform: rotate(270deg);
     width: 80px;
