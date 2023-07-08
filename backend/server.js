@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const cookieParser = require('cookie-parser')
 const spotifyRoutes = require('./routes/spotifyRoutes');
 const port = process.env.PORT || 3000;
 
@@ -10,6 +11,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
 // All calls made to the Spotify API are made through this middleware 
 app.use('/api/spotify', spotifyRoutes);
 

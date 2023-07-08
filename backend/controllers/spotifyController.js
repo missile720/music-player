@@ -1,7 +1,7 @@
+require('dotenv').config();
 const crypto = require('crypto');
 const clientId = process.env.CLIENT_ID;
 const redirectUri = process.env.REDIRECT_URI;
-
 
 function generateRandomString(length) {
     let text = "";
@@ -14,7 +14,7 @@ function generateRandomString(length) {
     return text;
 }
 
-async function generateCodeChallenge(codeVerifier) {
+function generateCodeChallenge(codeVerifier) {
     const encoder = new TextEncoder();
     const data = encoder.encode(codeVerifier);
     const hash = crypto.createHash('sha256');
@@ -32,8 +32,9 @@ function base64encode(string) {
 
 const loginSpotify = async (req, res) => {
     try {
-        const codeVerifier = generateRandomString(128);
-        const codeChallenge = await generateCodeChallenge(codeVerifier);
+        res.cookie("code_verifier", generateRandomString(128), { httpOnly: true });
+
+        const codeChallenge = await generateCodeChallenge(req.cookies.code_verifier);
 
         const state = generateRandomString(16);
         const scope = `user-read-private user-read-email 
@@ -52,8 +53,7 @@ const loginSpotify = async (req, res) => {
         });
 
         const authorizationUri = "https://accounts.spotify.com/authorize?" + args;
-        console.log(authorizationUri)
-        res.send({ codeVerifier: codeVerifier, authorizationUri: authorizationUri });
+        res.send({ authorizationUri: authorizationUri });
 
     } catch (error) {
         console.log(error);
@@ -61,7 +61,7 @@ const loginSpotify = async (req, res) => {
 }
 
 const exchangeAuthorizationCode = async (req, res) => {
-    const codeVerifier = req.params.codeVerifier;
+    const code = req.body.code
     try {
         const response = await fetch("https://accounts.spotify.com/api/token", {
             method: "POST",
@@ -73,7 +73,7 @@ const exchangeAuthorizationCode = async (req, res) => {
                 code: code,
                 redirect_uri: redirectUri,
                 client_id: clientId,
-                code_verifier: codeVerifier,
+                code_verifier: req.cookies.code_verifier,
             }),
         });
 
@@ -82,7 +82,12 @@ const exchangeAuthorizationCode = async (req, res) => {
         }
 
         const data = await response.json();
-        res.send(data);
+        const { accessToken, refreshToken, expiresIn } = data;
+
+        res.cookie("access_token", accessToken, { httpOnly: true });
+        res.cookie("refresh_token", refreshToken, { httpOnly: true });
+        res.cookie("expires_in", expiresIn, { httpOnly: true });
+        res.send({ message: 'Login successful.' });
 
     } catch (error) {
         console.error(
@@ -96,7 +101,7 @@ const getProfile = async (req, res) => {
     try {
         const response = await fetch("https://api.spotify.com/v1/me", {
             headers: {
-                Authorization: "Bearer " + accessToken,
+                Authorization: "Bearer " + req.cookies.access_token,
             },
         });
         const data = await response.json();
@@ -107,9 +112,77 @@ const getProfile = async (req, res) => {
     }
 }
 
+const getProfilePlaylist = async (req, res) => {
+    try {
+        const response = await fetch("https://api.spotify.com/v1/me/playlists", {
+            headers: {
+                Authorization: "Bearer " + req.cookies.access_token,
+            },
+        });
+
+        const data = await response.json();
+        res.send(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const getSongAudioAnalysis = async (req, res) => {
+    const trackId = req.params.trackId;
+    try {
+        const response = await fetch(`https://api.spotify.com/v1/audio-analysis/${trackId}`, {
+            headers: {
+                Authorization: "Bearer " + req.cookies.access_token,
+            },
+        });
+
+        const data = await response.json();
+        res.send(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const getSpotifyPlaylistTracks = async (req, res) => {
+    const tracksUrl = req.params.tracksUrl;
+    try {
+        const response = await fetch(`${tracksUrl}`, {
+            headers: {
+                Authorization: "Bearer " + req.cookies.access_token,
+            },
+        });
+
+        const data = await response.json();
+        res.send(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+const deletePlaylistTrack = async (req, res) => {
+    const tracksUrl = req.params.tracksUrl;
+    try {
+        const response = await fetch(`${tracksUrl}`, {
+            headers: {
+                Authorization: "Bearer " + req.cookies.access_token,
+            },
+        });
+
+        const data = await response.json();
+        res.send(data);
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
+
 module.exports = {
     loginSpotify,
     exchangeAuthorizationCode,
     getProfile,
-
+    getProfilePlaylist,
+    getSongAudioAnalysis,
+    getSpotifyPlaylistTracks,
+    deletePlaylistTrack
 }
