@@ -30,7 +30,7 @@ function base64encode(string) {
         .replace(/=+$/, "");
 }
 
-const loginSpotify = async (req, res) => {
+async function loginSpotify(req, res) {
     try {
         res.cookie("code_verifier", generateRandomString(128), { httpOnly: true });
 
@@ -60,7 +60,7 @@ const loginSpotify = async (req, res) => {
     }
 }
 
-const exchangeAuthorizationCode = async (req, res) => {
+async function exchangeAuthorizationCode(req, res) {
     const code = req.body.code
     try {
         const response = await fetch("https://accounts.spotify.com/api/token", {
@@ -97,7 +97,7 @@ const exchangeAuthorizationCode = async (req, res) => {
     }
 }
 
-const getProfile = async (req, res) => {
+async function getProfile(req, res) {
     try {
         const response = await fetch("https://api.spotify.com/v1/me", {
             headers: {
@@ -112,7 +112,7 @@ const getProfile = async (req, res) => {
     }
 }
 
-const getProfilePlaylist = async (req, res) => {
+async function getProfilePlaylist(req, res) {
     try {
         const response = await fetch("https://api.spotify.com/v1/me/playlists", {
             headers: {
@@ -127,7 +127,7 @@ const getProfilePlaylist = async (req, res) => {
     }
 }
 
-const getSongAudioAnalysis = async (req, res) => {
+async function getSongAudioAnalysis(req, res) {
     const trackId = req.params.trackId;
     try {
         const response = await fetch(`https://api.spotify.com/v1/audio-analysis/${trackId}`, {
@@ -143,7 +143,7 @@ const getSongAudioAnalysis = async (req, res) => {
     }
 }
 
-const getSpotifyPlaylistTracks = async (req, res) => {
+async function getSpotifyPlaylistTracks(req, res) {
     const tracksUrl = req.params.tracksUrl;
     try {
         const response = await fetch(`${tracksUrl}`, {
@@ -159,21 +159,78 @@ const getSpotifyPlaylistTracks = async (req, res) => {
     }
 }
 
-const deletePlaylistTrack = async (req, res) => {
-    const tracksUrl = req.params.tracksUrl;
+async function deletePlaylistTrack(req, res) {
+    const trackUri = req.body.tracksUrl;
+    const playlistId = req.params.playlistId;
     try {
-        const response = await fetch(`${tracksUrl}`, {
+        const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+            method: "DELETE",
             headers: {
-                Authorization: "Bearer " + req.cookies.access_token,
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
             },
+            body: JSON.stringify({
+                tracks: [{ uri: trackUri }],
+            }),
         });
 
-        const data = await response.json();
+        if (response.ok) {
+            if (req.cookies.access_token) {
+                res.send(getProfilePlaylist(req.cookies.access_token))
+            }
+        }
         res.send(data);
     } catch (error) {
         console.log(error)
     }
 }
+
+function checkForAccessToken(req, res) {
+    try {
+        if (req.cookies.access_token) {
+            res.send({ isAccessTokenValid: true })
+        } else {
+            res.send({ isAccessTokenValid: false })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function refreshToken(req, res) {
+    try {
+        const response = await fetch("https://accounts.spotify.com/api/token", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+                grant_type: "refresh_token",
+                refresh_token: refreshToken,
+                client_id: clientId,
+            }),
+        });
+    } catch (error) {
+
+    }
+}
+
+async function searchList(req, res) {
+    const search = req.params.search
+    try {
+        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(search)}&type=track`, {
+            headers: {
+                Authorization: 'Bearer ' + req.cookies.access_token,
+            }
+        })
+        const data = await response.json();
+        res.send(data)
+    } catch (error) {
+
+    }
+}
+
+
 
 
 
@@ -184,5 +241,8 @@ module.exports = {
     getProfilePlaylist,
     getSongAudioAnalysis,
     getSpotifyPlaylistTracks,
-    deletePlaylistTrack
+    deletePlaylistTrack,
+    checkForAccessToken,
+    refreshToken,
+    searchList,
 }

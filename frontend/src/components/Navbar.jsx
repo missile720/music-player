@@ -10,7 +10,7 @@ import "./Navbar.css"
 
 function Nav() {
     const { theme, mode } = useContext(ThemeContext)
-    const { userProfileSpotify, accessToken } = useContext(Context);
+    const { userProfileSpotify, domain } = useContext(Context);
     const [search, setSearch] = useState("");
     const [songList, setSongList] = useState({})
 
@@ -18,16 +18,15 @@ function Nav() {
         setSearch(event.target.value);
     }
 
-    async function searchList(accessToken, search) {
-        setSongList({});
-        const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(search)}&type=track`, {
-            headers: {
-                Authorization: 'Bearer ' + accessToken,
-            }
-        });
-
-        const data = await response.json();
-        setSongList(data);
+    async function searchList(search) {
+        try {
+            setSongList({});
+            const response = await fetch(`${domain}/searchList/${search}`);
+            const data = await response.json();
+            setSongList(data);
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     /**

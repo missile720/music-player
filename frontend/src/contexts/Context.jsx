@@ -9,6 +9,7 @@ function ContextProvider({ children }) {
   const [currentPlaylist, setCurrentPlaylist] = useState("");
   const [currentPlayingSongData, setCurrentPlayingSongData] = useState();
   const [currentPlayingSongCallback, setCurrentPlayingSongCallback] = useState();
+  const [isAccessTokenValid, setIsAccessTokenValid] = useState(false);
   const domain = 'http://localhost:3000/api/spotify'
 
   async function loginSpotify() {
@@ -46,6 +47,7 @@ function ContextProvider({ children }) {
       });
 
       const data = await response.json();
+      setIsAuthenticated(true);
       console.log(data.message)
       window.history.pushState({}, null, "/");
     } catch (error) {
@@ -100,36 +102,34 @@ function ContextProvider({ children }) {
     try {
       const response = await fetch(`${domain}/getSpotifyPlaylistTracks/${tracksUrl}`)
       const data = await response.json();
-
       return data;
     } catch (error) {
       console.log(error)
     }
   }
 
-  function deletePlaylistTrack(playlistId, trackUri) {
-    if (trackUri) {
-      fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          tracks: [{ uri: trackUri }],
-        }),
-      })
-        .then((response) => {
-          if (response.ok) {
-            if (accessToken) {
-              getProfilePlaylist(accessToken);
-            }
-            console.log("Track deleted successfully.");
-          } else {
-            console.log("Failed to delete track from the playlist.");
-          }
-        })
-        .catch((error) => console.error("Error:", error));
+  async function deletePlaylistTrack(playlistId, trackUri) {
+    try {
+      if (trackUri) {
+        const response = await fetch(`${domain}/deletePlaylistTrack/${playlistId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            tracks: [{ uri: trackUri }],
+          }),
+        });
+
+        if (response.ok) {
+          console.log("Track deleted successfully.");
+        } else {
+          console.log("Failed to delete track from the playlist.");
+        }
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -180,6 +180,22 @@ function ContextProvider({ children }) {
       .catch((error) => console.error("Error:", error));
   }
 
+  async function checkForAccessToken() {
+    try {
+      const response = await fetch(`${domain}/checkForAccessToken`);
+      const data = await response.json();
+      if (data.isAccessTokenValid) {
+        setIsAccessTokenValid(true);
+        return true
+      } else {
+        setIsAccessTokenValid(false)
+        return false
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     // Check if the current URL contains the authorization code and state
     const params = new URLSearchParams(window.location.search);
@@ -195,29 +211,19 @@ function ContextProvider({ children }) {
 
   //retrieve Spotify data
   useEffect(() => {
-    if (accessToken) {
-      getProfile(accessToken);
-      getProfilePlaylist(accessToken);
+    if (checkForAccessToken) {
+      getProfile();
+      getProfilePlaylist();
     }
-  }, [accessToken]);
+  }, [isAccessTokenValid]);
 
   useEffect(() => {
-    if (!refreshToken || !expiresIn) {
-      return;
-    }
     //Right before token expires this runs the refresh token
     const refreshInterval = setInterval(async () => {
       try {
-        const response = await fetch("https://accounts.spotify.com/api/token", {
+        const response = await fetch(`${domain}/refreshToken`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          body: new URLSearchParams({
-            grant_type: "refresh_token",
-            refresh_token: refreshToken,
-            client_id: clientId,
-          }),
+          credentials: "include",
         });
 
         if (!response.ok) {
@@ -225,9 +231,6 @@ function ContextProvider({ children }) {
         }
 
         const data = await response.json();
-        setAccessToken(data.access_token);
-        setRefreshToken(data.refresh_token);
-        setExpiresIn(data.expires_in);
       } catch (error) {
         console.error(
           "Error exchanging authorization code for access token:",
@@ -237,12 +240,13 @@ function ContextProvider({ children }) {
     }, (expiresIn - 60) * 1000);
 
     return () => clearInterval(refreshInterval);
-  }, [refreshToken, expiresIn]);
+  }, []);
 
   return (
     <Context.Provider
       value={{
-        accessToken,
+        domain,
+        isAccessTokenValid,
         userProfileSpotify,
         userPlaylistSpotify,
         currentPlaylist,
