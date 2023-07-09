@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.use('/api/spotify', spotifyRoutes);
 
 app.get('/', (req, res) => {
-    res.send('Server Started.')
+    res.send('Server Started')
 });
 
 

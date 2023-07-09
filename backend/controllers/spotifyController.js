@@ -32,10 +32,9 @@ function base64encode(string) {
 
 async function loginSpotify(req, res) {
     try {
-        res.cookie("code_verifier", generateRandomString(128), { httpOnly: true });
-
+        res.cookie("code_verifier", '123', { httpOnly: true });
+        console.log('Cookies: ', req.cookies.code_verifier)
         const codeChallenge = await generateCodeChallenge(req.cookies.code_verifier);
-
         const state = generateRandomString(16);
         const scope = `user-read-private user-read-email 
             playlist-read-private playlist-modify-public 
@@ -56,7 +55,8 @@ async function loginSpotify(req, res) {
         res.send({ authorizationUri: authorizationUri });
 
     } catch (error) {
-        console.log(error);
+        console.error("Error logging into Spotify:", error);
+        res.status(500).send({ error: "Failed to login to Spotify" });
     }
 }
 
@@ -90,10 +90,8 @@ async function exchangeAuthorizationCode(req, res) {
         res.send({ message: 'Login successful.' });
 
     } catch (error) {
-        console.error(
-            "Error exchanging authorization code for access token:",
-            error
-        );
+        console.error("Error occurred when acquiring authorization:", error);
+        res.status(500).send({ error: "Failed to acquire authorization" });
     }
 }
 
@@ -108,7 +106,8 @@ async function getProfile(req, res) {
         res.send(data);
 
     } catch (error) {
-        console.log(error)
+        console.error("Error fetching profile:", error);
+        res.status(500).send({ error: "Failed to fetch profile" });
     }
 }
 
@@ -123,7 +122,8 @@ async function getProfilePlaylist(req, res) {
         const data = await response.json();
         res.send(data);
     } catch (error) {
-        console.log(error)
+        console.error("Error fetching playlists:", error);
+        res.status(500).send({ error: "Failed to fetch playlists" });
     }
 }
 
@@ -139,7 +139,8 @@ async function getSongAudioAnalysis(req, res) {
         const data = await response.json();
         res.send(data);
     } catch (error) {
-        console.log(error)
+        console.error("Error fetching song audio analysis:", error);
+        res.status(500).send({ error: "Failed to fetch song audio analysis" });
     }
 }
 
@@ -155,7 +156,8 @@ async function getSpotifyPlaylistTracks(req, res) {
         const data = await response.json();
         res.send(data);
     } catch (error) {
-        console.log(error)
+        console.error("Error fetching playlist tracks:", error);
+        res.status(500).send({ error: "Failed to fetch playlist tracks" });
     }
 }
 
@@ -181,7 +183,8 @@ async function deletePlaylistTrack(req, res) {
         }
         res.send(data);
     } catch (error) {
-        console.log(error)
+        console.error("Error deleting playlist track:", error);
+        res.status(500).send({ error: "Failed to delete playlist track" });
     }
 }
 
@@ -193,7 +196,8 @@ function checkForAccessToken(req, res) {
             res.send({ isAccessTokenValid: false })
         }
     } catch (error) {
-        console.log(error)
+        console.error("Error checking access token:", error);
+        res.status(500).send({ error: "Failed to check for access token" });
     }
 }
 
@@ -206,12 +210,16 @@ async function refreshToken(req, res) {
             },
             body: new URLSearchParams({
                 grant_type: "refresh_token",
-                refresh_token: refreshToken,
+                refresh_token: req.cookies.refresh_token,
                 client_id: clientId,
             }),
         });
+        const data = await response.json()
+        console.log(data)
+        res.send(data)
     } catch (error) {
-
+        console.error("Error refreshing access token:", error);
+        res.status(500).send({ error: "Failed to refresh access token" });
     }
 }
 
@@ -226,7 +234,8 @@ async function searchList(req, res) {
         const data = await response.json();
         res.send(data)
     } catch (error) {
-
+        console.error("Error searching for song:", error);
+        res.status(500).send({ error: "Failed to search for song" });
     }
 }
 

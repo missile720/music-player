@@ -217,30 +217,24 @@ function ContextProvider({ children }) {
     }
   }, [isAccessTokenValid]);
 
-  useEffect(() => {
-    //Right before token expires this runs the refresh token
-    const refreshInterval = setInterval(async () => {
-      try {
-        const response = await fetch(`${domain}/refreshToken`, {
-          method: "POST",
-          credentials: "include",
-        });
+  // useEffect(() => {
+  //   //Right before token expires this runs the refresh token
+  //   let expiresIn
+  //   const refreshInterval = setInterval(async () => {
+  //     try {
+  //       const response = await fetch(`${domain}/refreshToken`, {
+  //         method: "POST",
+  //         credentials: "include",
+  //       });
+  //       const data = await response.json();
+  //       expiresIn = data.expiresIn;
+  //     } catch (error) {
+  //       console.log(error)
+  //     }
+  //   }, (expiresIn - 60) * 1000);
 
-        if (!response.ok) {
-          throw new Error("Failed to refresh access token");
-        }
-
-        const data = await response.json();
-      } catch (error) {
-        console.error(
-          "Error exchanging authorization code for access token:",
-          error
-        );
-      }
-    }, (expiresIn - 60) * 1000);
-
-    return () => clearInterval(refreshInterval);
-  }, []);
+  //   return () => clearInterval(refreshInterval);
+  // }, []);
 
   return (
     <Context.Provider
