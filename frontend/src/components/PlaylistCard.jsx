@@ -1,6 +1,7 @@
 /* eslint react/prop-types: 0 */
 import { useContext } from "react"
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
+import { ThemeContext } from "../contexts/ThemeContext"
 
 import Card from "./Card"
 import defaultPlaylistArt from "../assets/defaultCardArt.svg"
@@ -12,6 +13,7 @@ import defaultPlaylistArt from "../assets/defaultCardArt.svg"
  * @returns {Card} A Card that displays PlaylistCard elements
  */
 function PlaylistCard({ playlist, index }) {
+    const { theme, mode } = useContext(ThemeContext)
     const {
         choosePlaylist,
         playlistIndex
@@ -38,7 +40,7 @@ function PlaylistCard({ playlist, index }) {
         let baseCardType = " playlist-card "
 
         if (playlistIndex === index) {
-            baseCardType += " selected-card "
+            baseCardType +=  `${theme}-${mode}-selected-card`
         }
 
         return baseCardType
