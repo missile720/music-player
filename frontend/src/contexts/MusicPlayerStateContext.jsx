@@ -1,4 +1,6 @@
-import { useState, useEffect, createContext, useRef } from "react"
+import { useState, useEffect, createContext } from "react"
+
+import testPlaylistData from "../test/test-playlist.jsx"
 
 const MusicPlayerStateContext = createContext()
 
@@ -36,11 +38,17 @@ function MusicPlayerStateContextProvider({ children }) {
     }, [])
 
     /**
-     * Side effect for setting the source of the currently selected song
+     * Side effect for updating state variables on the change of songIndex,
+     * playlistIndex, or library
      */
     useEffect(() => {
         if (library[playlistIndex]) {
             setCurrentSongSource(library[playlistIndex].source ? 'local' : 'spotify')
+        }
+
+        // Loading test playlistdata for LocalMusicPlayer implementation
+        if (library[playlistIndex] && library[playlistIndex].source) {
+            setCurrentTracklist(testPlaylistData)
         }
     }, [songIndex, playlistIndex, library])
 
@@ -135,6 +143,25 @@ function MusicPlayerStateContextProvider({ children }) {
         setPlayer(reactPlayer)
     }
 
+    /**
+     * Module increments the songIndex to have loop behaviour
+     */
+    function nextTrack() {
+        if (currentTracklist && currentTracklist.length > 0) {
+            setSongIndex(prev => (prev + 1) % currentTracklist.length)
+        }
+    }
+
+    /**
+     * Modulo decrements the songIndex to have loop behaviour
+     */
+    function previousTrack() {
+        if (currentTracklist && currentTracklist.length > 0) {
+            // Tracklist length added to decrement to avoid the modulous of a negative number
+            setSongIndex(prev => (prev - 1 + currentTracklist.length) % currentTracklist.length)
+        }
+    }
+
 
     return (
         <MusicPlayerStateContext.Provider
@@ -159,7 +186,9 @@ function MusicPlayerStateContextProvider({ children }) {
                 handleProgress,
                 localPlayback,
                 getPlayer,
-                updateOnScrub
+                updateOnScrub,
+                nextTrack,
+                previousTrack
             }}
         >
             {children}

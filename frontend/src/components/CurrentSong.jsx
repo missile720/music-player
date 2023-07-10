@@ -17,7 +17,9 @@ function CurrentSong() {
         togglePlay,
         setScrubbing,
         localPlayback,
-        updateOnScrub
+        updateOnScrub,
+        nextTrack,
+        previousTrack
     } = useContext(MusicPlayerStateContext)
 
     return (
@@ -59,7 +61,11 @@ function CurrentSong() {
                 </div>
                 <div className="music-play-buttons">
                     {/* skip backwards */}
-                    <img className={`music-button music-button-${theme}-${mode}`} src={rewindImg}></img>
+                    <img
+                        className={`music-button music-button-${theme}-${mode}`}
+                        src={rewindImg}
+                        onClick={previousTrack}
+                    ></img>
                     {/* Play */}
                     <img
                         className={`music-button music-button-${theme}-${mode}`}
@@ -67,7 +73,11 @@ function CurrentSong() {
                         onClick={togglePlay}
                     ></img>
                     {/* skip forward  */}
-                    <img className={`music-button music-button-${theme}-${mode}`} src={fastforwardImg}></img>
+                    <img
+                        className={`music-button music-button-${theme}-${mode}`}
+                        src={fastforwardImg}
+                        onClick={nextTrack}
+                    ></img>
                 </div>
             </div>
         </div>
