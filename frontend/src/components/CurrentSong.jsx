@@ -11,7 +11,14 @@ import './CurrentSong.css'
 
 function CurrentSong() {
     const { theme, mode } = useContext(ThemeContext)
-    const { songProgress, scrubSong, libraryView } = useContext(MusicPlayerStateContext)
+    const {
+        scrubSong,
+        libraryView,
+        togglePlay,
+        setScrubbing,
+        localPlayback,
+        setLocalPlayback
+    } = useContext(MusicPlayerStateContext)
 
     return (
         <div
@@ -38,10 +45,12 @@ function CurrentSong() {
                 <div className="song-bar">
                     <input
                         type="range"
-                        min="1"
-                        max="100"
-                        step="1"
-                        value={songProgress}
+                        min="0"
+                        max="0.99999999"
+                        step="any"
+                        value={localPlayback.played}
+                        onMouseDown={() => setScrubbing(true)}
+                        onMouseUp={() => setScrubbing(false)}
                         onChange={scrubSong}
                         data-bs-toggle="offcanvas"
                         id="range"
@@ -52,7 +61,11 @@ function CurrentSong() {
                     {/* skip backwards */}
                     <img className={`music-button music-button-${theme}-${mode}`} src={rewindImg}></img>
                     {/* Play */}
-                    <img className={`music-button music-button-${theme}-${mode}`} src={playImg}></img>
+                    <img
+                        className={`music-button music-button-${theme}-${mode}`}
+                        src={playImg}
+                        onClick={togglePlay}
+                    ></img>
                     {/* skip forward  */}
                     <img className={`music-button music-button-${theme}-${mode}`} src={fastforwardImg}></img>
                 </div>

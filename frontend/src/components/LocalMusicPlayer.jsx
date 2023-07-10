@@ -9,15 +9,20 @@ import testSongUrl from "../assets/DJ Sona Ethereal (Nosaj Thing x Pretty Lights
 
 const LocalMusicPlayer = ({ song }) => {
     const {
-        playing
+        playing,
+        localPlayback,
+        handleProgress
     } = useContext(MusicPlayerStateContext)
 
     return (
         <>
             <CurrentSong />
             <ReactPlayer
+                height="0"
                 url={testSongUrl}
                 playing={playing}
+                played={localPlayback.played}
+                onProgress={handleProgress}
             />
         </>
     )

@@ -9,10 +9,16 @@ function MusicPlayerStateContextProvider({ children }) {
     const [playlistIndex, setPlaylistIndex] = useState(0)
     const [songIndex, setSongIndex] = useState(0)
     const [libraryView, setLibraryView] = useState(true)
-    const [songProgress, setSongProgress] = useState(10)
     const [currentTracklist, setCurrentTracklist] = useState([])
     const [currentSongSource, setCurrentSongSource] = useState('')
     const [playing, setPlaying] = useState(true)
+    const [scrubbing, setScrubbing] = useState(false)
+    const [localPlayback, setLocalPlayback] = useState({
+        played: 0,
+        playedSeconds: 0,
+        loaded: 0,
+        loadedSeconds: 0
+    })
 
     // Effects
     /**
@@ -67,25 +73,43 @@ function MusicPlayerStateContextProvider({ children }) {
         setSongIndex(index)
     }
 
+
+    /**
+     * Sets the library view as true. Meant to be used as event listener
+     * for window size, such that if a user resizes their window to be
+     * desktop view on mobile, library view is guaranteed to be true
+    */
+    function setAsLibraryView() {
+        if (typeof window !== "undefined" &&
+            window.innerWidth >= MEDIUM_SCREEN_BREAKPOINT) {
+            setLibraryView(true)
+        }
+    }
+
+    // PLAYER CONTROL FUNCTIONS
+
+    /**
+     * Toggles currentSong playback on/off
+     */
+    function togglePlay() {
+        setPlaying(prevPlay => !prevPlay)
+    }
+
     /**
      * Handles the playback scrubbing of a range input by setting the current
      * songProgress as the scrubbed time
      * @param {Event} event Range input event
      */
     function scrubSong(event) {
-        setSongProgress(event.target.value)
-        event.stopPropagation()
+        setLocalPlayback(prevPlayback => ({
+            ...prevPlayback,
+            played: parseFloat(event.target.value)
+        }))
     }
 
-    /**
-     * Sets the library view as true. Meant to be used as event listener
-     * for window size, such that if a user resizes their window to be
-     * desktop view on mobile, library view is guaranteed to be true
-     */
-    function setAsLibraryView() {
-        if (typeof window !== "undefined" &&
-            window.innerWidth >= MEDIUM_SCREEN_BREAKPOINT) {
-            setLibraryView(true)
+    function handleProgress(state) {
+        if (!scrubbing) {
+            setLocalPlayback(state)
         }
     }
 
@@ -102,12 +126,16 @@ function MusicPlayerStateContextProvider({ children }) {
                 chooseSong,
                 libraryView,
                 setLibraryView,
-                songProgress,
                 scrubSong,
                 currentTracklist,
                 setCurrentTracklist,
                 currentSongSource,
-                playing
+                playing,
+                togglePlay,
+                scrubbing,
+                setScrubbing,
+                handleProgress,
+                localPlayback
             }}
         >
             {children}
