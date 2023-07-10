@@ -2,9 +2,7 @@ import { useContext } from "react";
 import { SettingsStateContext } from "../contexts/SettingsStateContext";
 
 const VolumeComponent = () => {
-    
-
-    const {volume, updateVolume} = useContext(SettingsStateContext)
+    const { volume, updateVolume } = useContext(SettingsStateContext)
 
     const handleVolumeChange = (event) => {
         const newVolume = parseInt(event.target.value)
@@ -22,12 +20,12 @@ const VolumeComponent = () => {
                 className="volume"
             />
             <div className="description">
-                <input 
+                <input
                     type="number"
-                    className="value" 
+                    className="value"
                     value={volume}
                     onChange={handleVolumeChange}
-                /> 
+                />
                 <p className="value value-text">Volume</p>
             </div>
         </div>
