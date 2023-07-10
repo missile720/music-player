@@ -17,7 +17,7 @@ function CurrentSong() {
         togglePlay,
         setScrubbing,
         localPlayback,
-        setLocalPlayback
+        updateOnScrub
     } = useContext(MusicPlayerStateContext)
 
     return (
@@ -50,7 +50,7 @@ function CurrentSong() {
                         step="any"
                         value={localPlayback.played}
                         onMouseDown={() => setScrubbing(true)}
-                        onMouseUp={() => setScrubbing(false)}
+                        onMouseUp={updateOnScrub}
                         onChange={scrubSong}
                         data-bs-toggle="offcanvas"
                         id="range"

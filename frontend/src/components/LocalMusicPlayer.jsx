@@ -11,7 +11,8 @@ const LocalMusicPlayer = ({ song }) => {
     const {
         playing,
         localPlayback,
-        handleProgress
+        handleProgress,
+        getPlayer
     } = useContext(MusicPlayerStateContext)
 
     return (
@@ -19,10 +20,12 @@ const LocalMusicPlayer = ({ song }) => {
             <CurrentSong />
             <ReactPlayer
                 height="0"
+                ref={getPlayer}
                 url={testSongUrl}
                 playing={playing}
                 played={localPlayback.played}
                 onProgress={handleProgress}
+            // onSeek={ }
             />
         </>
     )

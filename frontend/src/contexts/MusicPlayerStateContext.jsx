@@ -1,4 +1,4 @@
-import { useState, useEffect, createContext } from "react"
+import { useState, useEffect, createContext, useRef } from "react"
 
 const MusicPlayerStateContext = createContext()
 
@@ -19,6 +19,7 @@ function MusicPlayerStateContextProvider({ children }) {
         loaded: 0,
         loadedSeconds: 0
     })
+    const [player, setPlayer] = useState(() => { })
 
     // Effects
     /**
@@ -107,10 +108,31 @@ function MusicPlayerStateContextProvider({ children }) {
         }))
     }
 
+    /**
+     * Has the player seek to the specified playback input
+     * @param {Event} event Event object for input range mouse up
+     */
+    function updateOnScrub(event) {
+        setScrubbing(false)
+        player.seekTo(parseFloat(event.target.value))
+    }
+
+    /**
+     * Updates playback state as song plays
+     * @param {Object} state Playbackstate
+     */
     function handleProgress(state) {
         if (!scrubbing) {
             setLocalPlayback(state)
         }
+    }
+
+    /**
+     * Sets the player state as the given player
+     * @param {Object} player The internal player for the ReactPlayer
+     */
+    function getPlayer(reactPlayer) {
+        setPlayer(reactPlayer)
     }
 
 
@@ -135,7 +157,9 @@ function MusicPlayerStateContextProvider({ children }) {
                 scrubbing,
                 setScrubbing,
                 handleProgress,
-                localPlayback
+                localPlayback,
+                getPlayer,
+                updateOnScrub
             }}
         >
             {children}
