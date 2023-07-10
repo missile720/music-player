@@ -61,7 +61,7 @@ function Main() {
             <Nav />
           </div>
           <div className="col-12 lib-text playlist-bar">
-            <h3>Library</h3>
+            <h3 className="title">Library</h3>
             <button
               type="button"
               className={`btn element-${theme}-${mode}`}
@@ -98,7 +98,7 @@ function Main() {
               ></img>
             </button>
             <div className="col-10 col-md-12 px-2">
-              <h3>
+              <h3 className="title">
                 {library.length > 0 &&
                   library[playlistIndex] &&
                   library[playlistIndex].name}

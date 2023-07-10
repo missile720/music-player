@@ -41,7 +41,7 @@ function Card({ coverArt, metaData, cardClickHandler, cardType }) {
         <div
             onClick={cardClickHandler}
             className={getCardClassName(cardType)}
-            id={`tertiary-${theme}-${mode}`}
+            // id={`tertiary-${theme}-${mode}`}
         >
             <img
                 src={coverArt.url}

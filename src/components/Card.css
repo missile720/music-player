@@ -4,13 +4,26 @@
  */
 .mp-card--art {
     height: 4rem;
+    padding-right: 10px;
 }
 
 
 
-.selected-card {
-    background-color: #7b8cdb !important;
-    color: #16161d !important;
+.royal-light-selected-card {
+    background-color: #2B94F6 !important;
+    /* color: #d4d4d4 !important; */
+}
+.royal-dark-selected-card {
+    background-color: #22238D !important;
+    /* color: #d4d4d4 !important; */
+}
+.bvt-dark-selected-card {
+    background-color: #FF5531 !important;
+    /*color: #FF5531 !important; */
+}
+.bvt-light-selected-card {
+    background-color: #FD2C00 !important;
+    /* color: #d4d4d4 !important; */
 }
 
 .trashIcon {
@@ -22,34 +35,20 @@
     text-align: left;
 }
 
-.royal-light-container-card {
-    border: 2px solid #d4d4d4;
-}
-.royal-dark-container-card {
-    border: 2px solid #d4d4d4;
-}
-
-.bvt-light-container-card {
-    border: 2px solid #d4d4d4;
-}
-.bvt-dark-container-card {
-    border: 2px solid #d4d4d4;
-}
-
 .royal-light-container-card:hover{
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    border: 2px solid #323130;
+    background-color: #2B94F6;
+    
 }
 .royal-dark-container-card:hover{
-    box-shadow: rgba(255, 255, 255, 0.664) 0px 3px 8px;
-    border: 2px solid white;
+    background: #22238D;
+    
 }
 
-.bvt-light-container-card:hover{
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    border: 2px solid #323130;
-}
 .bvt-dark-container-card:hover{
-    box-shadow: rgba(255, 255, 255, 0.664) 0px 3px 8px;
-    border: 2px solid white;
+    background: #737873;
+    color: white;
+    
+}
+.bvt-light-container-card:hover{
+    background: #FD2C00;
 }
