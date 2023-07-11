@@ -13,7 +13,9 @@ const LocalMusicPlayer = () => {
         getPlayer,
         currentTracklist,
         songIndex,
-        hasNonEmptyTracklist
+        hasNonEmptyTracklist,
+        nextTrack,
+        getDuration
     } = useContext(MusicPlayerStateContext)
 
     return (
@@ -27,6 +29,8 @@ const LocalMusicPlayer = () => {
                 playing={playing}
                 played={localPlayback.played}
                 onProgress={handleProgress}
+                onEnded={nextTrack}
+                onDuration={getDuration}
             />
         </>
     )

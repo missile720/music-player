@@ -21,7 +21,9 @@ function CurrentSong() {
         updateOnScrub,
         nextTrack,
         previousTrack,
-        playing
+        playing,
+        duration,
+        convertToTimestamp
     } = useContext(MusicPlayerStateContext)
 
     return (
@@ -46,7 +48,8 @@ function CurrentSong() {
             </div>
 
             <div className="current-song-right-side col-6 h-100">
-                <div className="song-bar">
+                <div className="song-bar d-flex justify-content-between">
+                    <span>{convertToTimestamp(localPlayback.playedSeconds)}</span>
                     <input
                         type="range"
                         min="0"
@@ -60,6 +63,7 @@ function CurrentSong() {
                         id="range"
                         className="custom-range"
                     />
+                    <span>{convertToTimestamp(duration)}</span>
                 </div>
                 <div className="music-play-buttons">
                     {/* skip backwards */}

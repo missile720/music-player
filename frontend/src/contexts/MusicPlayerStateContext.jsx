@@ -17,9 +17,11 @@ function MusicPlayerStateContextProvider({ children }) {
         played: 0,
         playedSeconds: 0,
         loaded: 0,
-        loadedSeconds: 0
+        loadedSeconds: 0,
+        duration: 0
     })
     const [player, setPlayer] = useState(() => { })
+    const [duration, setDuration] = useState(0)
 
     // Effects
     /**
@@ -128,6 +130,10 @@ function MusicPlayerStateContextProvider({ children }) {
         }
     }
 
+    function getDuration(duration) {
+        setDuration(duration)
+    }
+
     /**
      * Sets the player state as the given player
      * @param {Object} player The internal player for the ReactPlayer
@@ -175,6 +181,13 @@ function MusicPlayerStateContextProvider({ children }) {
             library[playlistIndex].name
     }
 
+    function convertToTimestamp(timeInSeconds) {
+        const minutes = Math.floor(timeInSeconds / 60).toString()
+        const seconds = Math.floor(timeInSeconds % 60).toString()
+
+        return timeInSeconds ? `${minutes}:${seconds.padStart(2, "0")}` : "--:--"
+    }
+
 
     return (
         <MusicPlayerStateContext.Provider
@@ -203,7 +216,10 @@ function MusicPlayerStateContextProvider({ children }) {
                 nextTrack,
                 previousTrack,
                 getPlaylistName,
-                hasNonEmptyTracklist
+                hasNonEmptyTracklist,
+                getDuration,
+                duration,
+                convertToTimestamp
             }}
         >
             {children}
