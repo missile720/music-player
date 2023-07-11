@@ -1,7 +1,4 @@
 require('dotenv').config();
-const crypto = require('crypto');
-const clientId = process.env.CLIENT_ID;
-const redirectUri = process.env.REDIRECT_URI;
 
 async function loginSpotify(req, res) {
     const state = req.body.state;

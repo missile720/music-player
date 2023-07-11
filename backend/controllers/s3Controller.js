@@ -1,4 +1,6 @@
 require('dotenv').config();
+//import { PutObjectCommand, CreateBucketCommand } from '@aws-sdk/client-s3';
+//import { s3Client } from '../libs/client';
 
 async function getUploadedPlaylists(req, res) {
     try {
@@ -11,3 +13,4 @@ async function getUploadedPlaylists(req, res) {
 module.exports = {
     getUploadedPlaylists
 }
+
