@@ -1,56 +1,14 @@
 require('dotenv').config();
 const crypto = require('crypto');
-const jwt = require('jsonwebtoken');
 const clientId = process.env.CLIENT_ID;
 const redirectUri = process.env.REDIRECT_URI;
-const jwtSecret = process.env.JWT_SECRET;
 let codeVerifier = '';
 
-function generateToken(jwtData) {
-    const payload = {
-        accessToken: jwtData.access_token,
-        refreshToken: jwtData.refresh_token,
-        expiresIn: jwtData.expires_in,
-        codeVerifier: codeVerifier
-    };
-
-    return jwt.sign(payload, jwtSecret, { expiresIn: 3600 });
-}
-
-
-function generateRandomString(length) {
-    let text = "";
-    let possible =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-    for (let i = 0; i < length; i++) {
-        text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
-}
-
-function generateCodeChallenge(codeVerifier) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(codeVerifier);
-    const hash = crypto.createHash('sha256');
-    const digest = hash.update(data).digest();
-
-    return base64encode(digest);
-}
-
-function base64encode(string) {
-    return string.toString('base64')
-        .replace(/\+/g, "-")
-        .replace(/\//g, "_")
-        .replace(/=+$/, "");
-}
-
 async function loginSpotify(req, res) {
+    const state = req.body.state;
+    const codeChallenge = req.body.codeChallenge;
+    console.log(codeChallenge)
     try {
-        codeVerifier = generateCodeChallenge(128);
-
-        const codeChallenge = await generateCodeChallenge(codeVerifier);
-        const state = generateRandomString(16);
         const scope = `user-read-private user-read-email 
             playlist-read-private playlist-modify-public 
             playlist-modify-private streaming 
@@ -76,26 +34,25 @@ async function loginSpotify(req, res) {
 
 async function exchangeAuthorizationCode(req, res) {
     const code = req.body.code
-    res.cookie('teste', 'testset', { httpOnly: true });
+    const codeVerifier = req.body.codeVerifier;
     try {
         const response = await fetch("https://accounts.spotify.com/api/token", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
-            credentials: true,
             body: new URLSearchParams({
                 grant_type: "authorization_code",
                 code: code,
                 redirect_uri: redirectUri,
                 client_id: clientId,
                 code_verifier: codeVerifier,
-            }),
+            })
         });
+
         const data = await response.json();
-        const token = generateToken(data);
-        console.log(data)
-        res.cookie('spotify_tokens', token, { httpOnly: true });
+        console.log("Access Token:", data)
+        res.send(data)
 
     } catch (error) {
         console.error("Error occurred when acquiring authorization:", error);
@@ -104,11 +61,10 @@ async function exchangeAuthorizationCode(req, res) {
 }
 
 async function getProfile(req, res) {
-    console.log(req.cookies)
     try {
         const response = await fetch("https://api.spotify.com/v1/me", {
             headers: {
-                Authorization: "Bearer " + req.cookies.spotify_tokens.accessToken,
+                Authorization: req.headers.Authorization,
             },
         });
 
@@ -125,7 +81,7 @@ async function getProfilePlaylist(req, res) {
     try {
         const response = await fetch("https://api.spotify.com/v1/me/playlists", {
             headers: {
-                Authorization: "Bearer " + req.cookies.access_token,
+                Authorization: req.headers.Authorization,
             },
         });
 
@@ -142,7 +98,7 @@ async function getSongAudioAnalysis(req, res) {
     try {
         const response = await fetch(`https://api.spotify.com/v1/audio-analysis/${trackId}`, {
             headers: {
-                Authorization: "Bearer " + req.cookies.access_token,
+                Authorization: req.headers.Authorization,
             },
         });
 
@@ -159,7 +115,7 @@ async function getSpotifyPlaylistTracks(req, res) {
     try {
         const response = await fetch(`${tracksUrl}`, {
             headers: {
-                Authorization: "Bearer " + req.cookies.access_token,
+                Authorization: req.headers.Authorization,
             },
         });
 
@@ -178,7 +134,7 @@ async function deletePlaylistTrack(req, res) {
         const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
             method: "DELETE",
             headers: {
-                Authorization: `Bearer ${accessToken}`,
+                Authorization: req.headers.Authorization,
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
@@ -186,13 +142,36 @@ async function deletePlaylistTrack(req, res) {
             }),
         });
 
-        if (response.ok) {
-            if (req.cookies.access_token) {
-                res.send(getProfilePlaylist(req.cookies.access_token))
-            }
-        }
+        // if (response.ok) {
+        //     if (req.cookies.access_token) {
+        //         res.send(getProfilePlaylist(req.cookies.access_token))
+        //     }
+        // }
 
         res.send(data);
+    } catch (error) {
+        console.error("Error deleting playlist track:", error);
+        res.status(500).send({ error: "Failed to delete playlist track" });
+    }
+}
+
+async function updatePlaylistName(req, res) {
+    const playlistId = req.params.playlistId;
+    const newName = req.body.name
+    try {
+        const response = await fetch(
+            `https://api.spotify.com/v1/playlists/${playlistId}`,
+            {
+                method: "PUT",
+                headers: {
+                    Authorization: req.headers.Authorization,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    name: newName,
+                })
+            }
+        )
     } catch (error) {
         console.error("Error deleting playlist track:", error);
         res.status(500).send({ error: "Failed to delete playlist track" });
@@ -221,7 +200,7 @@ async function refreshToken(req, res) {
             },
             body: new URLSearchParams({
                 grant_type: "refresh_token",
-                refresh_token: req.cookies.refresh_token,
+                refresh_token: req.body.refresh_token,
                 client_id: clientId,
             }),
         });
@@ -239,7 +218,7 @@ async function searchList(req, res) {
     try {
         const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(search)}&type=track`, {
             headers: {
-                Authorization: 'Bearer ' + req.cookies.access_token,
+                Authorization: req.headers.Authorization,
             }
         });
 

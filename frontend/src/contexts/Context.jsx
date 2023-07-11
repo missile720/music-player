@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useCookies } from 'react-cookie';
 import PropTypes from "prop-types";
 
 const Context = React.createContext();
@@ -10,15 +11,51 @@ function ContextProvider({ children }) {
   const [currentPlayingSongData, setCurrentPlayingSongData] = useState();
   const [currentPlayingSongCallback, setCurrentPlayingSongCallback] = useState();
   const [isAccessTokenValid, setIsAccessTokenValid] = useState(false);
+  const [cookies, setCookies] = useCookies(['codeVerifier', 'accessToken']);
   const domain = 'http://localhost:3000/api/spotify'
+
+  async function generateCodeChallenge(codeVerifier) {
+    function base64encode(string) {
+      return window
+        .btoa(String.fromCharCode.apply(null, new Uint8Array(string)))
+        .replace(/\+/g, "-")
+        .replace(/\//g, "_")
+        .replace(/=+$/, "");
+    }
+
+    const encoder = new TextEncoder();
+    const data = encoder.encode(codeVerifier);
+    const digest = await window.crypto.subtle.digest("SHA-256", data);
+
+    return base64encode(digest);
+  }
+
+  function generateRandomString(length) {
+    let text = "";
+    let possible =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    for (let i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  }
 
   async function loginSpotify() {
     try {
+      const codeVerifier = await generateCodeChallenge(128);
+      setCookies('codeVerifier', codeVerifier);
+      const codeChallenge = await generateCodeChallenge(cookies.codeVerifier);
+      const state = generateRandomString(16);
       const response = await fetch(`${domain}/loginSpotify`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({
+          codeChallenge: codeChallenge,
+          state: state
+        })
       });
       const { authorizationUri } = await response.json();
       if (response.ok) {
@@ -39,17 +76,20 @@ function ContextProvider({ children }) {
   const exchangeAuthorizationCode = async (code) => {
     try {
       const response = await fetch(`${domain}/exchangeAuthorizationCode`, {
-        credentials: 'include',
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ code: code })
+        body: JSON.stringify({
+          code: code,
+          codeVerifier: cookies.codeVerifier
+        }),
+        credentials: "include",
       });
 
       const data = await response.json();
-      setIsAuthenticated(true);
-      console.log(data.message)
+      setCookies('accessToken', data.access_token);
+      setIsAccessTokenValid(true);
       window.history.pushState({}, null, "/");
     } catch (error) {
       console.error(
@@ -61,7 +101,12 @@ function ContextProvider({ children }) {
 
   async function getProfile() {
     try {
-      const response = await fetch(`${domain}/getProfile`);
+      const response = await fetch(`${domain}/getProfile`, {
+        headers: {
+          Authorization: `Bearer ${cookies.accessToken}`,
+        },
+        credentials: "include"
+      });
       const data = await response.json();
       setUserProfileSpotify(data);
     } catch (error) {
@@ -71,7 +116,12 @@ function ContextProvider({ children }) {
 
   async function getProfilePlaylist() {
     try {
-      const response = await fetch(`${domain}/getProfilePlaylist`);
+      const response = await fetch(`${domain}/getProfilePlaylist`, {
+        headers: {
+          Authorization: `Bearer ${cookies.accessToken}`,
+        },
+        credentials: "include"
+      });
       const data = await response.json();
       setUserPlaylistSpotify(data);
     } catch (error) {
@@ -83,7 +133,12 @@ function ContextProvider({ children }) {
   async function getSongAudioAnalysis(playerCallback) {
     const trackId = playerCallback.track.id;
     try {
-      const response = await fetch(`${domain}/getProfilePlaylist/${trackId}`);
+      const response = await fetch(`${domain}/getProfilePlaylist/${trackId}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.accessToken}`,
+        },
+        credentials: "include"
+      });
       const data = await response.json();
       setCurrentPlayingSongData(data);
       setCurrentPlayingSongCallback(playerCallback);
@@ -101,7 +156,12 @@ function ContextProvider({ children }) {
    */
   async function getSpotifyPlaylistTracks(tracksUrl) {
     try {
-      const response = await fetch(`${domain}/getSpotifyPlaylistTracks/${tracksUrl}`)
+      const response = await fetch(`${domain}/getSpotifyPlaylistTracks/${tracksUrl}`, {
+        headers: {
+          Authorization: `Bearer ${cookies.accessToken}`,
+        },
+        credentials: "include"
+      })
       const data = await response.json();
       return data;
     } catch (error) {
@@ -115,12 +175,13 @@ function ContextProvider({ children }) {
         const response = await fetch(`${domain}/deletePlaylistTrack/${playlistId}`, {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${cookies.accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             tracks: [{ uri: trackUri }],
           }),
+          credentials: "include"
         });
 
         if (response.ok) {
@@ -141,12 +202,13 @@ function ContextProvider({ children }) {
         {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${accessToken}`,
+            Authorization: `Bearer ${cookies.accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             name: newName,
           }),
+          credentials: "include"
         }
       );
       if (!response.ok) {
@@ -161,16 +223,17 @@ function ContextProvider({ children }) {
     fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${cookies.accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         uris: [trackUri],
       }),
+      credentials: "include"
     })
       .then((response) => {
         if (response.ok) {
-          if (accessToken) {
+          if (cookies.accessToken) {
             getProfilePlaylist(accessToken);
           }
           console.log("Track added to the playlist successfully.");
@@ -179,22 +242,6 @@ function ContextProvider({ children }) {
         }
       })
       .catch((error) => console.error("Error:", error));
-  }
-
-  async function checkForAccessToken() {
-    try {
-      const response = await fetch(`${domain}/checkForAccessToken`);
-      const data = await response.json();
-      if (data.isAccessTokenValid) {
-        setIsAccessTokenValid(true);
-        return true
-      } else {
-        setIsAccessTokenValid(false)
-        return false
-      }
-    } catch (error) {
-      console.log(error)
-    }
   }
 
   useEffect(() => {
@@ -212,11 +259,11 @@ function ContextProvider({ children }) {
 
   //retrieve Spotify data
   useEffect(() => {
-    if (checkForAccessToken) {
+    if (cookies.accessToken) {
       getProfile();
       getProfilePlaylist();
     }
-  }, [isAccessTokenValid]);
+  }, [cookies.accessToken]);
 
   // useEffect(() => {
   //   //Right before token expires this runs the refresh token
@@ -253,7 +300,8 @@ function ContextProvider({ children }) {
         addPlaylistTrack,
         currentPlaylistId,
         updatePlaylistName,
-        getSongAudioAnalysis
+        getSongAudioAnalysis,
+        cookies
       }}
     >
       {children}
