@@ -39,6 +39,7 @@ function ContextProvider({ children }) {
   const exchangeAuthorizationCode = async (code) => {
     try {
       const response = await fetch(`${domain}/exchangeAuthorizationCode`, {
+        credentials: 'include',
         method: "POST",
         headers: {
           "Content-Type": "application/json",
