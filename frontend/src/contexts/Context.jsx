@@ -263,7 +263,7 @@ function ContextProvider({ children }) {
       getProfile();
       getProfilePlaylist();
     }
-  }, [cookies.accessToken]);
+  }, [cookies]);
 
   // useEffect(() => {
   //   //Right before token expires this runs the refresh token

@@ -2,7 +2,6 @@ require('dotenv').config();
 const crypto = require('crypto');
 const clientId = process.env.CLIENT_ID;
 const redirectUri = process.env.REDIRECT_URI;
-let codeVerifier = '';
 
 async function loginSpotify(req, res) {
     const state = req.body.state;
@@ -35,6 +34,7 @@ async function loginSpotify(req, res) {
 async function exchangeAuthorizationCode(req, res) {
     const code = req.body.code
     const codeVerifier = req.body.codeVerifier;
+    console.log(codeVerifier)
     try {
         const response = await fetch("https://accounts.spotify.com/api/token", {
             method: "POST",
