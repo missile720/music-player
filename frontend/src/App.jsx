@@ -8,10 +8,10 @@ import { Context } from "./contexts/Context"
 import "./App.css"
 
 function App() {
-  const { isAccessTokenValid } = useContext(Context);
+  const { accessToken } = useContext(Context);
 
   return <>
-    {isAccessTokenValid ? <Main /> : <Login />}
+    {accessToken ? <Main /> : <Login />}
     <CurrentSongOffCanvas />
   </>;
 }

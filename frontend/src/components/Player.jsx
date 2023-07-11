@@ -14,7 +14,7 @@ function Player() {
     setSongIndex,
     currentTracklist
   } = useContext(MusicPlayerStateContext)
-  const { cookies, getSongAudioAnalysis } = useContext(Context)
+  const { accessToken, getSongAudioAnalysis } = useContext(Context)
   const { volume } = useContext(SettingsStateContext)
 
   const playerVolume = volume / VOLUME_MAX;
@@ -77,7 +77,7 @@ function Player() {
           // trackNameColor: '#fff',
         }}
         callback={setPlayerCallback}
-        token={cookies.accessToken}
+        token={accessToken}
         layout='responsive'
         initialVolume={playerVolume}
         inlineVolume={true}

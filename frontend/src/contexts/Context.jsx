@@ -1,18 +1,46 @@
 import React, { useState, useEffect } from "react";
-import { useCookies } from 'react-cookie';
 import PropTypes from "prop-types";
 
 const Context = React.createContext();
 
 function ContextProvider({ children }) {
+  const [accessToken, setAccessToken] = useState("");
+  const [refreshToken, setRefreshToken] = useState("");
+  const [expiresIn, setExpiresIn] = useState("");
   const [userProfileSpotify, setUserProfileSpotify] = useState({});
   const [userPlaylistSpotify, setUserPlaylistSpotify] = useState({});
   const [currentPlaylist, setCurrentPlaylist] = useState("");
   const [currentPlayingSongData, setCurrentPlayingSongData] = useState();
   const [currentPlayingSongCallback, setCurrentPlayingSongCallback] = useState();
-  const [isAccessTokenValid, setIsAccessTokenValid] = useState(false);
-  const [cookies, setCookies] = useCookies(['codeVerifier', 'accessToken']);
-  const domain = 'http://localhost:3000/api/spotify'
+  const clientId = "146d22c1a56f4060939214df2f8b8ab4";
+  const redirectUri = "http://localhost:5173/callback";
+
+  async function loginSpotify() {
+    let codeVerifier = generateRandomString(128);
+
+    generateCodeChallenge(codeVerifier).then((codeChallenge) => {
+      let state = generateRandomString(16);
+      let scope = `user-read-private user-read-email 
+        playlist-read-private playlist-modify-public 
+        playlist-modify-private streaming 
+        user-read-playback-state
+        user-modify-playback-state`;
+
+      localStorage.setItem("code_verifier", codeVerifier);
+
+      let args = new URLSearchParams({
+        response_type: "code",
+        client_id: clientId,
+        scope: scope,
+        redirect_uri: redirectUri,
+        state: state,
+        code_challenge_method: "S256",
+        code_challenge: codeChallenge,
+      });
+
+      window.location = "https://accounts.spotify.com/authorize?" + args;
+    });
+  }
 
   async function generateCodeChallenge(codeVerifier) {
     function base64encode(string) {
@@ -41,55 +69,38 @@ function ContextProvider({ children }) {
     return text;
   }
 
-  async function loginSpotify() {
-    try {
-      const codeVerifier = await generateCodeChallenge(128);
-      setCookies('codeVerifier', codeVerifier);
-      const codeChallenge = await generateCodeChallenge(cookies.codeVerifier);
-      const state = generateRandomString(16);
-      const response = await fetch(`${domain}/loginSpotify`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          codeChallenge: codeChallenge,
-          state: state
-        })
-      });
-      const { authorizationUri } = await response.json();
-      if (response.ok) {
-        window.location = authorizationUri;
-      } else {
-        throw new Error("Failed to login with Spotify");
-      }
-    } catch (error) {
-      console.log(error)
-    }
-
-  }
-
   function currentPlaylistId(id) {
     setCurrentPlaylist(id);
   }
 
   const exchangeAuthorizationCode = async (code) => {
+    const codeVerifier = localStorage.getItem("code_verifier");
+
     try {
-      const response = await fetch(`${domain}/exchangeAuthorizationCode`, {
+      const response = await fetch("https://accounts.spotify.com/api/token", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: JSON.stringify({
+        body: new URLSearchParams({
+          grant_type: "authorization_code",
           code: code,
-          codeVerifier: cookies.codeVerifier
+          redirect_uri: redirectUri,
+          client_id: clientId,
+          code_verifier: codeVerifier,
         }),
-        credentials: "include",
       });
 
+      if (!response.ok) {
+        throw new Error(
+          "Failed to exchange authorization code for access token"
+        );
+      }
+
       const data = await response.json();
-      setCookies('accessToken', data.access_token);
-      setIsAccessTokenValid(true);
+      setAccessToken(data.access_token);
+      setRefreshToken(data.refresh_token);
+      setExpiresIn(data.expires_in);
       window.history.pushState({}, null, "/");
     } catch (error) {
       console.error(
@@ -100,51 +111,39 @@ function ContextProvider({ children }) {
   };
 
   async function getProfile() {
-    try {
-      const response = await fetch(`${domain}/getProfile`, {
-        headers: {
-          Authorization: `Bearer ${cookies.accessToken}`,
-        },
-        credentials: "include"
-      });
-      const data = await response.json();
-      setUserProfileSpotify(data);
-    } catch (error) {
-      console.log(error)
-    }
+    const response = await fetch("https://api.spotify.com/v1/me", {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+
+    const data = await response.json();
+    setUserProfileSpotify(data);
   }
 
   async function getProfilePlaylist() {
-    try {
-      const response = await fetch(`${domain}/getProfilePlaylist`, {
-        headers: {
-          Authorization: `Bearer ${cookies.accessToken}`,
-        },
-        credentials: "include"
-      });
-      const data = await response.json();
-      setUserPlaylistSpotify(data);
-    } catch (error) {
-      console.log(error)
-    }
+    const response = await fetch("https://api.spotify.com/v1/me/playlists", {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
 
+    const data = await response.json();
+    setUserPlaylistSpotify(data);
   }
 
   async function getSongAudioAnalysis(playerCallback) {
-    const trackId = playerCallback.track.id;
-    try {
-      const response = await fetch(`${domain}/getProfilePlaylist/${trackId}`, {
-        headers: {
-          Authorization: `Bearer ${cookies.accessToken}`,
-        },
-        credentials: "include"
-      });
-      const data = await response.json();
-      setCurrentPlayingSongData(data);
-      setCurrentPlayingSongCallback(playerCallback);
-    } catch (error) {
-      console.log(error)
-    }
+    let trackId = playerCallback.track.id;
+
+    const response = await fetch(`https://api.spotify.com/v1/audio-analysis/${trackId}`, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+
+    const data = await response.json();
+    setCurrentPlayingSongData(data);
+    setCurrentPlayingSongCallback(playerCallback);
   }
 
   /**
@@ -155,43 +154,39 @@ function ContextProvider({ children }) {
    * @returns {Object} A Spotify Playlist Tracks Response Object
    */
   async function getSpotifyPlaylistTracks(tracksUrl) {
-    try {
-      const response = await fetch(`${domain}/getSpotifyPlaylistTracks/${tracksUrl}`, {
-        headers: {
-          Authorization: `Bearer ${cookies.accessToken}`,
-        },
-        credentials: "include"
-      })
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.log(error)
-    }
+    const response = await fetch(tracksUrl, {
+      headers: {
+        Authorization: "Bearer " + accessToken,
+      },
+    });
+    const data = await response.json();
+
+    return data;
   }
 
-  async function deletePlaylistTrack(playlistId, trackUri) {
-    try {
-      if (trackUri) {
-        const response = await fetch(`${domain}/deletePlaylistTrack/${playlistId}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${cookies.accessToken}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            tracks: [{ uri: trackUri }],
-          }),
-          credentials: "include"
-        });
-
-        if (response.ok) {
-          console.log("Track deleted successfully.");
-        } else {
-          console.log("Failed to delete track from the playlist.");
-        }
-      }
-    } catch (error) {
-      console.log(error)
+  function deletePlaylistTrack(playlistId, trackUri) {
+    if (trackUri) {
+      fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          tracks: [{ uri: trackUri }],
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            if (accessToken) {
+              getProfilePlaylist(accessToken);
+            }
+            console.log("Track deleted successfully.");
+          } else {
+            console.log("Failed to delete track from the playlist.");
+          }
+        })
+        .catch((error) => console.error("Error:", error));
     }
   }
 
@@ -202,13 +197,12 @@ function ContextProvider({ children }) {
         {
           method: "PUT",
           headers: {
-            Authorization: `Bearer ${cookies.accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
             name: newName,
           }),
-          credentials: "include"
         }
       );
       if (!response.ok) {
@@ -223,17 +217,16 @@ function ContextProvider({ children }) {
     fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${cookies.accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         uris: [trackUri],
       }),
-      credentials: "include"
     })
       .then((response) => {
         if (response.ok) {
-          if (cookies.accessToken) {
+          if (accessToken) {
             getProfilePlaylist(accessToken);
           }
           console.log("Track added to the playlist successfully.");
@@ -259,36 +252,54 @@ function ContextProvider({ children }) {
 
   //retrieve Spotify data
   useEffect(() => {
-    if (cookies.accessToken) {
-      getProfile();
-      getProfilePlaylist();
+    if (accessToken) {
+      getProfile(accessToken);
+      getProfilePlaylist(accessToken);
     }
-  }, [cookies]);
+  }, [accessToken]);
 
-  // useEffect(() => {
-  //   //Right before token expires this runs the refresh token
-  //   let expiresIn
-  //   const refreshInterval = setInterval(async () => {
-  //     try {
-  //       const response = await fetch(`${domain}/refreshToken`, {
-  //         method: "POST",
-  //         credentials: "include",
-  //       });
-  //       const data = await response.json();
-  //       expiresIn = data.expiresIn;
-  //     } catch (error) {
-  //       console.log(error)
-  //     }
-  //   }, (expiresIn - 60) * 1000);
+  useEffect(() => {
+    if (!refreshToken || !expiresIn) {
+      return;
+    }
+    //Right before token expires this runs the refresh token
+    const refreshInterval = setInterval(async () => {
+      try {
+        const response = await fetch("https://accounts.spotify.com/api/token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          body: new URLSearchParams({
+            grant_type: "refresh_token",
+            refresh_token: refreshToken,
+            client_id: clientId,
+          }),
+        });
 
-  //   return () => clearInterval(refreshInterval);
-  // }, []);
+        if (!response.ok) {
+          throw new Error("Failed to refresh access token");
+        }
+
+        const data = await response.json();
+        setAccessToken(data.access_token);
+        setRefreshToken(data.refresh_token);
+        setExpiresIn(data.expires_in);
+      } catch (error) {
+        console.error(
+          "Error exchanging authorization code for access token:",
+          error
+        );
+      }
+    }, (expiresIn - 60) * 1000);
+
+    return () => clearInterval(refreshInterval);
+  }, [refreshToken, expiresIn]);
 
   return (
     <Context.Provider
       value={{
-        domain,
-        isAccessTokenValid,
+        accessToken,
         userProfileSpotify,
         userPlaylistSpotify,
         currentPlaylist,
@@ -300,8 +311,7 @@ function ContextProvider({ children }) {
         addPlaylistTrack,
         currentPlaylistId,
         updatePlaylistName,
-        getSongAudioAnalysis,
-        cookies
+        getSongAudioAnalysis
       }}
     >
       {children}
