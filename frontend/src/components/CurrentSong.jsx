@@ -39,7 +39,7 @@ function CurrentSong() {
             aria-controls="currentSongOffCanvas"
             disabled={libraryView}
         >
-            <div className="current-song-left-side col-6">
+            <div className="current-song-left-side col-8 col-md-6">
                 <div className="image-container col-4 d-flex justify-content-center">
                     {/* Current Song picture */}
                     <img
@@ -48,15 +48,19 @@ function CurrentSong() {
                     ></img>
                 </div>
                 <div className="song-title-artist col-8">
-                    <ul>
-                        <li>{currentSongMetadata.name}</li>
+                    <ul className="song-meta-data">
+                        <li
+                            className="song-title"
+                        >
+                            {currentSongMetadata.name}
+                        </li>
                         <li>{currentSongMetadata.artist}</li>
                     </ul>
                 </div>
             </div>
 
-            <div className="current-song-right-side col-6 h-100">
-                <div className="song-bar d-flex justify-content-between">
+            <div className="current-song-right-side col-4 col-md-6 h-100">
+                <div className="song-bar justify-content-between d-none d-md-flex">
                     <span>{convertToTimestamp(localPlayback.playedSeconds)}</span>
                     <input
                         type="range"
@@ -78,7 +82,10 @@ function CurrentSong() {
                     <img
                         className={`music-button music-button-${theme}-${mode}`}
                         src={rewindImg}
-                        onClick={previousTrack}
+                        onClick={(event) => {
+                            event.stopPropagation()
+                            previousTrack()
+                        }}
                     ></img>
                     {/* Play */}
                     <img

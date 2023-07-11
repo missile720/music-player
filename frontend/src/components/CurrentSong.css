@@ -19,6 +19,11 @@ ul {
 }
 li {
   list-style: none;
+  margin-bottom: .5rem;
+}
+
+.song-title {
+  font-size: 1.2rem;
 }
 
 .music-play-buttons {
@@ -58,19 +63,31 @@ li {
 }
 
 @media (max-width: 767px) {
-.royal-light-current-song-container:active {
-    background-color: #5CADF8;
-}
-  
-.royal-dark-current-song-container:active {
-    background-color: #181964;
-}
+  li {
+    margin-bottom: .25rem;
+  }
 
-.bvt-light-current-song-container:active {
-    background-color: #8D918D;
-}
-  
-.bvt-dark-current-song-container:active {
-    background-color: #FF5531;
-}
+  .song-meta-data {
+    font-size: .8rem;
+  }
+
+  .song-title {
+    font-size: 1rem;
+  }
+
+  .royal-light-current-song-container:active {
+      background-color: #5CADF8;
+  }
+    
+  .royal-dark-current-song-container:active {
+      background-color: #181964;
+  }
+
+  .bvt-light-current-song-container:active {
+      background-color: #8D918D;
+  }
+    
+  .bvt-dark-current-song-container:active {
+      background-color: #FF5531;
+  }
 }
