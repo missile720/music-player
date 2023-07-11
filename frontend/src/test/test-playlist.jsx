@@ -44,6 +44,7 @@ export default [
         source: "local",
         tracks: [
             {
+                artist: "Nehemiah",
                 id: "999",
                 name: "Risen King",
                 url: testSong4Url

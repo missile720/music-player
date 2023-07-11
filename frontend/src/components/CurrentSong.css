@@ -36,10 +36,8 @@ li {
 }
 
 .song-art {
-  width: 50%;
-  border-radius: .5rem;
-  background-color: #dfe0e9;
-  padding: .5rem;
+  width: 100%;
+  padding: 1rem;
 }
 
 #range {
@@ -52,16 +50,27 @@ li {
   justify-content: center;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1210px) {
   .song-art {
     width: 100%;
+    padding: .25rem;
   }
+}
 
-  /* .current-song-container-light:active{
-    background-color: #dfe0e9;
-  }
+@media (max-width: 767px) {
+.royal-light-current-song-container:active {
+    background-color: #5CADF8;
+}
   
-  .current-song-container-dark:active{
-    background-color: #df9710; */
-  }
+.royal-dark-current-song-container:active {
+    background-color: #181964;
+}
+
+.bvt-light-current-song-container:active {
+    background-color: #8D918D;
+}
+  
+.bvt-dark-current-song-container:active {
+    background-color: #FF5531;
+}
 }

@@ -1,5 +1,7 @@
 import { useState, useEffect, createContext } from "react"
 
+import defaultSongArt from "../assets/defaultCardArt.svg"
+
 const MusicPlayerStateContext = createContext()
 
 const MEDIUM_SCREEN_BREAKPOINT = 768
@@ -181,11 +183,41 @@ function MusicPlayerStateContextProvider({ children }) {
             library[playlistIndex].name
     }
 
+    /**
+     * @param {Number} timeInSeconds An amount of time in seconds
+     * @returns A string of the time in the format of a timestamp
+     */
     function convertToTimestamp(timeInSeconds) {
         const minutes = Math.floor(timeInSeconds / 60).toString()
         const seconds = Math.floor(timeInSeconds % 60).toString()
 
-        return timeInSeconds ? `${minutes}:${seconds.padStart(2, "0")}` : "--:--"
+        return timeInSeconds ?
+            `${minutes}:${seconds.padStart(2, "0")}` :
+            "--:--"
+    }
+
+    /**
+     * Gets the current song meta data for use of the CurrentSong
+     * component during local file playback
+     * @returns {Object} An object containing the relevant metadata
+     * of the current song
+     */
+    function getCurrentSongMetadata() {
+        const songMetadata = {
+            artist: "",
+            name: "",
+            songImage: ""
+        }
+
+        if (hasNonEmptyTracklist()) {
+            const currentSong = currentTracklist[songIndex]
+
+            songMetadata.artist = currentSong.artist
+            songMetadata.name = currentSong.name
+            songMetadata.songImage = currentSong.songImage || defaultSongArt
+        }
+
+        return songMetadata
     }
 
 
@@ -219,7 +251,8 @@ function MusicPlayerStateContextProvider({ children }) {
                 hasNonEmptyTracklist,
                 getDuration,
                 duration,
-                convertToTimestamp
+                convertToTimestamp,
+                getCurrentSongMetadata
             }}
         >
             {children}
