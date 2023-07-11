@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { SettingsStateContext } from "../contexts/SettingsStateContext";
 
 const VolumeComponent = () => {
-    const { volume, updateVolume } = useContext(SettingsStateContext)
+    const { volume, updateVolume, VOLUME_MIN, VOLUME_MAX } = useContext(SettingsStateContext)
 
     const handleVolumeChange = (event) => {
         const newVolume = parseInt(event.target.value)
@@ -13,8 +13,8 @@ const VolumeComponent = () => {
         <div className="volume-component">
             <input
                 type="range"
-                min={0}
-                max={100}
+                min={VOLUME_MIN}
+                max={VOLUME_MAX}
                 value={volume}
                 onChange={handleVolumeChange}
                 className="volume"
@@ -25,6 +25,8 @@ const VolumeComponent = () => {
                     className="value"
                     value={volume}
                     onChange={handleVolumeChange}
+                    min={VOLUME_MIN}
+                    max={VOLUME_MAX}
                 />
                 <p className="value value-text">Volume</p>
             </div>

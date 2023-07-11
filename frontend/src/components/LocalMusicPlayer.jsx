@@ -2,6 +2,7 @@ import { useContext } from "react"
 import ReactPlayer from "react-player"
 
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx"
+import { SettingsStateContext } from "../contexts/SettingsStateContext.jsx"
 
 import CurrentSong from "./CurrentSong"
 
@@ -17,6 +18,7 @@ const LocalMusicPlayer = () => {
         nextTrack,
         getDuration
     } = useContext(MusicPlayerStateContext)
+    const { volume } = useContext(SettingsStateContext)
 
     return (
         <>
@@ -28,6 +30,7 @@ const LocalMusicPlayer = () => {
                     currentTracklist[songIndex].url}
                 playing={playing}
                 played={localPlayback.played}
+                volume={volume / 100}
                 onProgress={handleProgress}
                 onEnded={nextTrack}
                 onDuration={getDuration}
