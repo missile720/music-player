@@ -17,6 +17,10 @@ import returnImg from "../assets/return.svg";
 import "./main.css";
 import LocalMusicPlayer from "./LocalMusicPlayer.jsx";
 
+// Debugging variables
+import testPlaylistsData from "../test/test-playlist.jsx";
+const debug = true;
+
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
   const { userPlaylistSpotify, currentPlayingSongData } = useContext(Context);
@@ -28,14 +32,18 @@ function Main() {
   // Load the user's playlists from Spotify and local storage into the
   // library whenever it's updated
   useEffect(() => {
-    if (localPlaylistsState && userPlaylistSpotify.items) {
-      const joinedPlaylists = [
-        ...userPlaylistSpotify.items,
-        ...localPlaylistsState,
-      ];
-      setLibrary(joinedPlaylists);
-    } else if (userPlaylistSpotify.items) {
-      setLibrary(userPlaylistSpotify.items);
+    if (debug) {
+      setLibrary(testPlaylistsData)
+    } else {
+      if (localPlaylistsState && userPlaylistSpotify.items) {
+        const joinedPlaylists = [
+          ...userPlaylistSpotify.items,
+          ...localPlaylistsState,
+        ];
+        setLibrary(joinedPlaylists);
+      } else if (userPlaylistSpotify.items) {
+        setLibrary(userPlaylistSpotify.items);
+      }
     }
   }, [userPlaylistSpotify, localPlaylistsState]);
 
@@ -52,9 +60,8 @@ function Main() {
       <div className="row h-100">
         {/* left column */}
         <div
-          className={`col-12 col-md-6 h-100 ${
-            libraryView ? "" : "d-none d-md-block"
-          }`}
+          className={`col-12 col-md-6 h-100 ${libraryView ? "" : "d-none d-md-block"
+            }`}
         >
           {/* Nav/search bar */}
           <div className="col-12 ns-bar text-center">
@@ -83,9 +90,8 @@ function Main() {
 
         {/* right column */}
         <div
-          className={`col-12 col-md-6 h-100 ${
-            !libraryView ? "" : "d-none d-md-block"
-          }`}
+          className={`col-12 col-md-6 h-100 ${!libraryView ? "" : "d-none d-md-block"
+            }`}
         >
           <div className="col-12 d-flex cur-text align-items-center">
             <button
@@ -113,7 +119,7 @@ function Main() {
           </div>
           {/* Music Visualizer */}
           <div className="col-12 cur-vis">
-            {currentPlayingSongData && <WaveformVisualizer /> }
+            {currentPlayingSongData && <WaveformVisualizer />}
           </div>
           {/* Current song bar */}
           <div className="col-12 cur-song-bar ">

@@ -1,7 +1,5 @@
 import { useState, useEffect, createContext } from "react"
 
-import testPlaylistData from "../test/test-playlist.jsx"
-
 const MusicPlayerStateContext = createContext()
 
 const MEDIUM_SCREEN_BREAKPOINT = 768
@@ -44,11 +42,6 @@ function MusicPlayerStateContextProvider({ children }) {
     useEffect(() => {
         if (library[playlistIndex]) {
             setCurrentSongSource(library[playlistIndex].source ? 'local' : 'spotify')
-        }
-
-        // Loading test playlistdata for LocalMusicPlayer implementation
-        if (library[playlistIndex] && library[playlistIndex].source) {
-            setCurrentTracklist(testPlaylistData)
         }
     }, [songIndex, playlistIndex, library])
 
