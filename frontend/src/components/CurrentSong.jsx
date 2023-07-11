@@ -86,6 +86,7 @@ function CurrentSong() {
                     <img
                         className={`music-button music-button-${theme}-${mode}`}
                         src={rewindImg}
+                        onClick={previousTrack}
                     ></img>
                     {/* Play */}
                     <img

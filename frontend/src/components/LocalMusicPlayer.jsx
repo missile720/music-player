@@ -18,7 +18,10 @@ const LocalMusicPlayer = () => {
         nextTrack,
         getDuration
     } = useContext(MusicPlayerStateContext)
-    const { volume } = useContext(SettingsStateContext)
+    const {
+        volume,
+        VOLUME_MAX
+    } = useContext(SettingsStateContext)
 
     return (
         <>
@@ -30,7 +33,7 @@ const LocalMusicPlayer = () => {
                     currentTracklist[songIndex].url}
                 playing={playing}
                 played={localPlayback.played}
-                volume={volume / 100}
+                volume={volume / VOLUME_MAX}
                 onProgress={handleProgress}
                 onEnded={nextTrack}
                 onDuration={getDuration}
