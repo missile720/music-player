@@ -2,6 +2,7 @@
 import { useState, useContext } from "react";
 import { Context } from "../contexts/Context";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext";
+import { ThemeContext } from "../contexts/ThemeContext.jsx";
 
 import Card from "./Card";
 import defaultSongArt from "../assets/defaultCardArt.svg";
@@ -20,8 +21,10 @@ import trashHover from "../assets/trashSelected.svg";
  * given song
  */
 function SongCard({ song, index, cardClickHandler, isEditable }) {
-  const [hover, setHover] = useState(false);
   const { deletePlaylistTrack, currentPlaylist } = useContext(Context)
+  const { theme, mode } = useContext(ThemeContext)
+
+  const [hover, setHover] = useState(false);
   const { songIndex } = useContext(MusicPlayerStateContext)
 
   function handleMouseEnter() {
@@ -87,7 +90,7 @@ function SongCard({ song, index, cardClickHandler, isEditable }) {
     let cardType = " song-card "
 
     if (songIndex == index) {
-      cardType += " selected-card ";
+      cardType += ` ${theme}-${mode}-selected-card `;
     }
 
     return cardType;

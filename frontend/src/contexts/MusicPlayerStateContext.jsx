@@ -158,7 +158,8 @@ function MusicPlayerStateContextProvider({ children }) {
     function previousTrack() {
         if (currentTracklist && currentTracklist.length > 0) {
             // Tracklist length added to decrement to avoid the modulous of a negative number
-            setSongIndex(prev => (prev - 1 + currentTracklist.length) % currentTracklist.length)
+            setSongIndex(prev =>
+                (prev - 1 + currentTracklist.length) % currentTracklist.length)
         }
     }
 
