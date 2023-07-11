@@ -11,7 +11,7 @@ function MusicPlayerStateContextProvider({ children }) {
     const [libraryView, setLibraryView] = useState(true)
     const [currentTracklist, setCurrentTracklist] = useState([])
     const [currentSongSource, setCurrentSongSource] = useState('')
-    const [playing, setPlaying] = useState(true)
+    const [playing, setPlaying] = useState(false)
     const [scrubbing, setScrubbing] = useState(false)
     const [localPlayback, setLocalPlayback] = useState({
         played: 0,
@@ -156,6 +156,25 @@ function MusicPlayerStateContextProvider({ children }) {
         }
     }
 
+    // Helper functions
+    /**
+     * @returns {bool} Whether or not the current tracklist exists and
+     * has at least one track
+     */
+    function hasNonEmptyTracklist() {
+        return currentTracklist && currentTracklist.length > 0
+    }
+
+    /**
+     * @returns {string} The name of the current playlist in the library
+     * if it exists in the library
+     */
+    function getPlaylistName() {
+        return library.length > 0 &&
+            library[playlistIndex] &&
+            library[playlistIndex].name
+    }
+
 
     return (
         <MusicPlayerStateContext.Provider
@@ -182,7 +201,9 @@ function MusicPlayerStateContextProvider({ children }) {
                 getPlayer,
                 updateOnScrub,
                 nextTrack,
-                previousTrack
+                previousTrack,
+                getPlaylistName,
+                hasNonEmptyTracklist
             }}
         >
             {children}

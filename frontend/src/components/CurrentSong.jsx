@@ -6,6 +6,7 @@ import defaultCardArtImg from "../assets/defaultCardArt.svg"
 import rewindImg from "../assets/rewind.svg"
 import playImg from "../assets/play.svg"
 import fastforwardImg from "../assets/fastforward.svg"
+import pauseImg from "../assets/pause.svg"
 
 import './CurrentSong.css'
 
@@ -19,7 +20,8 @@ function CurrentSong() {
         localPlayback,
         updateOnScrub,
         nextTrack,
-        previousTrack
+        previousTrack,
+        playing
     } = useContext(MusicPlayerStateContext)
 
     return (
@@ -69,7 +71,7 @@ function CurrentSong() {
                     {/* Play */}
                     <img
                         className={`music-button music-button-${theme}-${mode}`}
-                        src={playImg}
+                        src={playing ? pauseImg : playImg}
                         onClick={togglePlay}
                     ></img>
                     {/* skip forward  */}

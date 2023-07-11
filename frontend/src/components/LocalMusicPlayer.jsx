@@ -12,7 +12,8 @@ const LocalMusicPlayer = () => {
         handleProgress,
         getPlayer,
         currentTracklist,
-        songIndex
+        songIndex,
+        hasNonEmptyTracklist
     } = useContext(MusicPlayerStateContext)
 
     return (
@@ -21,7 +22,8 @@ const LocalMusicPlayer = () => {
             <ReactPlayer
                 height="0"
                 ref={getPlayer}
-                url={currentTracklist && currentTracklist.length > 0 && currentTracklist[songIndex].url}
+                url={hasNonEmptyTracklist() &&
+                    currentTracklist[songIndex].url}
                 playing={playing}
                 played={localPlayback.played}
                 onProgress={handleProgress}

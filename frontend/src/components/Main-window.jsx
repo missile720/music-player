@@ -26,8 +26,14 @@ function Main() {
   const { userPlaylistSpotify, currentPlayingSongData } = useContext(Context);
   const [localPlaylistsState, setLocalPlaylistsState] = useState(() => fetchLocalPlaylists());
 
-  const { library, setLibrary, playlistIndex, libraryView, setLibraryView, currentSongSource } =
-    useContext(MusicPlayerStateContext);
+  const { library,
+    setLibrary,
+    playlistIndex,
+    libraryView,
+    setLibraryView,
+    currentSongSource,
+    getPlaylistName
+  } = useContext(MusicPlayerStateContext);
 
   // Load the user's playlists from Spotify and local storage into the
   // library whenever it's updated
@@ -105,9 +111,7 @@ function Main() {
             </button>
             <div className="col-10 col-md-12 px-2">
               <h3 className="title">
-                {library.length > 0 &&
-                  library[playlistIndex] &&
-                  library[playlistIndex].name}
+                {getPlaylistName()}
               </h3>
             </div>
           </div>
