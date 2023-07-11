@@ -2,7 +2,11 @@ import { useContext } from "react";
 import { SettingsStateContext } from "../contexts/SettingsStateContext";
 
 const VolumeComponent = () => {
-    const { volume, updateVolume, VOLUME_MIN, VOLUME_MAX } = useContext(SettingsStateContext)
+    const { volume,
+        updateVolume,
+        VOLUME_MIN,
+        VOLUME_MAX
+    } = useContext(SettingsStateContext)
 
     const handleVolumeChange = (event) => {
         const newVolume = parseInt(event.target.value)
