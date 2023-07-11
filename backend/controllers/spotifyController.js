@@ -1,7 +1,22 @@
 require('dotenv').config();
 const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 const clientId = process.env.CLIENT_ID;
 const redirectUri = process.env.REDIRECT_URI;
+const jwtSecret = process.env.JWT_SECRET;
+let codeVerifier = '';
+
+function generateToken(jwtData) {
+    const payload = {
+        accessToken: jwtData.access_token,
+        refreshToken: jwtData.refresh_token,
+        expiresIn: jwtData.expires_in,
+        codeVerifier: codeVerifier
+    };
+
+    return jwt.sign(payload, jwtSecret, { expiresIn: 3600 });
+}
+
 
 function generateRandomString(length) {
     let text = "";
@@ -32,9 +47,9 @@ function base64encode(string) {
 
 async function loginSpotify(req, res) {
     try {
-        res.cookie("code_verifier", '123', { httpOnly: true });
-        console.log('Cookies: ', req.cookies.code_verifier)
-        const codeChallenge = await generateCodeChallenge(req.cookies.code_verifier);
+        codeVerifier = generateCodeChallenge(128);
+
+        const codeChallenge = await generateCodeChallenge(codeVerifier);
         const state = generateRandomString(16);
         const scope = `user-read-private user-read-email 
             playlist-read-private playlist-modify-public 
@@ -50,7 +65,6 @@ async function loginSpotify(req, res) {
             code_challenge_method: "S256",
             code_challenge: codeChallenge,
         });
-
         const authorizationUri = "https://accounts.spotify.com/authorize?" + args;
         res.send({ authorizationUri: authorizationUri });
 
@@ -62,32 +76,26 @@ async function loginSpotify(req, res) {
 
 async function exchangeAuthorizationCode(req, res) {
     const code = req.body.code
+    res.cookie('teste', 'testset', { httpOnly: true });
     try {
         const response = await fetch("https://accounts.spotify.com/api/token", {
             method: "POST",
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
+            credentials: true,
             body: new URLSearchParams({
                 grant_type: "authorization_code",
                 code: code,
                 redirect_uri: redirectUri,
                 client_id: clientId,
-                code_verifier: req.cookies.code_verifier,
+                code_verifier: codeVerifier,
             }),
         });
-
-        if (!response.ok) {
-            throw new Error({ message: "Failed to exchange authorization code for access token" });
-        }
-
         const data = await response.json();
-        const { accessToken, refreshToken, expiresIn } = data;
-
-        res.cookie("access_token", accessToken, { httpOnly: true });
-        res.cookie("refresh_token", refreshToken, { httpOnly: true });
-        res.cookie("expires_in", expiresIn, { httpOnly: true });
-        res.send({ message: 'Login successful.' });
+        const token = generateToken(data);
+        console.log(data)
+        res.cookie('spotify_tokens', token, { httpOnly: true });
 
     } catch (error) {
         console.error("Error occurred when acquiring authorization:", error);
@@ -96,12 +104,14 @@ async function exchangeAuthorizationCode(req, res) {
 }
 
 async function getProfile(req, res) {
+    console.log(req.cookies)
     try {
         const response = await fetch("https://api.spotify.com/v1/me", {
             headers: {
-                Authorization: "Bearer " + req.cookies.access_token,
+                Authorization: "Bearer " + req.cookies.spotify_tokens.accessToken,
             },
         });
+
         const data = await response.json();
         res.send(data);
 
@@ -181,6 +191,7 @@ async function deletePlaylistTrack(req, res) {
                 res.send(getProfilePlaylist(req.cookies.access_token))
             }
         }
+
         res.send(data);
     } catch (error) {
         console.error("Error deleting playlist track:", error);
@@ -214,8 +225,8 @@ async function refreshToken(req, res) {
                 client_id: clientId,
             }),
         });
+
         const data = await response.json()
-        console.log(data)
         res.send(data)
     } catch (error) {
         console.error("Error refreshing access token:", error);
@@ -230,7 +241,8 @@ async function searchList(req, res) {
             headers: {
                 Authorization: 'Bearer ' + req.cookies.access_token,
             }
-        })
+        });
+
         const data = await response.json();
         res.send(data)
     } catch (error) {
@@ -238,10 +250,6 @@ async function searchList(req, res) {
         res.status(500).send({ error: "Failed to search for song" });
     }
 }
-
-
-
-
 
 module.exports = {
     loginSpotify,
