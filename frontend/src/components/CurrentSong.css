@@ -4,7 +4,10 @@
   height: 100%;
   width: 100%;
   justify-content: space-evenly;
-  
+}
+
+.current-song-container:focus-within {
+  background-color: #ffffff00 !important;
 }
 
 .current-song-left-side {
@@ -79,7 +82,8 @@ li {
     font-size: 1rem;
   }
 
-  .royal-light-current-song-container:active {
+  .royal-light-current-song-container:active
+  {
       background-color: #5CADF8;
   }
     

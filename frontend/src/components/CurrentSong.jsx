@@ -8,7 +8,7 @@ import playImg from "../assets/play.svg"
 import fastforwardImg from "../assets/fastforward.svg"
 import pauseImg from "../assets/pause.svg"
 
-import './CurrentSong.css'
+import "./CurrentSong.css"
 
 function CurrentSong() {
     const { theme, mode } = useContext(ThemeContext)
@@ -73,7 +73,6 @@ function CurrentSong() {
                         onMouseDown={() => setScrubbing(true)}
                         onMouseUp={updateOnScrub}
                         onChange={scrubSong}
-                        data-bs-toggle="offcanvas"
                         id="range"
                         className="custom-range"
                     />
@@ -87,18 +86,24 @@ function CurrentSong() {
                         className={`music-button music-button-${theme}-${mode}`}
                         src={rewindImg}
                         onClick={previousTrack}
+                        tabIndex="999"
+                        data-bs-toggle="offcanvas"
                     ></img>
                     {/* Play */}
                     <img
                         className={`music-button music-button-${theme}-${mode}`}
                         src={playing ? pauseImg : playImg}
                         onClick={togglePlay}
+                        tabIndex="1000"
+                        data-bs-toggle="offcanvas"
                     ></img>
                     {/* skip forward  */}
                     <img
                         className={`music-button music-button-${theme}-${mode}`}
                         src={fastforwardImg}
                         onClick={nextTrack}
+                        tabIndex="1001"
+                        data-bs-toggle="offcanvas"
                     ></img>
                 </div>
             </div>
