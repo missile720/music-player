@@ -93,7 +93,6 @@ function MusicPlayerStateContextProvider({ children }) {
     }
 
     // PLAYER CONTROL FUNCTIONS
-
     /**
      * Toggles currentSong playback on/off
      */
@@ -126,12 +125,17 @@ function MusicPlayerStateContextProvider({ children }) {
      * Updates playback state as song plays
      * @param {Object} state Playbackstate
      */
-    function handleProgress(state) {
+    function updateProgress(state) {
         if (!scrubbing) {
             setLocalPlayback(state)
         }
     }
 
+    /**
+     * Sets duration state to store duration of current local files
+     * song. Only for use on local files player.
+     * @param {Number} duration Duration of a song in seconds
+     */
     function getDuration(duration) {
         setDuration(duration)
     }
@@ -241,7 +245,7 @@ function MusicPlayerStateContextProvider({ children }) {
                 togglePlay,
                 scrubbing,
                 setScrubbing,
-                handleProgress,
+                updateProgress,
                 localPlayback,
                 getPlayer,
                 updateOnScrub,

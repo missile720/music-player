@@ -10,7 +10,7 @@ const LocalMusicPlayer = () => {
     const {
         playing,
         localPlayback,
-        handleProgress,
+        updateProgress,
         getPlayer,
         currentTracklist,
         songIndex,
@@ -34,7 +34,7 @@ const LocalMusicPlayer = () => {
                 playing={playing}
                 played={localPlayback.played}
                 volume={volume / VOLUME_MAX}
-                onProgress={handleProgress}
+                onProgress={updateProgress}
                 onEnded={nextTrack}
                 onDuration={getDuration}
             />

@@ -35,6 +35,10 @@ li {
   cursor: pointer;
 }
 
+.music-button:hover, .music-button:active {
+  filter: invert(34%) sepia(1%) saturate(0%) hue-rotate(18deg) brightness(91%) contrast(88%);
+}
+
 .image-container {
   width: 30%;
   height: 100%;
