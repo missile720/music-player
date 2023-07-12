@@ -1,5 +1,7 @@
 import { useState, useEffect, createContext } from "react"
 
+import defaultSongArt from "../assets/defaultCardArt.svg"
+
 const MusicPlayerStateContext = createContext()
 
 const MEDIUM_SCREEN_BREAKPOINT = 768
@@ -9,9 +11,19 @@ function MusicPlayerStateContextProvider({ children }) {
     const [playlistIndex, setPlaylistIndex] = useState(0)
     const [songIndex, setSongIndex] = useState(0)
     const [libraryView, setLibraryView] = useState(true)
-    const [songProgress, setSongProgress] = useState(10)
     const [currentTracklist, setCurrentTracklist] = useState([])
     const [currentSongSource, setCurrentSongSource] = useState('')
+    const [playing, setPlaying] = useState(false)
+    const [scrubbing, setScrubbing] = useState(false)
+    const [localPlayback, setLocalPlayback] = useState({
+        played: 0,
+        playedSeconds: 0,
+        loaded: 0,
+        loadedSeconds: 0,
+        duration: 0
+    })
+    const [player, setPlayer] = useState(() => { })
+    const [duration, setDuration] = useState(0)
 
     // Effects
     /**
@@ -28,7 +40,8 @@ function MusicPlayerStateContextProvider({ children }) {
     }, [])
 
     /**
-     * Side effect for setting the source of the currently selected song
+     * Side effect for updating state variables on the change of songIndex,
+     * playlistIndex, or library
      */
     useEffect(() => {
         if (library[playlistIndex]) {
@@ -66,27 +79,152 @@ function MusicPlayerStateContextProvider({ children }) {
         setSongIndex(index)
     }
 
-    /**
-     * Handles the playback scrubbing of a range input by setting the current
-     * songProgress as the scrubbed time
-     * @param {Event} event Range input event
-     */
-    function scrubSong(event) {
-        setSongProgress(event.target.value)
-        event.stopPropagation()
-    }
 
     /**
      * Sets the library view as true. Meant to be used as event listener
      * for window size, such that if a user resizes their window to be
      * desktop view on mobile, library view is guaranteed to be true
-     */
+    */
     function setAsLibraryView() {
         if (typeof window !== "undefined" &&
             window.innerWidth >= MEDIUM_SCREEN_BREAKPOINT) {
             setLibraryView(true)
         }
     }
+
+    // PLAYER CONTROL FUNCTIONS
+    /**
+     * Toggles currentSong playback on/off
+     */
+    function togglePlay() {
+        setPlaying(prevPlay => !prevPlay)
+    }
+
+    /**
+     * Handles the playback scrubbing of a range input by setting the current
+     * songProgress as the scrubbed time
+     * @param {Event} event Range input event
+     */
+    function scrubSong(event) {
+        setLocalPlayback(prevPlayback => ({
+            ...prevPlayback,
+            played: parseFloat(event.target.value)
+        }))
+    }
+
+    /**
+     * Has the player seek to the specified playback input
+     * @param {Event} event Event object for input range mouse up
+     */
+    function updateOnScrub(event) {
+        setScrubbing(false)
+        player.seekTo(parseFloat(event.target.value))
+    }
+
+    /**
+     * Updates playback state as song plays
+     * @param {Object} state Playbackstate
+     */
+    function updateProgress(state) {
+        if (!scrubbing) {
+            setLocalPlayback(state)
+        }
+    }
+
+    /**
+     * Sets duration state to store duration of current local files
+     * song. Only for use on local files player.
+     * @param {Number} duration Duration of a song in seconds
+     */
+    function getDuration(duration) {
+        setDuration(duration)
+    }
+
+    /**
+     * Sets the player state as the given player
+     * @param {Object} player The internal player for the ReactPlayer
+     */
+    function getPlayer(reactPlayer) {
+        setPlayer(reactPlayer)
+    }
+
+    /**
+     * Modulo increments the songIndex to have loop behaviour
+     */
+    function nextTrack() {
+        if (currentTracklist && currentTracklist.length > 0) {
+            setSongIndex(prev => (prev + 1) % currentTracklist.length)
+        }
+    }
+
+    /**
+     * Modulo decrements the songIndex to have loop behaviour
+     */
+    function previousTrack() {
+        if (currentTracklist && currentTracklist.length > 0) {
+            // Tracklist length added to decrement to avoid the 
+            // modulous of a negative number
+            setSongIndex(prev =>
+                (prev - 1 + currentTracklist.length) % currentTracklist.length)
+        }
+    }
+
+    // Helper functions
+    /**
+     * @returns {bool} Whether or not the current tracklist exists and
+     * has at least one track
+     */
+    function hasNonEmptyTracklist() {
+        return currentTracklist && currentTracklist.length > 0
+    }
+
+    /**
+     * @returns {string} The name of the current playlist in the library
+     * if it exists in the library
+     */
+    function getPlaylistName() {
+        return library.length > 0 &&
+            library[playlistIndex] &&
+            library[playlistIndex].name
+    }
+
+    /**
+     * @param {Number} timeInSeconds An amount of time in seconds
+     * @returns A string of the time in the format of a timestamp
+     */
+    function convertToTimestamp(timeInSeconds) {
+        const minutes = Math.floor(timeInSeconds / 60).toString()
+        const seconds = Math.floor(timeInSeconds % 60).toString()
+
+        return timeInSeconds ?
+            `${minutes}:${seconds.padStart(2, "0")}` :
+            "--:--"
+    }
+
+    /**
+     * Gets the current song meta data for use of the CurrentSong
+     * component during local file playback
+     * @returns {Object} An object containing the relevant metadata
+     * of the current song
+     */
+    function getCurrentSongMetadata() {
+        const songMetadata = {
+            artist: "",
+            name: "",
+            songImage: ""
+        }
+
+        if (hasNonEmptyTracklist()) {
+            const currentSong = currentTracklist[songIndex]
+
+            songMetadata.artist = currentSong.artist
+            songMetadata.name = currentSong.name
+            songMetadata.songImage = currentSong.songImage || defaultSongArt
+        }
+
+        return songMetadata
+    }
+
 
     return (
         <MusicPlayerStateContext.Provider
@@ -100,11 +238,26 @@ function MusicPlayerStateContextProvider({ children }) {
                 chooseSong,
                 libraryView,
                 setLibraryView,
-                songProgress,
                 scrubSong,
                 currentTracklist,
                 setCurrentTracklist,
-                currentSongSource
+                currentSongSource,
+                playing,
+                togglePlay,
+                scrubbing,
+                setScrubbing,
+                updateProgress,
+                localPlayback,
+                getPlayer,
+                updateOnScrub,
+                nextTrack,
+                previousTrack,
+                getPlaylistName,
+                hasNonEmptyTracklist,
+                getDuration,
+                duration,
+                convertToTimestamp,
+                getCurrentSongMetadata
             }}
         >
             {children}

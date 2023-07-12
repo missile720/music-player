@@ -87,6 +87,8 @@ function PlaylistContainer({ playlist }) {
 
         // If the spotify is from local files
         if (playlist.source === 'local') {
+            setCurrentTracklist(playlist.tracks)
+
             setSongCards(playlist.tracks.map(
                 (song, index) =>
                     <SongCard
