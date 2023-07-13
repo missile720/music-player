@@ -118,7 +118,6 @@ function ContextProvider({ children }) {
     });
 
     const data = await response.json();
-    console.log(data)
     setUserProfileSpotify(data);
   }
 
