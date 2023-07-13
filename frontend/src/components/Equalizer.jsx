@@ -3,7 +3,7 @@ import { SettingsStateContext } from "../contexts/SettingsStateContext";
 
 const EqualizerComponent = () => {
 
-    const { bass, updateBass, treble, updateTreble, FREQ_MIN, FREQ_MAX } = useContext(SettingsStateContext)
+    const { bass, updateBass, treble, updateTreble, GAIN_MIN, GAIN_MAX } = useContext(SettingsStateContext)
 
     const handleBassChange = (event) => {
         const newBass = parseInt(event.target.value)
@@ -20,8 +20,8 @@ const EqualizerComponent = () => {
         <div className="equalizer-component">
             <input
                 type="range"
-                min={FREQ_MIN}
-                max={FREQ_MAX}
+                min={GAIN_MIN}
+                max={GAIN_MAX}
                 value={bass}
                 onChange={handleBassChange}
                 className="bass"
@@ -32,15 +32,15 @@ const EqualizerComponent = () => {
                     className="value"
                     value={bass}
                     onChange={handleBassChange}
-                    min={FREQ_MIN}
-                    max={FREQ_MAX}
+                    min={GAIN_MIN}
+                    max={GAIN_MAX}
                 />
                 <p className="value value-text">Bass</p>
             </div>
             <input
                 type="range"
-                min={FREQ_MIN}
-                max={FREQ_MAX}
+                min={GAIN_MIN}
+                max={GAIN_MAX}
                 value={treble}
                 onChange={handleTrebleChange}
                 className="treble"
@@ -51,8 +51,8 @@ const EqualizerComponent = () => {
                     className="value"
                     value={treble}
                     onChange={handleTrebleChange}
-                    min={FREQ_MIN}
-                    max={FREQ_MAX}
+                    min={GAIN_MIN}
+                    max={GAIN_MAX}
                 />
                 <p className="value value-text">Treble</p>
             </div>

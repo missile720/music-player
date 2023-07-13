@@ -5,42 +5,52 @@ import { MusicPlayerStateContext } from "./MusicPlayerStateContext"
 
 const SettingsStateContext = createContext()
 
+// Constants
+const VOLUME_MIN = 0
+const VOLUME_MAX = 100
+const GAIN_MAX = 40
+const GAIN_MIN = -40
+const BASS_FREQ = 400
+const TREBLE_FREQ = 1000
+
+// Audio Context Variables for EQ Adjustment
 const audioContext = new AudioContext()
+const bassFilter = audioContext.createBiquadFilter()
+const trebleFilter = audioContext.createBiquadFilter()
+bassFilter.type = "lowshelf"
+trebleFilter.type = "highshelf"
+bassFilter.frequency.value = BASS_FREQ
+trebleFilter.frequency.value = TREBLE_FREQ
+
+bassFilter.connect(audioContext.destination)
+trebleFilter.connect(bassFilter)
 
 const SettingsStateContextProvider = ({ children }) => {
-    // Constants
-    const VOLUME_MIN = 0
-    const VOLUME_MAX = 100
-    const FREQ_MAX = 4000
-    const FREQ_MIN = 20
-    const GAIN_VAL = 0
-
     // Context Values
     const { currentSongSource } = useContext(MusicPlayerStateContext)
 
     // States
     const [volume, setVolume] = useState(50)
-    const [bass, setBass] = useState(20)
-    const [treble, setTreble] = useState(20)
+    const [bass, setBass] = useState(0)
+    const [treble, setTreble] = useState(0)
     const [audioSource, setAudioSource] = useState({})
-
-    if (Object.keys(audioSource).length) {
-        const source = audioContext.createMediaElementSource(audioSource)
-        const bassFilter = audioContext.createBiquadFilter()
-        bassFilter.type = "lowshelf"
-        bassFilter.frequency.value = bass
-        bassFilter.gain.value = GAIN_VAL
-
-        source.connect(bassFilter)
-        bassFilter.connect(audioContext.destination)
-    }
 
     useEffect(() => {
         if (currentSongSource === "local") {
             const audio = document.querySelector("audio")
-            setAudioSource(audio)
+            if (audio !== audioSource) {
+                setAudioSource(audio)
+            }
         }
     }, [currentSongSource])
+
+    useEffect(() => {
+        if (Object.keys(audioSource).length) {
+            const source = audioContext.createMediaElementSource(audioSource)
+
+            source.connect(trebleFilter)
+        }
+    }, [audioSource])
 
 
 
@@ -67,8 +77,8 @@ const SettingsStateContextProvider = ({ children }) => {
             updateTreble,
             VOLUME_MIN,
             VOLUME_MAX,
-            FREQ_MAX,
-            FREQ_MIN
+            GAIN_MAX,
+            GAIN_MIN
         }}>
             {children}
         </SettingsStateContext.Provider>
