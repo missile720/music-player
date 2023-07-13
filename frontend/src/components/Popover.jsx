@@ -62,7 +62,7 @@ const Popover = ({ content }) => {
 
     return (
         <div
-            className={popoverClassName()}
+            className="popover"
             ref={popoverRef}
         >
             {content === 'volume' ?

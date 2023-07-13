@@ -56,7 +56,7 @@ const SettingsStateContextProvider = ({ children }) => {
      * found
      */
     useEffect(() => {
-        if (Object.keys(audioSource).length) {
+        if (audioSource && Object.keys(audioSource).length) {
             const source = audioContext.createMediaElementSource(audioSource)
             source.connect(trebleFilter)
         }
@@ -109,7 +109,9 @@ const SettingsStateContextProvider = ({ children }) => {
             VOLUME_MIN,
             VOLUME_MAX,
             GAIN_MAX,
-            GAIN_MIN
+            GAIN_MIN,
+            audioSource,
+            setAudioSource
         }}>
             {children}
         </SettingsStateContext.Provider>

@@ -32,6 +32,8 @@ const EqualizerComponent = () => {
                     className="value"
                     value={bass}
                     onChange={handleBassChange}
+                    // To prevent the user from typing in invalid values
+                    onKeyDown={e => e.preventDefault()}
                     min={GAIN_MIN}
                     max={GAIN_MAX}
                 />
@@ -51,6 +53,8 @@ const EqualizerComponent = () => {
                     className="value"
                     value={treble}
                     onChange={handleTrebleChange}
+                    // To prevent the user from typing in invalid values
+                    onKeyDown={e => e.preventDefault()}
                     min={GAIN_MIN}
                     max={GAIN_MAX}
                 />
