@@ -12,16 +12,18 @@ const GAIN_MAX = 40
 const GAIN_MIN = -40
 const BASS_FREQ = 400
 const TREBLE_FREQ = 1000
-
-// Audio Context Variables for EQ Adjustment
+// Audio Context Consts for EQ adjustment
 const audioContext = new AudioContext()
 const bassFilter = audioContext.createBiquadFilter()
 const trebleFilter = audioContext.createBiquadFilter()
+
+// Filter adjustment
 bassFilter.type = "lowshelf"
 trebleFilter.type = "highshelf"
 bassFilter.frequency.value = BASS_FREQ
 trebleFilter.frequency.value = TREBLE_FREQ
 
+// Chain filters together to make audio pipeline for equalizer
 bassFilter.connect(audioContext.destination)
 trebleFilter.connect(bassFilter)
 
@@ -35,6 +37,11 @@ const SettingsStateContextProvider = ({ children }) => {
     const [treble, setTreble] = useState(0)
     const [audioSource, setAudioSource] = useState({})
 
+    // Effects 
+    /**
+     * Effect to get the audio source when a local playlist
+     * is selected
+     */
     useEffect(() => {
         if (currentSongSource === "local") {
             const audio = document.querySelector("audio")
@@ -44,28 +51,52 @@ const SettingsStateContextProvider = ({ children }) => {
         }
     }, [currentSongSource])
 
+    /**
+     * Effect to connect the audioSource to the equalizer when
+     * found
+     */
     useEffect(() => {
         if (Object.keys(audioSource).length) {
             const source = audioContext.createMediaElementSource(audioSource)
-
             source.connect(trebleFilter)
         }
     }, [audioSource])
 
+    /**
+     * Effect to update the bass gain
+     */
+    useEffect(() => {
+        bassFilter.gain.value = bass
+    }, [bass])
 
+    /**
+     * Effect to update the treble gain
+     */
+    useEffect(() => {
+        trebleFilter.gain.value = treble
+    }, [treble])
 
+    // Input Event Handlers
+    /**
+     * @param {Number} value New volume
+     */
     const updateVolume = (value) => {
         setVolume(value)
     }
 
+    /**
+     * @param {Number} value New gain value for bass
+     */
     const updateBass = (value) => {
         setBass(value)
     }
 
+    /**
+     * @param {Number} value New gain value for treble
+     */
     const updateTreble = (value) => {
         setTreble(value)
     }
-
 
     return (
         <SettingsStateContext.Provider value={{
