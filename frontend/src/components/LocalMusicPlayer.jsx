@@ -18,10 +18,7 @@ const LocalMusicPlayer = () => {
         nextTrack,
         getDuration
     } = useContext(MusicPlayerStateContext)
-    const {
-        volume,
-        VOLUME_MAX
-    } = useContext(SettingsStateContext)
+    const { volume, VOLUME_MAX } = useContext(SettingsStateContext)
 
     return (
         <>
