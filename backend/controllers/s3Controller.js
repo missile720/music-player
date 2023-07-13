@@ -1,16 +1,20 @@
 require('dotenv').config();
-//import { PutObjectCommand, CreateBucketCommand } from '@aws-sdk/client-s3';
-//import { s3Client } from '../libs/client';
+const { uploadFile } = require('../libs/client');
 
-async function getUploadedPlaylists(req, res) {
+async function uploadFilesToS3(req, res) {
+    // const fileId = req.body.fileId;
+    // const fileBuffer = req.body.fileBuffer
+
     try {
-
+        uploadFile("123esffes3", "fsefsef")
+        console.log("Successfully uploaded files");
     } catch (error) {
-
+        console.log(error)
     }
 }
 
+
 module.exports = {
-    getUploadedPlaylists
+    uploadFilesToS3
 }
 

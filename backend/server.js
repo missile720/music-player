@@ -3,7 +3,7 @@ const dotenv = require('dotenv');
 const cors = require('cors');
 const db = require('./config/mongoDB');
 const spotifyRoutes = require('./routes/spotifyRoutes');
-const s3Routes = require('./routes/s3Routes')
+const s3Routes = require('./routes/s3Routes');
 
 const port = process.env.PORT || 3000;
 
