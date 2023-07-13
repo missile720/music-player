@@ -3,7 +3,7 @@ import { SettingsStateContext } from "../contexts/SettingsStateContext";
 
 const EqualizerComponent = () => {
 
-    const { bass, updateBass, treble, updateTreble } = useContext(SettingsStateContext)
+    const { bass, updateBass, treble, updateTreble, FREQ_MIN, FREQ_MAX } = useContext(SettingsStateContext)
 
     const handleBassChange = (event) => {
         const newBass = parseInt(event.target.value)
@@ -13,43 +13,47 @@ const EqualizerComponent = () => {
     const handleTrebleChange = (event) => {
         const newTreble = parseInt(event.target.value)
         updateTreble(newTreble)
-        
+
     }
 
     return (
         <div className="equalizer-component">
             <input
                 type="range"
-                min={0}
-                max={100}
+                min={FREQ_MIN}
+                max={FREQ_MAX}
                 value={bass}
                 onChange={handleBassChange}
                 className="bass"
             />
             <div className="description">
-                <input 
+                <input
                     type="number"
-                    className="value" 
+                    className="value"
                     value={bass}
                     onChange={handleBassChange}
-                /> 
+                    min={FREQ_MIN}
+                    max={FREQ_MAX}
+                />
                 <p className="value value-text">Bass</p>
             </div>
             <input
                 type="range"
-                min={0}
-                max={100}
+                min={FREQ_MIN}
+                max={FREQ_MAX}
                 value={treble}
                 onChange={handleTrebleChange}
                 className="treble"
             />
             <div className="description">
-                <input 
+                <input
                     type="number"
-                    className="value" 
+                    className="value"
                     value={treble}
                     onChange={handleTrebleChange}
-                /> 
+                    min={FREQ_MIN}
+                    max={FREQ_MAX}
+                />
                 <p className="value value-text">Treble</p>
             </div>
         </div>
