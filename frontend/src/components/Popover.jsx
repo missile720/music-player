@@ -25,8 +25,6 @@ const Popover = ({ content }) => {
         setIsVisible(true)
     }
 
-    console.log(currentSongSource)
-
     const popoverClassName = () => {
         let className = "popover "
 
