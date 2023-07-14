@@ -45,6 +45,7 @@ const SettingsStateContextProvider = ({ children }) => {
     useEffect(() => {
         if (currentSongSource === "local") {
             const audio = document.querySelector("audio")
+            audio.setAttribute("crossorigin", "anonymous")
             if (audio !== audioSource) {
                 setAudioSource(audio)
             }
