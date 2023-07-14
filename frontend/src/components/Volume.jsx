@@ -29,6 +29,8 @@ const VolumeComponent = () => {
                     className="value"
                     value={volume}
                     onChange={handleVolumeChange}
+                    // To prevent the user from typing in invalid values
+                    onKeyDown={e => e.preventDefault()}
                     min={VOLUME_MIN}
                     max={VOLUME_MAX}
                 />
