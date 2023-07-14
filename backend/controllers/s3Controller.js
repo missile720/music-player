@@ -1,20 +1,21 @@
-require('dotenv').config();
-const { uploadFile } = require('../libs/client');
+import dotenv from 'dotenv';
+import { uploadFile } from '../libs/client.js';
+
+dotenv.config();
 
 async function uploadFilesToS3(req, res) {
-    // const fileId = req.body.fileId;
-    // const fileBuffer = req.body.fileBuffer
+    const fileId = req.body.Id;
+    const file = req.body.file;
 
     try {
-        uploadFile("123esffes3", "fsefsef")
-        console.log("Successfully uploaded files");
+        console.log('TEST')
+        //const response = await uploadFile(fileId, file);
+        res.send('Test')
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
 }
 
-
-module.exports = {
-    uploadFilesToS3
-}
-
+export {
+    uploadFilesToS3,
+};

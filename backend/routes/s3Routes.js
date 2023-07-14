@@ -1,8 +1,7 @@
-const express = require('express');
+import express from 'express';
+import { uploadFilesToS3 } from '../controllers/s3Controller.js';
 const router = express.Router();
-const s3Controller = require('../controllers/s3Controller')
 
-router.post("/uploadFilesToS3", s3Controller.uploadFilesToS3)
+router.post("/uploadFilesToS3", uploadFilesToS3);
 
-
-module.exports = router;
+export default router;

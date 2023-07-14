@@ -23,6 +23,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   // source of 'local' will help differentiate the two.
   const [playlistData, setPlaylistData] = useState({
     id: nanoid(12),
+    source: 'local'
   });
 
   useEffect(() => {
@@ -45,10 +46,6 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
 
   // ========================================================================================================================
   // Helper Functions
-  function setLocalStoragePlaylists(item) {
-    localStorage.setItem("Local Music", JSON.stringify(item));
-  }
-
   function handleChangeActiveTab(tabName) {
     setActiveTab(tabName);
   }
@@ -59,47 +56,46 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
 
   function resetInputs() {
     setPlaylistData({
-      images: [],
       name: "",
       tracks: [],
-      id: nanoid(12),
+      id: nanoid(12)
     });
   }
 
-  function compressImage(base64String, callback) {
-    const image = new Image();
-    image.onload = () => {
-      const canvas = document.createElement("canvas");
-      const context = canvas.getContext("2d");
-      canvas.width = 100;
-      canvas.height = 100;
-
-      context.drawImage(image, 0, 0, 100, 100);
-
-      const compressedBase64String = canvas.toDataURL("image/jpeg", 0.8);
-      callback(compressedBase64String);
-    };
-
-    image.src = base64String;
+  async function handleUpload(filesToUpload) {
+    try {
+      const response = await fetch(`http://localhost:3000/api/s3/uploadFilesToS3`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          files: filesToUpload
+        }
+      })
+      const data = await response.json();
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
   }
-
   // ========================================================================================================================
+
+  function handleFormattingFilesForUpload() {
+    const files = [{ id: playlistData.id, file: playlistData.image }]
+    const tracks = playlistData.tracks.map((track) => ({ id: track.id, file: track.audioSource, }))
+    files.push(tracks)
+
+    return files
+  }
 
   function handlePlaylistCoverChange(event) {
     const file = event.target.files[0];
-    const reader = new FileReader();
+    setPlaylistData({
+      ...playlistData,
+      image: file
+    })
 
-    reader.onloadend = () => {
-      let base64String = reader.result;
-      compressImage(base64String, (compressedBase64String) => {
-        setPlaylistData({
-          ...playlistData,
-          images: [{ url: compressedBase64String }],
-        });
-      });
-    };
-
-    reader.readAsDataURL(file);
   }
 
   function handlePlaylistChangeName(event) {
@@ -109,17 +105,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     });
   }
 
-  function convertAudioFileToString(file, callback) {
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const base64String = reader.result;
-      callback(base64String);
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function handleFileUpload(event) {
+  function handleSongMetaData(event) {
     const jsMediaTags = window.jsmediatags;
     const files = [...event.target.files];
 
@@ -127,11 +113,8 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
       const songData = {
         name: song.name,
         artist: "Unknown Artist",
-        audioSource: convertAudioFileToString(
-          song,
-          (base64String) => base64String
-        ),
-        id: nanoid(5),
+        audioSource: song,
+        id: nanoid(12),
       };
 
       jsMediaTags.read(song, {
@@ -154,9 +137,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
             let base64String = `data:${format};base64,${window.btoa(
               convertedString
             )}`;
-            compressImage(base64String, (compressedBase64String) => {
-              songData.songImage = compressedBase64String;
-            });
+            songData.songImage = base64String;
           }
         },
         onError: function (error) {
@@ -180,7 +161,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
       const localStorage = fetchLocalPlaylists();
       const updatedLocalStorage = localStorage.filter(playlist => playlist.id !== selectedPlaylistId);
       // This updates the local storage
-      setLocalStoragePlaylists(updatedLocalStorage);
+
       // This updates the state of what the local storage is so that the useEffect in the parent component
       // can re-render the library with the changes
       setLocalPlaylistsState(fetchLocalPlaylists())
@@ -195,57 +176,17 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
         playlistData.name &&
         playlistData.tracks.length
       ) {
-        handleLocalStorage();
+        const files = handleFormattingFilesForUpload();
+        handleUpload(files);
       }
       event.target.reset();
     } else if (activeTab === "edit") {
       if (selectedPlaylistSource === "local") {
-        handleLocalStorage();
+        handleUpload();
       } else if (selectedPlaylistSource === "spotify") {
         updatePlaylistName(selectedPlaylistId, playlistData.name);
       }
     }
-  }
-
-  function handleLocalStorage() {
-    if (localStorage.getItem("Local Music")) {
-      const localMusic = fetchLocalPlaylists();
-      for (let i = 0; i < localMusic.length; i++) {
-        // Making sure there aren't playlists with duplicate names
-        if (localMusic[i].name === playlistData.name) {
-          playlistData.name += "(1)";
-          break;
-        }
-      }
-      if (activeTab === "create") {
-        localMusic.push(playlistData);
-      } else if (activeTab === "edit") {
-        for (let i = 0; i < localMusic.length; i++) {
-          if (localMusic[i].id === selectedPlaylistId) {
-            localMusic[i] = {
-              ...localMusic[i],
-              name:
-                playlistData.name.length > 0
-                  ? playlistData.name
-                  : localMusic[i].name,
-              images:
-                playlistData.images.length > 0
-                  ? playlistData.images
-                  : localMusic[i].images,
-              tracks:
-                playlistData.tracks.length > 0
-                  ? [...localMusic[i].tracks, ...playlistData.tracks]
-                  : localMusic[i].tracks,
-            };
-          }
-        }
-      }
-      setLocalStoragePlaylists(localMusic)
-    } else {
-      setLocalStoragePlaylists([playlistData])
-    }
-    resetInputs();
-    setLocalPlaylistsState(fetchLocalPlaylists());
   }
 
   return (
@@ -357,7 +298,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
                   >
                     <CreatePlaylist
                       playlistData={playlistData}
-                      handleFileUpload={handleFileUpload}
+                      handleFileUpload={handleSongMetaData}
                       handlePlaylistChangeName={handlePlaylistChangeName}
                       handlePlaylistCoverChange={handlePlaylistCoverChange}
                     />
@@ -370,7 +311,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
                   >
                     <EditPlaylists
                       playlistData={playlistData}
-                      handleFileUpload={handleFileUpload}
+                      handleFileUpload={handleSongMetaData}
                       handlePlaylistChangeName={handlePlaylistChangeName}
                       handlePlaylistCoverChange={handlePlaylistCoverChange}
                       handleSelectionChange={handleSelectionChange}
