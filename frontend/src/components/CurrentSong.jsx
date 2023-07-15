@@ -60,8 +60,8 @@ function CurrentSong() {
             </div>
 
             <div className="current-song-right-side col-4 col-md-6 h-100">
-                <div className="song-bar justify-content-between d-none d-md-flex mb-2">
-                    <span className="pe-2">
+                <div className="song-bar justify-content-between d-none d-md-flex mb-2 align-items-center">
+                    <span className="timestamp-text pe-2">
                         {convertToTimestamp(localPlayback.playedSeconds)}
                     </span>
                     <input
@@ -76,7 +76,7 @@ function CurrentSong() {
                         id="range"
                         className="custom-range"
                     />
-                    <span className="ps-2">
+                    <span className="timestamp-text ps-2">
                         {convertToTimestamp(duration)}
                     </span>
                 </div>

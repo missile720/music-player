@@ -14,7 +14,7 @@ const trackSchema = mongoose.Schema(
             type: String,
             required: true
         },
-        coverImageSource: {
+        songImage: {
             type: String,
             required: false
         }

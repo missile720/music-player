@@ -22,6 +22,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   // Some of the functionality is based on whether the playlist was made locally or has been pulled from Spotify so giving it a
   // source of 'local' will help differentiate the two.
   const [playlistData, setPlaylistData] = useState({
+    source: "local",
     id: nanoid(12),
   });
 
@@ -62,6 +63,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
       images: [],
       name: "",
       tracks: [],
+      source: "local",
       id: nanoid(12),
     });
   }
