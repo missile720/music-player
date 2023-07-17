@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
 
 dotenv.config();
 
@@ -16,23 +16,33 @@ const s3 = new S3Client({
     },
 });
 
-function uploadFile(fileId, fileBuffer) {
-    console.log(s3)
+function uploadFile(fileId, file, mimetype) {
     try {
-        console.log('Connected with S3');
         const params = {
             Bucket: bucket,
             Key: fileId,
-            Body: fileBuffer,
+            Body: file,
+            ContentType: mimetype,
             ACL: 'public-read',
         };
+        console.log(params)
         const response = s3.send(new PutObjectCommand(params));
-        //const objectUrl = `https://${Bucket}.s3.${region}.amazonaws.com/${params.Key}`;
-        console.log(response);
     } catch (error) {
         console.log(error)
     }
 
 }
 
-export { s3, uploadFile };
+function deleteFile(fileId) {
+    try {
+        const params = {
+            Bucket: bucket,
+            Key: fileId
+        };
+        const response = s3.send(new DeleteObjectCommand(params));
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export { s3, uploadFile, deleteFile };
