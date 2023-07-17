@@ -62,8 +62,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   }
 
   function handleFormattingFilesForUpload() {
-    const files = [playlistData.image]
-    const audioFiles = playlistData.tracks.map
+    const files = [...playlistData.tracks]
     return files
   }
 
@@ -71,8 +70,10 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     const formData = new FormData();
 
     formData.append('playlistName', playlistData.name);
+    formData.append('files', playlistData.image)
     //formData.append('files', playlistData.tracks[0].audioSource);
     filesToUpload.forEach((file) => {
+      formData.append('files', file.songImage);
       formData.append('files', file.audioSource);
     });
 

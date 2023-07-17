@@ -16,7 +16,7 @@ const s3 = new S3Client({
     },
 });
 
-function uploadFile(fileId, file, mimetype) {
+function uploadFileToS3(fileId, file, mimetype) {
     try {
         const params = {
             Bucket: bucket,
@@ -26,14 +26,15 @@ function uploadFile(fileId, file, mimetype) {
             ACL: 'public-read',
         };
         console.log(params)
-        const response = s3.send(new PutObjectCommand(params));
+        s3.send(new PutObjectCommand(params));
+        const objectUrl = `https://${bucket}.s3.${region}.amazonaws.com/${params.Key}`;
+        return objectUrl
     } catch (error) {
         console.log(error)
     }
-
 }
 
-function deleteFile(fileId) {
+function deleteFileFromS3(fileId) {
     try {
         const params = {
             Bucket: bucket,
@@ -45,4 +46,4 @@ function deleteFile(fileId) {
     }
 }
 
-export { s3, uploadFile, deleteFile };
+export { s3, uploadFileToS3, deleteFileFromS3 };

@@ -1,24 +1,24 @@
 import dotenv from 'dotenv';
 import { nanoid } from 'nanoid'
-import { uploadFile } from '../libs/client.js';
+import { uploadFileToS3 } from '../libs/client.js';
 
 dotenv.config();
 
 async function uploadNewPlaylist(req, res) {
-    const playlistName = req.body.playlistName;
     const files = req.files;
-    console.log(playlistName)
+    const playlistName = req.body.playlistName;
     const playlistId = nanoid(15);
-
-    console.log(playlistName, playlistId)
+    console.log({ 'Playlist Name': playlistName })
     try {
         for (let i = 0; i < files.length; i++) {
             const fileId = nanoid(20);
             const file = files[i];
             const buffer = file.buffer;
             const mimetype = file.mimetype
-            console.log(file)
-            await uploadFile(fileId, buffer, mimetype);
+
+            const response = await uploadFileToS3(fileId, buffer, mimetype);
+            const data = response.json();
+            console.log(data)
         }
         res.send('File uploaded successfully.')
     } catch (error) {
