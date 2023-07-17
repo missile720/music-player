@@ -211,6 +211,8 @@ function ContextProvider({ children }) {
     } catch (error) {
       console.log(error);
     }
+
+    getProfilePlaylist();
   }
 
   function addPlaylistTrack(playlistId, trackUri) {

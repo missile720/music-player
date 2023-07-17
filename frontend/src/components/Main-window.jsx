@@ -19,7 +19,7 @@ import LocalMusicPlayer from "./LocalMusicPlayer.jsx";
 
 // Debugging variables
 import testPlaylistsData from "../test/test-playlist.jsx";
-const debug = true;
+const debug = false;
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
