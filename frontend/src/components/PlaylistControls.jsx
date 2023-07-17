@@ -57,21 +57,29 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   function resetInputs() {
     setPlaylistData({
       name: "",
-      tracks: [],
-      id: nanoid(12)
+      tracks: []
     });
   }
 
+  function handleFormattingFilesForUpload() {
+    const files = [playlistData.image]
+    const audioFiles = playlistData.tracks.map
+    return files
+  }
+
   async function handleUpload(filesToUpload) {
+    const formData = new FormData();
+
+    formData.append('playlistName', playlistData.name);
+    //formData.append('files', playlistData.tracks[0].audioSource);
+    filesToUpload.forEach((file) => {
+      formData.append('files', file.audioSource);
+    });
+
     try {
-      const response = await fetch(`http://localhost:3000/api/s3/uploadFilesToS3`, {
+      const response = await fetch(`http://localhost:3000/api/playlist/uploadNewPlaylist`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: {
-          files: filesToUpload
-        }
+        body: formData
       })
       const data = await response.json();
       console.log(data)
@@ -79,16 +87,8 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
       console.log(error)
     }
   }
+
   // ========================================================================================================================
-
-  function handleFormattingFilesForUpload() {
-    const files = [{ id: playlistData.id, file: playlistData.image }]
-    const tracks = playlistData.tracks.map((track) => ({ id: track.id, file: track.audioSource, }))
-    files.push(tracks)
-
-    return files
-  }
-
   function handlePlaylistCoverChange(event) {
     const file = event.target.files[0];
     setPlaylistData({
@@ -114,7 +114,6 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
         name: song.name,
         artist: "Unknown Artist",
         audioSource: song,
-        id: nanoid(12),
       };
 
       jsMediaTags.read(song, {
@@ -154,25 +153,25 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   }
 
   function handleDeletePlaylist() {
-    if (library[playlistIndex].id === selectedPlaylistId) {
-      choosePlaylist(playlistIndex - 1);
-    }
-    if (selectedPlaylistSource === 'local') {
-      const localStorage = fetchLocalPlaylists();
-      const updatedLocalStorage = localStorage.filter(playlist => playlist.id !== selectedPlaylistId);
-      // This updates the local storage
+    // if (library[playlistIndex].id === selectedPlaylistId) {
+    //   choosePlaylist(playlistIndex - 1);
+    // }
+    // if (selectedPlaylistSource === 'local') {
+    //   const localStorage = fetchLocalPlaylists();
+    //   const updatedLocalStorage = localStorage.filter(playlist => playlist.id !== selectedPlaylistId);
+    //   // This updates the local storage
 
-      // This updates the state of what the local storage is so that the useEffect in the parent component
-      // can re-render the library with the changes
-      setLocalPlaylistsState(fetchLocalPlaylists())
-    }
+    //   // This updates the state of what the local storage is so that the useEffect in the parent component
+    //   // can re-render the library with the changes
+    //   setLocalPlaylistsState(fetchLocalPlaylists())
+    // }
   }
 
   function handleSubmit(event) {
     event.preventDefault();
     if (activeTab === "create") {
       if (
-        playlistData.images &&
+        playlistData.image &&
         playlistData.name &&
         playlistData.tracks.length
       ) {
@@ -298,7 +297,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
                   >
                     <CreatePlaylist
                       playlistData={playlistData}
-                      handleFileUpload={handleSongMetaData}
+                      handleSongMetaData={handleSongMetaData}
                       handlePlaylistChangeName={handlePlaylistChangeName}
                       handlePlaylistCoverChange={handlePlaylistCoverChange}
                     />
@@ -311,7 +310,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
                   >
                     <EditPlaylists
                       playlistData={playlistData}
-                      handleFileUpload={handleSongMetaData}
+                      handleSongMetaData={handleSongMetaData}
                       handlePlaylistChangeName={handlePlaylistChangeName}
                       handlePlaylistCoverChange={handlePlaylistCoverChange}
                       handleSelectionChange={handleSelectionChange}
