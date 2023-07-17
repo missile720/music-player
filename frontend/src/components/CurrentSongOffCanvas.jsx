@@ -66,8 +66,8 @@ export default function CurrentSongOffCanvas() {
                         {currentSongMetadata.artist}
                     </h3>
                 </div>
-                <div className="song-bar d-flex jutify-content-between">
-                    <span className="pe-2">
+                <div className="song-bar d-flex jutify-content-between align-items-center">
+                    <span className="timestamp-text pe-2">
                         {convertToTimestamp(localPlayback.playedSeconds)}
                     </span>
                     <input
@@ -82,7 +82,7 @@ export default function CurrentSongOffCanvas() {
                         id="range"
                         className="custom-range"
                     />
-                    <span className="ps-2">
+                    <span className="timestamp-text ps-2">
                         {convertToTimestamp(duration)}
                     </span>
                 </div>

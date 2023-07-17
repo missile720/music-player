@@ -4,6 +4,7 @@ import testSong3Url from "./assets/05 - Takyon (Death Yon).mp3"
 import testSong4Url from "./assets/05 - Risen King (feat. Cp).mp3"
 
 import testSongImageUrl from "./assets/00 - Death_Grips_Exmilitary-front-large.jpg"
+import testPlaylistImageUrl from "./assets/with bro tonight.jpg"
 
 // A sample set of test playlist data based on the schema 
 // of local playlists defined by CreatePlaylist with each track
@@ -14,26 +15,31 @@ export default [
         id: "u49xO",
         name: "playlist 1",
         source: "local",
+        coverImageSource: testPlaylistImageUrl,
         tracks: [
             {
                 artist: "Death Grips",
-                id: "777",
+                id: "000000000000",
                 name: "Guillotine",
+<<<<<<< HEAD
                 url: 'https://bvt-music-player.s3.us-west-1.amazonaws.com/Motorama+-+Alps.mp3',
+=======
+                songSource: testSong1Url,
+>>>>>>> development
                 songImage: testSongImageUrl
             },
             {
                 artist: "Death Grips",
-                id: "666",
+                id: "111111111111",
                 name: "Spread Eagle Cross the Block",
-                url: testSong2Url,
+                songSource: testSong2Url,
                 songImage: testSongImageUrl
             },
             {
                 artist: "Death Grips",
-                id: "555",
+                id: "222222222222",
                 name: "Takyon (Death Yon)",
-                url: testSong3Url,
+                songSource: testSong3Url,
                 songImage: testSongImageUrl
             }
         ]
@@ -45,9 +51,16 @@ export default [
         tracks: [
             {
                 artist: "Nehemiah",
-                id: "999",
+                id: "333333333333",
                 name: "Risen King",
-                url: testSong4Url
+                songSource: testSong4Url
+            },
+            // Test Case For Song on Backend
+            {
+                artist: "Alps",
+                id: "444444444444",
+                name: "Motorama",
+                songSource: "https://bvt-music-player.s3.us-west-1.amazonaws.com/Motorama+-+Alps.mp3"
             }
         ]
     }

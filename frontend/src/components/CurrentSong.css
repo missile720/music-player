@@ -36,6 +36,7 @@ li {
 
 .music-button {
   cursor: pointer;
+  width: 30px;
 }
 
 .music-button:hover, .music-button:active {
@@ -54,6 +55,11 @@ li {
 
 #range {
   width: 100%;
+}
+
+.timestamp-text {
+  font-size: .8rem;
+  min-width: 2rem;
 }
 
 .current-song-right-side {

@@ -28,6 +28,10 @@ function PlaylistCard({ playlist, index }) {
             return playlist.images[0].url
         }
 
+        if (playlist.coverImageSource) {
+            return playlist.coverImageSource
+        }
+
         return defaultPlaylistArt
     }
 
@@ -40,7 +44,7 @@ function PlaylistCard({ playlist, index }) {
         let baseCardType = " playlist-card "
 
         if (playlistIndex === index) {
-            baseCardType +=  `${theme}-${mode}-selected-card`
+            baseCardType += `${theme}-${mode}-selected-card`
         }
 
         return baseCardType

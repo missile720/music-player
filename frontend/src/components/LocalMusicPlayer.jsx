@@ -27,7 +27,7 @@ const LocalMusicPlayer = () => {
                 height="0"
                 ref={getPlayer}
                 url={hasNonEmptyTracklist() &&
-                    currentTracklist[songIndex].url}
+                    currentTracklist[songIndex].songSource}
                 playing={playing}
                 played={localPlayback.played}
                 volume={volume / VOLUME_MAX}
