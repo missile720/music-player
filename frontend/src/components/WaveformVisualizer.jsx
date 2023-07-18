@@ -1,8 +1,10 @@
 import { useContext, useEffect, useRef } from "react";
 import { Context } from "../contexts/Context";
+import { ThemeContext } from "../contexts/ThemeContext.jsx";
 
 function WaveformVisualizer() {
   const { currentPlayingSongData, currentPlayingSongCallback } = useContext(Context);
+  const { theme, mode } = useContext(ThemeContext);
   const progressMs = currentPlayingSongCallback.progressMs;
   const isPlaying = currentPlayingSongCallback.isPlaying;
   const duration = currentPlayingSongCallback.track.durationMs;
@@ -21,7 +23,22 @@ function WaveformVisualizer() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Set up the waveform visualization properties
-    const waveformColor = "blue";
+    let color = "";
+
+    if(theme === 'royal' && mode === 'light'){
+      color = '#5CADF8';
+    }
+    else if(theme === 'royal' && mode === 'dark'){
+      color = '#181964';
+    }
+    else if(theme === 'bvt' && mode === 'light'){
+      color = '#FF5531';
+    }
+    else{
+      color = '#8D918D';
+    }
+
+    const waveformColor = color;
     const waveformLineWidth = 2;
     const waveformHeight = canvas.height;
 
