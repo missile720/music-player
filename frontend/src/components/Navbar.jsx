@@ -65,7 +65,7 @@ function Nav() {
                     <input
                         type="text"
                         className="form-control"
-                        placeholder="Search Songs"
+                        placeholder="Search Songs From Spotify"
                         aria-label="Search Songs"
                         aria-describedby="button-addon2"
                         onChange={updateText}
