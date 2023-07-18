@@ -1,16 +1,19 @@
-import { useContext, useState } from 'react';
-import { Context } from "../contexts/Context"
-import { ThemeContext } from '../contexts/ThemeContext';
+import { useContext, useState } from "react";
 
-import SearchSong from './SearchSong';
+import { Context } from "../contexts/Context"
+import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext";
+import { ThemeContext } from "../contexts/ThemeContext";
+
+import SearchSong from "./SearchSong";
 import defaultPfp from "../assets/defaultProfilePic.svg"
 import searchIcon from "../assets/searchIcon.svg"
 
 import "./Navbar.css"
 
 function Nav() {
-    const { theme, mode } = useContext(ThemeContext)
     const { userProfileSpotify, accessToken } = useContext(Context);
+    const { currentSongSource } = useContext(MusicPlayerStateContext)
+    const { theme, mode } = useContext(ThemeContext)
     const [search, setSearch] = useState("");
     const [songList, setSongList] = useState({})
 
@@ -59,8 +62,25 @@ function Nav() {
             <div className="col-10 d-flex align-items-center justify-content-center">
                 {/* search bar */}
                 <div className="input-group">
-                    <input type="text" className="form-control" placeholder="Search Songs" aria-label="Search Songs" aria-describedby="button-addon2" onChange={updateText} value={search} />
-                    <button className={`btn element-${theme}-${mode}`} type="button" id="button-addon2" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample" onClick={() => searchList(accessToken, search)}>
+                    <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Search Songs"
+                        aria-label="Search Songs"
+                        aria-describedby="button-addon2"
+                        onChange={updateText}
+                        value={search}
+                    />
+                    <button
+                        className={`btn element-${theme}-${mode}`}
+                        type="button"
+                        id="button-addon2"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#offcanvasExample"
+                        aria-controls="offcanvasExample"
+                        onClick={() => searchList(accessToken, search)}
+                        disabled={currentSongSource !== "spotify"}
+                    >
                         <img
                             src={searchIcon}
                             width="16"

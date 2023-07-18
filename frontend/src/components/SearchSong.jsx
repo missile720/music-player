@@ -1,6 +1,7 @@
 import { useContext } from "react"
+
 import { Context } from "../contexts/Context"
-import { ThemeContext } from '../contexts/ThemeContext'
+import { ThemeContext } from "../contexts/ThemeContext"
 
 import "./SearchSong.css"
 
@@ -47,13 +48,34 @@ function SearchSong(props) {
     })
 
     return (
-        <div className="offcanvas offcanvas-start" tabIndex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
-            <div className={`offcanvas-header secondary-offcanvas-${theme}-${mode}`}>
+        <div
+            className="offcanvas offcanvas-start"
+            tabIndex="-1"
+            id="offcanvasExample"
+            aria-labelledby="offcanvasExampleLabel"
+        >
+            <div
+                className={`offcanvas-header secondary-offcanvas-${theme}-${mode}`}
+            >
                 <div>
-                    <h4 className="offcanvas-title text-start" id="offcanvasExampleLabel">Songs</h4>
-                    {songs.length > 0 ? <p>Click song to add to current playlist</p> : <p className='text-danger'>Search field was empty</p>}
+                    <h4
+                        className="offcanvas-title text-start"
+                        id="offcanvasExampleLabel"
+                    >
+                        Songs
+                    </h4>
+                    {
+                        songs.length > 0 ?
+                            <p>Click song to add to current playlist</p> :
+                            <p className='text-danger'>Search field was empty</p>
+                    }
                 </div>
-                <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                <button
+                    type="button"
+                    className="btn-close"
+                    data-bs-dismiss="offcanvas"
+                    aria-label="Close"
+                ></button>
             </div>
             <div className={`offcanvas-body secondary-offcanvas-${theme}-${mode}`}>
                 {/* Place for song lists */}
