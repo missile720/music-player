@@ -1,9 +1,12 @@
-const dotenv = require('dotenv');
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
-const Bucket = process.env.S3_BUCKET
+import dotenv from 'dotenv';
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from "@aws-sdk/client-s3";
+
+dotenv.config();
+
+const bucket = process.env.S3_BUCKET;
 const accessKeyId = process.env.AWS_S3_ACCESS_KEY;
 const secretAccessKey = process.env.AWS_S3_SECRET;
-const region = process.env.S3_REGION
+const region = process.env.S3_REGION;
 
 const s3 = new S3Client({
     region: region,
@@ -11,23 +14,35 @@ const s3 = new S3Client({
         accessKeyId: accessKeyId,
         secretAccessKey: secretAccessKey,
     },
-
 });
 
-function uploadFile(fileId, fileBuffer) {
-    const params = {
-        Bucket: Bucket,
-        Key: fileId,
-        Body: fileBuffer,
-        ACL: 'public-read',
+function uploadFileToS3(fileId, file, mimetype) {
+    try {
+        const params = {
+            Bucket: bucket,
+            Key: fileId,
+            Body: file,
+            ContentType: mimetype,
+            ACL: 'public-read',
+        };
+        s3.send(new PutObjectCommand(params));
+        const objectUrl = `https://${bucket}.s3.${region}.amazonaws.com/${params.Key}`;
+        return objectUrl
+    } catch (error) {
+        console.log(error)
     }
-
-    const response = s3.send(new PutObjectCommand(params))
-    //const objectUrl = `https://${Bucket}.s3.${region}.amazonaws.com/${params.Key}`;
-    console.log(response)
 }
 
-module.exports = {
-    s3,
-    uploadFile
-};
+function deleteFileFromS3(fileId) {
+    try {
+        const params = {
+            Bucket: bucket,
+            Key: fileId
+        };
+        const response = s3.send(new DeleteObjectCommand(params));
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+export { s3, uploadFileToS3, deleteFileFromS3 };
