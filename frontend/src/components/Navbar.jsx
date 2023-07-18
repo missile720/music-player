@@ -43,7 +43,6 @@ function Nav() {
         setSongList(data);
     }
 
-
     /**
      * Creates a shortcut for searching for spotify songs by triggering the
      * searchList function and showing the SearchSong when the user hits enter
