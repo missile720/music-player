@@ -21,11 +21,7 @@ export default [
                 artist: "Death Grips",
                 id: "000000000000",
                 name: "Guillotine",
-<<<<<<< HEAD
-                url: 'https://bvt-music-player.s3.us-west-1.amazonaws.com/Motorama+-+Alps.mp3',
-=======
                 songSource: testSong1Url,
->>>>>>> development
                 songImage: testSongImageUrl
             },
             {

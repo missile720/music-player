@@ -25,7 +25,6 @@ function uploadFileToS3(fileId, file, mimetype) {
             ContentType: mimetype,
             ACL: 'public-read',
         };
-        console.log(params)
         s3.send(new PutObjectCommand(params));
         const objectUrl = `https://${bucket}.s3.${region}.amazonaws.com/${params.Key}`;
         return objectUrl

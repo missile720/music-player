@@ -19,13 +19,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   const { theme, mode } = useContext(ThemeContext);
   const { updatePlaylistName, userProfileSpotify } = useContext(Context);
 
-  // Some of the functionality is based on whether the playlist was made locally or has been pulled from Spotify so giving it a
-  // source of 'local' will help differentiate the two.
-  const [playlistData, setPlaylistData] = useState({
-    source: "local",
-    id: nanoid(12),
-    source: 'local'
-  });
+  const [playlistData, setPlaylistData] = useState({});
 
   useEffect(() => {
     resetInputs();
@@ -71,12 +65,15 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   async function handleUpload(filesToUpload) {
     const formData = new FormData();
 
+    formData.append('email', userProfileSpotify.email);
     formData.append('playlistName', playlistData.name);
-    formData.append('files', playlistData.image)
-    //formData.append('files', playlistData.tracks[0].audioSource);
+    formData.append('playlistImage', playlistData.image)
     filesToUpload.forEach((file) => {
-      formData.append('files', file.songImage);
-      formData.append('files', file.audioSource);
+      console.log(file.name)
+      formData.append('songNames', file.name);
+      formData.append('songArtists', file.artist);
+      formData.append('songImages', file.songImage);
+      formData.append('songSources', file.audioSource);
     });
 
     try {
@@ -130,16 +127,10 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
           if (tag.tags.picture) {
             const pictureData = tag.tags.picture.data;
             const format = tag.tags.picture.format;
-            let convertedString = "";
+            const fileData = new Uint8Array(pictureData);
+            const file = new Blob([fileData], { type: format });
 
-            for (let i = 0; i < pictureData.length; i++) {
-              convertedString += String.fromCharCode(pictureData[i]);
-            }
-
-            let base64String = `data:${format};base64,${window.btoa(
-              convertedString
-            )}`;
-            songData.songImage = base64String;
+            songData.songImage = file;
           }
         },
         onError: function (error) {
