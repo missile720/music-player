@@ -22,6 +22,7 @@ const EditPlaylists = ({
           data-live-search="true"
           onChange={handleSelectionChange}
         >
+          <option value="none" selected disabled hidden>Select an Option</option>
           {playlistsToEditOptions}
         </select>
       </div>
