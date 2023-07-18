@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 
 import { Context } from "../contexts/Context"
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext";
@@ -12,10 +12,18 @@ import "./Navbar.css"
 
 function Nav() {
     const { userProfileSpotify, accessToken } = useContext(Context);
-    const { currentSongSource } = useContext(MusicPlayerStateContext)
+    const { currentSongSource, playlistIndex, library } = useContext(MusicPlayerStateContext)
     const { theme, mode } = useContext(ThemeContext)
     const [search, setSearch] = useState("");
     const [songList, setSongList] = useState({})
+
+    /**
+     * Clears the search text when the user changes the current playlist
+     * or updates their library
+     */
+    useEffect(() => {
+        setSearch("")
+    }, [playlistIndex, library])
 
     /**
      * Updates text of search input
@@ -50,13 +58,13 @@ function Nav() {
      * @param {Event} event Keypress event
      */
     async function searchOnEnter(event) {
-        const keyCode = event.code || event.keyCode
+        const keyCode = event.code || event.keyCode;
         if (keyCode === "Enter") {
-            searchList(accessToken, search)
+            searchList(accessToken, search);
             const searchSongOffcanvas = new bootstrap.Offcanvas(
                 document.getElementById("offcanvasExample")
             )
-            searchSongOffcanvas.show()
+            searchSongOffcanvas.show();
         }
     }
 
