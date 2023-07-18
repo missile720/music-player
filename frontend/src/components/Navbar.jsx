@@ -45,7 +45,9 @@ function Nav() {
 
 
     /**
-     * Allows the user to simply hit enter when they want to search for spotify songs
+     * Creates a shortcut for searching for spotify songs by triggering the
+     * searchList function and showing the SearchSong when the user hits enter
+     * on the text input
      * @param {Event} event Keypress event
      */
     async function searchOnEnter(event) {
