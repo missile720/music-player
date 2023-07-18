@@ -8,17 +8,28 @@ const playlistSchema = mongoose.Schema(
         },
         coverImageSource: {
             type: String,
-            required: false
+            required: true
+        },
+        coverImageSourceId: {
+            type: String,
+            required: true
         },
         tracks: [{
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             ref: 'Track'
         }],
-        source: 'local'
+        source: {
+            type: String,
+            default: 'local',
+        },
+        id: {
+            type: String,
+            default: 'local',
+        }
     }
 );
 
 const Playlist = mongoose.model('Playlist', playlistSchema);
 
-export { Playlist }
+export default Playlist
 

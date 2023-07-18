@@ -8,12 +8,17 @@ const userSchema = mongoose.Schema(
             unique: true
         },
         playlists: [{
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             ref: 'Playlist'
-        }]
+        }],
+        id: {
+            type: String,
+            required: true,
+            unique: true
+        }
     }
 );
 
 const User = mongoose.model('User', userSchema);
 
-export { User }
+export default User 

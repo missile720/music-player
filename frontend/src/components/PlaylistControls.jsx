@@ -10,7 +10,7 @@ import CreatePlaylist from "./CreatePlaylist";
 import "./PlaylistControls.css";
 
 
-const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
+const PlaylistControls = ({ }) => {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
   const [selectedPlaylistSource, setSelectedPlaylistSource] = useState("");
   const [activeTab, setActiveTab] = useState("create");
@@ -53,7 +53,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     setPlaylistData({
       name: "",
       tracks: [],
-      source: "local",
+      source: 'local'
     });
   }
 
@@ -69,7 +69,6 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     formData.append('playlistName', playlistData.name);
     formData.append('playlistImage', playlistData.image)
     filesToUpload.forEach((file) => {
-      console.log(file.name)
       formData.append('songNames', file.name);
       formData.append('songArtists', file.artist);
       formData.append('songImages', file.songImage);
@@ -114,8 +113,8 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
         name: song.name,
         artist: "Unknown Artist",
         audioSource: song,
+        songImage: ''
       };
-
       jsMediaTags.read(song, {
         onSuccess: function (tag) {
           if (tag.tags.title) {
@@ -137,7 +136,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
           console.log(error);
         },
       });
-
+      console.log(songData)
       return songData;
     });
     setPlaylistData({

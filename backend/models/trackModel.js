@@ -18,6 +18,14 @@ const trackSchema = mongoose.Schema(
             type: String,
             required: false
         },
+        songSourceId: {
+            type: String,
+            required: true
+        },
+        songImageId: {
+            type: String,
+            required: true
+        },
         id: {
             type: String,
             required: true
@@ -27,4 +35,4 @@ const trackSchema = mongoose.Schema(
 
 const Track = mongoose.model('Track', trackSchema);
 
-export { Track }
+export default Track

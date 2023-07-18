@@ -8,7 +8,7 @@ import playlistRoutes from './routes/palylistRoutes.js';
 const port = process.env.PORT || 3000;
 
 dotenv.config();
-//db();
+db();
 const app = express();
 
 app.use(cors());
