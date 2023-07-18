@@ -6,6 +6,7 @@ import { MusicPlayerStateContext } from "./MusicPlayerStateContext"
 const SettingsStateContext = createContext()
 
 // Constants
+const AUDIO_SOURCE_UPDATE_DELAY = 500 // in ms
 const VOLUME_MIN = 0
 const VOLUME_MAX = 100
 const GAIN_MAX = 40
@@ -29,7 +30,7 @@ trebleFilter.connect(bassFilter)
 
 const SettingsStateContextProvider = ({ children }) => {
     // Context Values
-    const { currentSongSource } = useContext(MusicPlayerStateContext)
+    const { currentSongSource, player } = useContext(MusicPlayerStateContext)
 
     // States
     const [volume, setVolume] = useState(50)
@@ -40,17 +41,23 @@ const SettingsStateContextProvider = ({ children }) => {
     // Effects 
     /**
      * Effect to get the audio source when a local playlist
-     * is selected
+     * is selected. Adds delay to wait for the audio element 
+     * from the ReactPlayer to load.
      */
     useEffect(() => {
-        if (currentSongSource === "local") {
-            const audio = document.querySelector("audio")
-            if (audio && audio !== audioSource) {
-                audio.setAttribute("crossorigin", "anonymous")
-                setAudioSource(audio)
-            }
+        if (currentSongSource === "local" && player) {
+            const audioUpdateTimeout = setTimeout(() => {
+                const audio = player.getInternalPlayer()
+
+                if (audio && audio !== audioSource) {
+                    audio.setAttribute("crossorigin", "anonymous")
+                    setAudioSource(audio)
+                }
+            }, AUDIO_SOURCE_UPDATE_DELAY)
+
+            return () => clearTimeout(audioUpdateTimeout)
         }
-    }, [currentSongSource])
+    }, [currentSongSource, player])
 
     /**
      * Effect to connect the audioSource to the equalizer when
