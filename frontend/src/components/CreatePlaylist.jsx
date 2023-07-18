@@ -1,4 +1,4 @@
-const CreatePlaylist = ({ playlistData, handlePlaylistChangeName, handlePlaylistCoverChange, handleFileUpload }) => {
+const CreatePlaylist = ({ playlistData, handlePlaylistChangeName, handlePlaylistCoverChange, handleSongMetaData }) => {
     return (
         <>
             <div className="mb-3">
@@ -31,7 +31,7 @@ const CreatePlaylist = ({ playlistData, handlePlaylistChangeName, handlePlaylist
                     id="formFileMultiple"
                     accept="audio/*"
                     multiple
-                    onChange={handleFileUpload}
+                    onChange={handleSongMetaData}
                 />
             </div>
         </>

@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose'
 
 const trackSchema = mongoose.Schema(
     {
@@ -17,10 +17,22 @@ const trackSchema = mongoose.Schema(
         songImage: {
             type: String,
             required: false
+        },
+        songSourceId: {
+            type: String,
+            required: true
+        },
+        songImageId: {
+            type: String,
+            required: true
+        },
+        id: {
+            type: String,
+            required: true
         }
     }
 );
 
 const Track = mongoose.model('Track', trackSchema);
 
-module.exports = Track;
+export default Track

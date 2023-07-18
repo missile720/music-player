@@ -1,20 +1,13 @@
-require('dotenv').config();
-const { uploadFile } = require('../libs/client');
+import { nanoid } from 'nanoid'
+import { uploadFileToS3 } from '../libs/client.js';
 
-async function uploadFilesToS3(req, res) {
-    // const fileId = req.body.fileId;
-    // const fileBuffer = req.body.fileBuffer
+async function formatS3Upload(file) {
+    const fileId = nanoid(20);
+    const buffer = file.buffer;
+    const mimetype = file.mimetype
 
-    try {
-        uploadFile("123esffes3", "fsefsef")
-        console.log("Successfully uploaded files");
-    } catch (error) {
-        console.log(error)
-    }
+    const response = await uploadFileToS3(fileId, buffer, mimetype);
+    return { fileSource: response, fileId: fileId }
 }
 
-
-module.exports = {
-    uploadFilesToS3
-}
-
+export { formatS3Upload }

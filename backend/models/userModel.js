@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose'
 
 const userSchema = mongoose.Schema(
     {
@@ -8,12 +8,17 @@ const userSchema = mongoose.Schema(
             unique: true
         },
         playlists: [{
-            type: mongoose.Schema.Types.ObjectId,
+            type: String,
             ref: 'Playlist'
-        }]
+        }],
+        id: {
+            type: String,
+            required: true,
+            unique: true
+        }
     }
 );
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+export default User 
