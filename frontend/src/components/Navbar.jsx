@@ -17,10 +17,20 @@ function Nav() {
     const [search, setSearch] = useState("");
     const [songList, setSongList] = useState({})
 
+    /**
+     * Updates text of search input
+     * @param {Event} event Input Change event
+     */
     function updateText(event) {
         setSearch(event.target.value);
     }
 
+    /**
+     * Makes api call to spotify to search for song using search as 
+     * query
+     * @param {string} accessToken Spotify access token
+     * @param {string} search Search query from navbar input
+     */
     async function searchList(accessToken, search) {
         setSongList({});
         const response = await fetch(`https://api.spotify.com/v1/search?q=${encodeURIComponent(search)}&type=track`, {
@@ -31,6 +41,22 @@ function Nav() {
 
         const data = await response.json();
         setSongList(data);
+    }
+
+
+    /**
+     * Allows the user to simply hit enter when they want to search for spotify songs
+     * @param {Event} event Keypress event
+     */
+    async function searchOnEnter(event) {
+        const keyCode = event.code || event.keyCode
+        if (keyCode === "Enter") {
+            searchList(accessToken, search)
+            const searchSongOffcanvas = new bootstrap.Offcanvas(
+                document.getElementById("offcanvasExample")
+            )
+            searchSongOffcanvas.show()
+        }
     }
 
     /**
@@ -69,6 +95,8 @@ function Nav() {
                         aria-label="Search Songs"
                         aria-describedby="button-addon2"
                         onChange={updateText}
+                        disabled={currentSongSource !== "spotify"}
+                        onKeyDown={searchOnEnter}
                         value={search}
                     />
                     <button
