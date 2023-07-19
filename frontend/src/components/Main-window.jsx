@@ -101,7 +101,7 @@ function Main() {
         >
           <div className="col-12 d-flex cur-text align-items-center">
             <button
-              className={`col-2 d-md-none element-${theme}-${mode} rounded border-0`}
+              className={`btn col-2 d-md-none element-${theme}-${mode} rounded`}
               onClick={() => setLibraryView(true)}>
               <img
                 src={returnImg}
