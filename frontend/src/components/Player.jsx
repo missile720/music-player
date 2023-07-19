@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react"
 import SpotifyPlayer from "react-spotify-web-playback"
 
 import { Context } from "../contexts/Context"
+import { ThemeContext } from "../contexts/ThemeContext.jsx";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
 import { SettingsStateContext } from "../contexts/SettingsStateContext"
 
@@ -13,14 +14,55 @@ function Player() {
     songIndex,
     setSongIndex,
     currentTracklist
-  } = useContext(MusicPlayerStateContext)
-  const { accessToken, getSongAudioAnalysis } = useContext(Context)
-  const { volume } = useContext(SettingsStateContext)
+  } = useContext(MusicPlayerStateContext);
+  const { accessToken, getSongAudioAnalysis } = useContext(Context);
+  const { volume } = useContext(SettingsStateContext);
+  const { theme, mode } = useContext(ThemeContext);
+
+  let bgColor = "";
+  let activeColor = "";
+  let color = "";
+  let trackArtistColor = "";
+  let trackNameColor = "";
+  let sliderColor = "";
+
+    if(theme === 'royal' && mode === 'light'){
+      bgColor = '#5CADF8';
+      activeColor = "#000";
+      color = "#000";
+      trackArtistColor = "#000";
+      trackNameColor = "#000";
+      sliderColor = '#fafafa';
+    }
+    else if(theme === 'royal' && mode === 'dark'){
+      bgColor = '#181964';
+      activeColor = "#fff";
+      color = "#fff";
+      trackArtistColor = "#fff";
+      trackNameColor = "#fff";
+      sliderColor = '#0E0F3B';
+    }
+    else if(theme === 'bvt' && mode === 'light'){
+      bgColor = '#FF5531';
+      activeColor = "#fff";
+      color = "#fff";
+      trackArtistColor = "#fff";
+      trackNameColor = "#fff";
+      sliderColor = '#FD2C00';
+    }
+    else{
+      bgColor = '#8D918D';
+      activeColor = "#fff";
+      color = "#fff";
+      trackArtistColor = "#fff";
+      trackNameColor = "#fff";
+      sliderColor = '#737873';
+    }
 
   const playerVolume = volume / VOLUME_MAX;
 
   // Used to track the react spotify player's playback state
-  const [playerCallback, setPlayerCallback] = useState("")
+  const [playerCallback, setPlayerCallback] = useState("");
 
   // Updates the songIndex as the user uses the previous and next buttons
   // on the react spotify player, properly updating the songCards in the
@@ -68,13 +110,13 @@ function Player() {
       <SpotifyPlayer
         name={PLAYER_NAME}
         styles={{
-          activeColor: '#fff',
-          // bgColor: '#333',
-          color: '#333',
+          activeColor: activeColor,
+          bgColor: bgColor,
+          color: color,
           loaderColor: '#fff',
-          sliderColor: '#1cb954',
-          // trackArtistColor: '#fff',
-          // trackNameColor: '#fff',
+          sliderColor: sliderColor,
+          trackArtistColor: trackArtistColor,
+          trackNameColor: trackNameColor
         }}
         callback={setPlayerCallback}
         token={accessToken}
