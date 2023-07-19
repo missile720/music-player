@@ -239,6 +239,10 @@ function ContextProvider({ children }) {
       .catch((error) => console.error("Error:", error));
   }
 
+  function logout(){
+    setAccessToken("");
+  }
+
   useEffect(() => {
     // Check if the current URL contains the authorization code and state
     const params = new URLSearchParams(window.location.search);
@@ -313,7 +317,8 @@ function ContextProvider({ children }) {
         addPlaylistTrack,
         currentPlaylistId,
         updatePlaylistName,
-        getSongAudioAnalysis
+        getSongAudioAnalysis,
+        logout
       }}
     >
       {children}
