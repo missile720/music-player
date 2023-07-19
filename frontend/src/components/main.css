@@ -156,6 +156,10 @@
     filter: invert(96%) sepia(72%) saturate(7469%) hue-rotate(190deg) brightness(132%) contrast(96%);
 }
 
+.svg-bvt-dark {
+    filter: invert(99%) sepia(1%) saturate(584%) hue-rotate(94deg) brightness(122%) contrast(100%);
+}
+
 
 .lib-list {
     height: 70%;

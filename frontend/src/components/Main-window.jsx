@@ -70,9 +70,8 @@ function Main() {
       <div className="row h-100">
         {/* left column */}
         <div
-          className={`col-12 col-md-6 h-100 ${
-            libraryView ? "" : "d-none d-md-block"
-          }`}
+          className={`col-12 col-md-6 h-100 ${libraryView ? "" : "d-none d-md-block"
+            }`}
         >
           {/* Nav/search bar */}
           <div className="col-12 ns-bar text-center">
@@ -101,9 +100,9 @@ function Main() {
 
         {/* right column */}
         <div
-          className={`col-12 col-md-6 h-100 ${
-            !libraryView ? "" : "d-none d-md-block"
-          }`}
+          className={`col-12 col-md-6 h-100 ${!libraryView ? ""
+            : "d-none d-md-block"
+            }`}
         >
           <div className="col-12 d-flex cur-text align-items-center">
             <button
@@ -116,19 +115,9 @@ function Main() {
                 className={`svg-${theme}-${mode}`}
               ></img>
             </button>
-            <div className="col-8 col-md-10 px-2">
+            <div className="col-10 col-md-12 px-2">
               <h3 className="title">{getPlaylistName()}</h3>
             </div>
-            <button
-              className={`btn col-2 element-${theme}-${mode} rounded`}
-              onClick={() => logout()}
-            >
-              <img
-                src={logoutImg}
-                alt="Logout"
-                className={`svg-${theme}-${mode}`}
-              ></img>
-            </button>
           </div>
           {/* Current playlist */}
           <div className="col-12 cur-list">
