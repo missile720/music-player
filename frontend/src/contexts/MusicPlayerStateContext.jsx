@@ -225,7 +225,6 @@ function MusicPlayerStateContextProvider({ children }) {
         return songMetadata
     }
 
-
     return (
         <MusicPlayerStateContext.Provider
             value={{
@@ -257,7 +256,8 @@ function MusicPlayerStateContextProvider({ children }) {
                 getDuration,
                 duration,
                 convertToTimestamp,
-                getCurrentSongMetadata
+                getCurrentSongMetadata,
+                player
             }}
         >
             {children}

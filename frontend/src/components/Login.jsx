@@ -22,7 +22,7 @@ function Login() {
             flex-column align-items-center justify-content-center`}
         >
           <button
-            className={`login-button p-1 element-${theme}-${mode} rounded`}
+            className={`btn login-button p-1 element-${theme}-${mode} rounded`}
             onClick={loginSpotify}
           >
             Connect Spotify Account
