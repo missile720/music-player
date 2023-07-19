@@ -11,7 +11,11 @@
 }
 
 .login-header {
-  padding: 20px;
+  font-size: 3rem;
+}
+
+.login-subheader {
+  font-size: 1rem;
 }
 
 .login-form {

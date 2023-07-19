@@ -9,6 +9,7 @@ import { SettingsStateContext } from "../contexts/SettingsStateContext"
 const PLAYER_NAME = "Music Player"
 
 function Player() {
+  // Context Variables
   const {
     songIndex,
     setSongIndex,
@@ -18,7 +19,7 @@ function Player() {
   const { volume, VOLUME_MAX } = useContext(SettingsStateContext);
   const { theme, mode } = useContext(ThemeContext);
 
-
+  // States
   const [reactPlayerStyle, setReactPlayerStyle] = useState({
     activeColor: "",
     bgColor: "",
@@ -28,7 +29,17 @@ function Player() {
     trackArtistColor: "",
     trackNameColor: ""
   })
+  // Used to track the react spotify player's playback state
+  const [playerCallback, setPlayerCallback] = useState("");
 
+  // Constants
+  const playerVolume = volume / VOLUME_MAX;
+
+  /**
+   * Use effect to update reactPlayerStyle on theme/mode change.
+   * Done in order to address bug when changing theme and mode 
+   * when the player is paused, but to no success.
+   */
   useEffect(() => {
     if (theme === 'royal' && mode === 'light') {
       setReactPlayerStyle(prevStyle => ({
@@ -73,11 +84,6 @@ function Player() {
     }
   }, [theme, mode])
 
-
-  const playerVolume = volume / VOLUME_MAX;
-
-  // Used to track the react spotify player's playback state
-  const [playerCallback, setPlayerCallback] = useState("");
 
   // Updates the songIndex as the user uses the previous and next buttons
   // on the react spotify player, properly updating the songCards in the

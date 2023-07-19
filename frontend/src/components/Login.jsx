@@ -16,7 +16,8 @@ function Login() {
       id={`primary-${theme}-${mode}`}
     >
       <div className='login d-flex align-items-center flex-column h-100'>
-        <h1 className="login-header">Login to account:</h1>
+        <h1 className="login-header">Music Player</h1>
+        <h3 className="login-subheader">Login to account:</h3>
         <div
           className={`login-body d-flex rounded
             flex-column align-items-center justify-content-center`}
