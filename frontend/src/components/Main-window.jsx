@@ -22,10 +22,8 @@ const debug = false;
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
-  const { userPlaylistSpotify, currentPlayingSongData, logout } = useContext(Context);
-  const [localPlaylistsState, setLocalPlaylistsState] = useState(() =>
-    fetchLocalPlaylists()
-  );
+  const { userPlaylistSpotify, currentPlayingSongData, logout, userProfileSpotify } = useContext(Context);
+  const [localPlaylistsState, setLocalPlaylistsState] = useState([]);
 
   const {
     library,
@@ -55,8 +53,20 @@ function Main() {
     }
   }, [userPlaylistSpotify, localPlaylistsState]);
 
-  function fetchLocalPlaylists() {
-    return JSON.parse(localStorage.getItem("Local Music"));
+  useEffect(() => {
+    fetchLocalPlaylists();
+  }, [userProfileSpotify])
+
+  async function fetchLocalPlaylists() {
+    try {
+      const response = await fetch(`http://localhost:3000/api/playlist/getPlaylists/${userProfileSpotify.email}`);
+      const data = await response.json();
+      setLocalPlaylistsState(data)
+    } catch (error) {
+      console.log(error)
+
+      return [];
+    }
   }
 
   return (

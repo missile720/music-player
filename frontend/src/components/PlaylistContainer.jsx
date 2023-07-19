@@ -65,7 +65,6 @@ function PlaylistContainer({ playlist }) {
                     // Only process songs in the playlist if they have valid
                     // track information (i.e. are playable)
                     const validTracks = tracks.items.filter(song => song.track)
-
                     setCurrentTracklist(
                         validTracks
                             .map(song => song.track.uri)
@@ -88,7 +87,6 @@ function PlaylistContainer({ playlist }) {
         // If the spotify is from local files
         if (playlist.source === 'local') {
             setCurrentTracklist(playlist.tracks)
-
             setSongCards(playlist.tracks.map(
                 (song, index) =>
                     <SongCard
