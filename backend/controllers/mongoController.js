@@ -47,7 +47,11 @@ async function createMongoPlaylist(playlistData, tracks, trackIds) {
 }
 
 async function createMongoTrack() {
+    try {
 
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 async function deleteMongoPlaylist() {
@@ -58,10 +62,36 @@ async function deleteMongoTrack() {
 
 }
 
-async function getMongoPlaylists() {
+async function getMongoPlaylists(email) {
+    const playlists = [];
+    try {
+        const user = await User.findOne({ email: email });
+        const playlistIds = user.playlists;
 
+        for (const playlistId of playlistIds) {
+            const playlistData = []
+            const playlist = await Playlist.findOne({ id: playlistId });
+            const trackIds = playlist.tracks
+            for (const track of trackIds) {
+                const songData = await Track.findOne({ id: track });
+
+                playlistData.push({
+                    name: songData.name,
+                    artist: songData.artist,
+                    songSource: songData.songSource,
+                    songImage: songData.songImage,
+                    songSourceId: songData.songSourceId,
+                    id: songData.id
+                })
+            }
+            playlists.push(playlistData)
+        }
+        return playlists
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 
 
-export { createMongoPlaylist, createMongoTrack }
+export { createMongoPlaylist, createMongoTrack, getMongoPlaylists }

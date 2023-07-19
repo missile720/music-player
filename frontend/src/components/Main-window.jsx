@@ -23,8 +23,8 @@ const debug = false;
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
-  const { userPlaylistSpotify, currentPlayingSongData } = useContext(Context);
-  const [localPlaylistsState, setLocalPlaylistsState] = useState(() => fetchLocalPlaylists());
+  const { userPlaylistSpotify, currentPlayingSongData, userProfileSpotify } = useContext(Context);
+  const [localPlaylistsState, setLocalPlaylistsState] = useState();
 
   const { library,
     setLibrary,
@@ -38,6 +38,7 @@ function Main() {
   // Load the user's playlists from Spotify and local storage into the
   // library whenever it's updated
   useEffect(() => {
+    console.log(userPlaylistSpotify)
     if (debug) {
       setLibrary(testPlaylistsData)
     } else {
@@ -53,8 +54,15 @@ function Main() {
     }
   }, [userPlaylistSpotify, localPlaylistsState]);
 
-  function fetchLocalPlaylists() {
-    return JSON.parse(localStorage.getItem("Local Music"));
+  async function fetchLocalPlaylists() {
+    try {
+      const response = await fetch(`http://localhost:3000/api/playlist/getPlaylists/${userProfileSpotify.email}`);
+      const data = await response.json();
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+      return [];
+    }
   }
 
   return (

@@ -2,7 +2,6 @@ import { useState, useContext, useEffect } from "react";
 import { Context } from "../contexts/Context";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext";
 import { ThemeContext } from "../contexts/ThemeContext"
-import { nanoid } from "nanoid";
 
 import EditPlaylists from "./EditPlaylists";
 import CreatePlaylist from "./CreatePlaylist";

@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { nanoid } from 'nanoid'
 import { formatS3Upload } from './s3Controller.js';
-import { createMongoPlaylist, createMongoTrack } from '../controllers/mongoController.js'
+import { createMongoPlaylist, createMongoTrack, getMongoPlaylists } from '../controllers/mongoController.js'
 
 dotenv.config();
 
@@ -41,8 +41,6 @@ async function uploadNewPlaylist(req, res) {
             id: nanoid(20)
         })
     }
-    console.log(playlist)
-    console.log({ 'Tracks': tracks })
     const tracksIds = tracks.map(track => track.id)
     createMongoPlaylist(playlist, tracks, tracksIds)
 
@@ -83,10 +81,22 @@ async function deleteTrack(req, res) {
         console.log(error);
     }
 }
+async function getPlaylists(req, res) {
+    const email = req.params.email;
+    console.log({ 'Email': email })
+    try {
+        const playLists = await getMongoPlaylists(email);
+        console.log(playLists)
+        res.send(playLists)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 export {
     uploadNewPlaylist,
     deletePlaylist,
     addNewTrack,
-    deleteTrack
+    deleteTrack,
+    getPlaylists
 };

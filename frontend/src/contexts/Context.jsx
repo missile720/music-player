@@ -160,6 +160,7 @@ function ContextProvider({ children }) {
       },
     });
     const data = await response.json();
+    console.log(userProfileSpotify)
 
     return data;
   }
