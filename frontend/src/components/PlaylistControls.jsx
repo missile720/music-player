@@ -2,7 +2,6 @@ import { useState, useContext, useEffect } from "react";
 import { Context } from "../contexts/Context";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext";
 import { ThemeContext } from "../contexts/ThemeContext"
-import { nanoid } from "nanoid";
 
 import EditPlaylists from "./EditPlaylists";
 import CreatePlaylist from "./CreatePlaylist";
@@ -10,7 +9,7 @@ import CreatePlaylist from "./CreatePlaylist";
 import "./PlaylistControls.css";
 
 
-const PlaylistControls = ({ }) => {
+const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
   const [selectedPlaylistSource, setSelectedPlaylistSource] = useState("");
   const [activeTab, setActiveTab] = useState("create");
@@ -81,7 +80,7 @@ const PlaylistControls = ({ }) => {
         body: formData
       })
       const data = await response.json();
-      console.log(data)
+      setLocalPlaylistsState(await fetchLocalPlaylists());
     } catch (error) {
       console.log(error)
     }

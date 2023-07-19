@@ -41,7 +41,7 @@ function SongCard({ song, index, cardClickHandler, isEditable }) {
    * @returns {string} The url for a song's album art
    */
   function getSongArt(song) {
-    if (typeof song.songImage === "string") {
+    if (typeof song.songImage === "string" && song.songImage) {
       return song.songImage;
     }
     if (song.album && song.album.images && song.album.images.length > 0) {
