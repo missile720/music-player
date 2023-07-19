@@ -9,7 +9,7 @@ import CreatePlaylist from "./CreatePlaylist";
 import "./PlaylistControls.css";
 
 
-const PlaylistControls = ({ }) => {
+const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
   const [selectedPlaylistSource, setSelectedPlaylistSource] = useState("");
   const [activeTab, setActiveTab] = useState("create");
@@ -80,7 +80,7 @@ const PlaylistControls = ({ }) => {
         body: formData
       })
       const data = await response.json();
-      console.log(data)
+      setLocalPlaylistsState(await fetchLocalPlaylists());
     } catch (error) {
       console.log(error)
     }

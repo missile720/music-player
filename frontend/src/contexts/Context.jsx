@@ -160,7 +160,6 @@ function ContextProvider({ children }) {
       },
     });
     const data = await response.json();
-    console.log(userProfileSpotify)
 
     return data;
   }
@@ -240,7 +239,7 @@ function ContextProvider({ children }) {
       .catch((error) => console.error("Error:", error));
   }
 
-  function logout(){
+  function logout() {
     setAccessToken("");
   }
 

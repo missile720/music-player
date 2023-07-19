@@ -6,7 +6,6 @@ import Track from '../models/trackModel.js';
 
 async function createMongoPlaylist(playlistData, tracks, trackIds) {
     try {
-        console.log('Track IDs:', ...trackIds);
         for (const track of tracks) {
             await Track.create({
                 name: track.name,
@@ -26,8 +25,8 @@ async function createMongoPlaylist(playlistData, tracks, trackIds) {
             id: playlistData.id
         })
         playlist.save()
-        console.log(playlist)
         const user = await User.findOne({ email: playlistData.email });
+
         if (user) {
             user.playlists.push(playlistData.id)
             await user.save()
@@ -69,13 +68,13 @@ async function getMongoPlaylists(email) {
         const playlistIds = user.playlists;
 
         for (const playlistId of playlistIds) {
-            const playlistData = []
+            const playlistSongs = []
             const playlist = await Playlist.findOne({ id: playlistId });
             const trackIds = playlist.tracks
             for (const track of trackIds) {
                 const songData = await Track.findOne({ id: track });
 
-                playlistData.push({
+                playlistSongs.push({
                     name: songData.name,
                     artist: songData.artist,
                     songSource: songData.songSource,
@@ -84,7 +83,16 @@ async function getMongoPlaylists(email) {
                     id: songData.id
                 })
             }
-            playlists.push(playlistData)
+            playlists.push({
+                name: playlist.name,
+                images: [{
+                    url: playlist.coverImageSource,
+                    id: playlist.coverImageSourceId
+                }],
+                tracks: [...playlistSongs],
+                source: playlist.source,
+                id: playlist.id
+            })
         }
         return playlists
     } catch (error) {
