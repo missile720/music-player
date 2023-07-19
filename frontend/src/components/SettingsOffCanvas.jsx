@@ -33,7 +33,9 @@ const Settings = ({ handleClick }) => {
     }
 
     /**
-     * A modal for prompting the user to logout of the app
+     * A modal for prompting the user to logout of the app.
+     * Currently unused due to a glitch that occurs when playing
+     * a local files song that immediately closes the prompt.
      */
     const LogoutPrompt = () => {
         return (
@@ -42,7 +44,7 @@ const Settings = ({ handleClick }) => {
                 id="logoutPrompt"
                 tabIndex="-1"
                 aria-labelledby="logoutPromptLabel"
-                aria-hidden="true"
+                data-backdrop="static"
             >
                 <div className="modal-dialog">
                     <div className={`modal-content primary-${theme}-${mode}`}>
@@ -68,13 +70,11 @@ const Settings = ({ handleClick }) => {
                                 type="button"
                                 class={`btn element-${theme}-${mode}`}
                                 data-bs-dismiss="modal"
-                                data-bs-target="#logoutPrompt"
                             >Cancel</button>
                             <button
                                 type="button"
                                 class={`btn element-${theme}-${mode}`}
-                                onClick={logout}
-                                data-bs-target="#logoutPrompt"
+                                onClick={() => logout()}
                                 data-bs-dismiss="modal"
                             >Logout</button>
                         </div>
@@ -114,7 +114,7 @@ const Settings = ({ handleClick }) => {
                     ></button>
                 </div>
                 <div className={`offcanvas-body secondary-offcanvas-${theme}-${mode}`}>
-                    <div>
+                    <form>
                         <label
                             htmlFor='themeSelection'
                             className='mb-1'
@@ -128,27 +128,25 @@ const Settings = ({ handleClick }) => {
                             <option value="royal">Royal</option>
                             <option value="bvt">BVT!!!</option>
                         </select>
-                        <label
-                            htmlFor="logout"
-                            className='mb-1'
-                        >Logout</label>
-                        <button
-                            className={`btn element-${theme}-${mode} rounded w-100`}
-                            type="button"
-                            id={`primary-${theme}-${mode}`}
-                            data-bs-toggle="modal"
-                            data-bs-target="#logoutPrompt"
-                        >
-                            <img
-                                src={logoutImg}
-                                alt="Logout"
-                                className={`svg-${theme}-${mode}`}
-                            ></img>
-                        </button>
-                    </div>
+                    </form>
+                    <span
+                        className='mb-1'
+                    >Logout</span>
+                    <button
+                        className={`btn element-${theme}-${mode} rounded w-100`}
+                        type="button"
+                        id={`primary-${theme}-${mode}`}
+                        onClick={logout}
+                    >
+                        <img
+                            src={logoutImg}
+                            alt="Logout"
+                            className={`svg-${theme}-${mode}`}
+                        ></img>
+                    </button>
                 </div>
             </div>
-            <LogoutPrompt />
+            {/* <LogoutPrompt /> */}
         </div>
     )
 }

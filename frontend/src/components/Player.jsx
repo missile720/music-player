@@ -128,19 +128,24 @@ function Player() {
 
   return (
     <div className="d-flex justify-content-center flex-column align-items-center h-100">
-      <SpotifyPlayer
-        name={PLAYER_NAME}
-        styles={reactPlayerStyle}
-        callback={setPlayerCallback}
-        token={accessToken}
-        layout='responsive'
-        initialVolume={playerVolume}
-        inlineVolume={true}
-        offset={songIndex}
-        play={true}
-        persistDeviceSelection={false}
-        uris={currentTracklist}
-      />
+      {
+        currentTracklist &&
+        currentTracklist.length > 0 &&
+        typeof currentTracklist[0] === "string" &&
+        <SpotifyPlayer
+          name={PLAYER_NAME}
+          styles={reactPlayerStyle}
+          callback={setPlayerCallback}
+          token={accessToken}
+          layout='responsive'
+          initialVolume={playerVolume}
+          inlineVolume={true}
+          offset={songIndex}
+          play={true}
+          persistDeviceSelection={false}
+          uris={currentTracklist}
+        />
+      }
     </div>
   )
 }
