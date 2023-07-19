@@ -14,6 +14,7 @@ import PlaylistControls from "./PlaylistControls.jsx";
 import WaveformVisualizer from "./WaveformVisualizer.jsx";
 
 import returnImg from "../assets/return.svg";
+import logoutImg from "../assets/arrow-right-from-bracket-solid.svg";
 import "./main.css";
 import LocalMusicPlayer from "./LocalMusicPlayer.jsx";
 
@@ -23,23 +24,26 @@ const debug = false;
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
-  const { userPlaylistSpotify, currentPlayingSongData } = useContext(Context);
-  const [localPlaylistsState, setLocalPlaylistsState] = useState(() => fetchLocalPlaylists());
+  const { userPlaylistSpotify, currentPlayingSongData, logout } = useContext(Context);
+  const [localPlaylistsState, setLocalPlaylistsState] = useState(() =>
+    fetchLocalPlaylists()
+  );
 
-  const { library,
+  const {
+    library,
     setLibrary,
     playlistIndex,
     libraryView,
     setLibraryView,
     currentSongSource,
-    getPlaylistName
+    getPlaylistName,
   } = useContext(MusicPlayerStateContext);
 
   // Load the user's playlists from Spotify and local storage into the
   // library whenever it's updated
   useEffect(() => {
     if (debug) {
-      setLibrary(testPlaylistsData)
+      setLibrary(testPlaylistsData);
     } else {
       if (localPlaylistsState && userPlaylistSpotify.items) {
         const joinedPlaylists = [
@@ -66,8 +70,9 @@ function Main() {
       <div className="row h-100">
         {/* left column */}
         <div
-          className={`col-12 col-md-6 h-100 ${libraryView ? "" : "d-none d-md-block"
-            }`}
+          className={`col-12 col-md-6 h-100 ${
+            libraryView ? "" : "d-none d-md-block"
+          }`}
         >
           {/* Nav/search bar */}
           <div className="col-12 ns-bar text-center">
@@ -96,24 +101,34 @@ function Main() {
 
         {/* right column */}
         <div
-          className={`col-12 col-md-6 h-100 ${!libraryView ? "" : "d-none d-md-block"
-            }`}
+          className={`col-12 col-md-6 h-100 ${
+            !libraryView ? "" : "d-none d-md-block"
+          }`}
         >
           <div className="col-12 d-flex cur-text align-items-center">
             <button
               className={`btn col-2 d-md-none element-${theme}-${mode} rounded`}
-              onClick={() => setLibraryView(true)}>
+              onClick={() => setLibraryView(true)}
+            >
               <img
                 src={returnImg}
                 alt="Return arrow"
                 className={`svg-${theme}-${mode}`}
               ></img>
             </button>
-            <div className="col-10 col-md-12 px-2">
-              <h3 className="title">
-                {getPlaylistName()}
-              </h3>
+            <div className="col-8 col-md-10 px-2">
+              <h3 className="title">{getPlaylistName()}</h3>
             </div>
+            <button
+              className={`btn col-2 element-${theme}-${mode} rounded`}
+              onClick={() => logout()}
+            >
+              <img
+                src={logoutImg}
+                alt="Logout"
+                className={`svg-${theme}-${mode}`}
+              ></img>
+            </button>
           </div>
           {/* Current playlist */}
           <div className="col-12 cur-list">
@@ -128,12 +143,11 @@ function Main() {
           {/* Current song bar */}
           <div className="col-12 cur-song-bar ">
             {/* < CurrentSong /> */}
-            {currentSongSource === 'spotify' ?
+            {currentSongSource === "spotify" ? (
               <Player />
-              :
+            ) : (
               <LocalMusicPlayer />
-            }
-
+            )}
           </div>
         </div>
       </div>
