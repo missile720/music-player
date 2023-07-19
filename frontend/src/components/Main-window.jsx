@@ -8,13 +8,11 @@ import Nav from "./Navbar";
 import LibraryContainer from "./LibraryContainer";
 import PlaylistContainer from "./PlaylistContainer";
 import SettingsBar from "./SettingsBar";
-// import CurrentSong from "./CurrentSong";
 import Player from "./Player.jsx";
 import PlaylistControls from "./PlaylistControls.jsx";
 import WaveformVisualizer from "./WaveformVisualizer.jsx";
 
 import returnImg from "../assets/return.svg";
-import logoutImg from "../assets/arrow-right-from-bracket-solid.svg";
 import "./main.css";
 import LocalMusicPlayer from "./LocalMusicPlayer.jsx";
 

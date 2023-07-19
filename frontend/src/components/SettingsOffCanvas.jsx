@@ -17,6 +17,10 @@ const Settings = ({ handleClick }) => {
         themeSelection: theme,
     })
 
+    /**
+     * Updates theme and form selection theme accordingly
+     * @param {Event} event Dropdown selection event
+     */
     const handleThemeSelection = (event) => {
         const { name, value } = event.target
         toggleTheme(value)
@@ -28,8 +32,61 @@ const Settings = ({ handleClick }) => {
         })
     }
 
+    /**
+     * A modal for prompting the user to logout of the app
+     */
+    const LogoutPrompt = () => {
+        return (
+            <div
+                className="modal fade"
+                id="logoutPrompt"
+                tabIndex="-1"
+                aria-labelledby="logoutPromptLabel"
+                aria-hidden="true"
+            >
+                <div className="modal-dialog">
+                    <div className={`modal-content primary-${theme}-${mode}`}>
+                        <div className="modal-header">
+                            <div
+                                className="modal-title fs-5"
+                                id="logoutPromptLabel"
+                            >
+                                Logout
+                            </div>
+                            <button
+                                className="btn-close"
+                                type="button"
+                                data-bs-dismiss="modal"
+                                aria-label="Close"
+                            ></button>
+                        </div>
+                        <div className="modal-body">
+                            Are you sure you want to logout?
+                        </div>
+                        <div className="modal-footer">
+                            <button
+                                type="button"
+                                class={`btn element-${theme}-${mode}`}
+                                data-bs-dismiss="modal"
+                                data-bs-target="#logoutPrompt"
+                            >Cancel</button>
+                            <button
+                                type="button"
+                                class={`btn element-${theme}-${mode}`}
+                                onClick={logout}
+                                data-bs-target="#logoutPrompt"
+                                data-bs-dismiss="modal"
+                            >Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
     return (
         <div>
+            {/* Settings Offcanvas Body */}
             <a
                 data-bs-toggle="offcanvas"
                 data-bs-target="#staticBackdrop"
@@ -77,8 +134,10 @@ const Settings = ({ handleClick }) => {
                         >Logout</label>
                         <button
                             className={`btn element-${theme}-${mode} rounded w-100`}
+                            type="button"
                             id={`primary-${theme}-${mode}`}
-                            onClick={() => logout()}
+                            data-bs-toggle="modal"
+                            data-bs-target="#logoutPrompt"
                         >
                             <img
                                 src={logoutImg}
@@ -89,6 +148,7 @@ const Settings = ({ handleClick }) => {
                     </div>
                 </div>
             </div>
+            <LogoutPrompt />
         </div>
     )
 }
