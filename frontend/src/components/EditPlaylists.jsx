@@ -2,7 +2,7 @@ const EditPlaylists = ({
   playlistData,
   handlePlaylistChangeName,
   handlePlaylistCoverChange,
-  handleFileUpload,
+  handleSongMetaData,
   handleSelectionChange,
   selectedPlaylistSource,
   library,
@@ -61,7 +61,7 @@ const EditPlaylists = ({
               id="formFileMultiple"
               accept="audio/*"
               multiple
-              onChange={handleFileUpload}
+              onChange={handleSongMetaData}
             />
           </div>
           <button

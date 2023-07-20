@@ -88,7 +88,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     const formData = new FormData();
 
     formData.append('playlistName', playlistData.name);
-    formData.append('playlistImage', playlistData.image);
+    formData.append('playlistImage', playlistData.image ? playlistData.image : '');
     formData.append('playlistId', selectedPlaylistId);
     filesToUpload.forEach((file) => {
       formData.append('songNames', file.name);
@@ -99,12 +99,36 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
 
     try {
       const response = await fetch(`http://localhost:3000/api/playlist/editPlaylist`, {
-        method: "POST",
+        method: "PUT",
         body: formData
       })
       const data = await response.json();
     } catch (error) {
-      console.log(error)
+      console.log({ "Error editing playlist": error })
+    }
+  }
+
+  async function handleDeleteTrack() {
+    try {
+      const response = await fetch(`http://localhost:3000/api/playlist/editPlaylist`, {
+        method: "DELETE",
+        body: {
+          playlistId: selectedPlaylistId,
+          trackId: selectedPlaylistId
+        }
+      })
+      const data = await response.json();
+    } catch (error) {
+      console.log({ "Error editing playlist": error })
+    }
+  }
+
+  async function handleDeletePlaylist() {
+    if (library[playlistIndex].id === selectedPlaylistId) {
+      choosePlaylist(playlistIndex - 1);
+    }
+    if (selectedPlaylistSource === 'local') {
+      await handleDeletePlaylist();
     }
   }
 
@@ -163,21 +187,6 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
       ...playlistData,
       tracks: songFiles,
     });
-  }
-
-  function handleDeletePlaylist() {
-    // if (library[playlistIndex].id === selectedPlaylistId) {
-    //   choosePlaylist(playlistIndex - 1);
-    // }
-    // if (selectedPlaylistSource === 'local') {
-    //   const localStorage = fetchLocalPlaylists();
-    //   const updatedLocalStorage = localStorage.filter(playlist => playlist.id !== selectedPlaylistId);
-    //   // This updates the local storage
-
-    //   // This updates the state of what the local storage is so that the useEffect in the parent component
-    //   // can re-render the library with the changes
-    //   setLocalPlaylistsState(fetchLocalPlaylists())
-    // }
   }
 
   function handleSubmit(event) {

@@ -45,20 +45,65 @@ async function createMongoPlaylist(playlistData, tracks, trackIds) {
 
 }
 
-async function createMongoTrack() {
-    try {
+async function deleteMongoPlaylist() {
 
+}
+
+async function deleteMongoTrack(playlsitId, trackId) {
+
+}
+
+async function editMongoPlaylist(playlistData, tracks, trackIds) {
+    const playlistToEdit = await Playlist.findOne({ id: playlistData.id });
+    try {
+        if (playlistData.name) {
+            playlistToEdit.name = playlistData.name;
+            await playlistToEdit.save();
+        }
+        if (playlistData.playlistImage) {
+            playlistToEdit.coverImageSource = playlistData.playlistImage;
+            playlistToEdit.coverImageSourceId = playlistData.playlistImageSourceId;
+            await playlistToEdit.save();
+        }
+        if (tracks) {
+            for (const track of tracks) {
+                await Track.create({
+                    name: track.name,
+                    artist: track.artist,
+                    songSource: track.songSource,
+                    songImage: track.songImage,
+                    songSourceId: track.songSourceId,
+                    songImageId: track.songImageId,
+                    id: track.id
+                });
+            }
+            await playlistToEdit.tracks.push(...trackIds)
+            await playlistToEdit.save();
+        }
+        console.log('Playlist updated successfully.');
     } catch (error) {
         console.log(error)
     }
 }
 
-async function deleteMongoPlaylist() {
+/**
+ * Helper function to get the source id of an audio or image source.
+ * @param {String} documentType The document type to search for: playlist or track
+ * @param {String} field The field id we want to get i.e. songSourceId, coverImageId, songImageId
+ * @param {String} id The id document we want to search for
+ * @returns {String} The source id of the field we want to search for to remove in Amazon S3
+ */
+async function getFieldId(documentType, field, id) {
+    try {
+        const documentToSearch = documentType === 'playlist' ? Playlist : Track;
+        const fieldSetToRemove = await documentToSearch.findOne({ id: id });
+        const fieldSourceId = fieldSetToRemove[field];
 
-}
-
-async function deleteMongoTrack() {
-
+        return fieldSourceId
+    }
+    catch (error) {
+        console.log(error)
+    }
 }
 
 async function getMongoPlaylists(email) {
@@ -100,15 +145,9 @@ async function getMongoPlaylists(email) {
     }
 }
 
-async function editMongoPlaylist(playlistId) {
-
-    try {
-        console.log(playlistId)
-
-    } catch (error) {
-        console.log(error)
-    }
+export {
+    createMongoPlaylist,
+    getMongoPlaylists,
+    editMongoPlaylist,
+    getFieldId
 }
-
-
-export { createMongoPlaylist, createMongoTrack, getMongoPlaylists, editMongoPlaylist }

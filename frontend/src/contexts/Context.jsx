@@ -154,6 +154,7 @@ function ContextProvider({ children }) {
    * @returns {Object} A Spotify Playlist Tracks Response Object
    */
   async function getSpotifyPlaylistTracks(tracksUrl) {
+    console.log(tracksUrl)
     const response = await fetch(tracksUrl, {
       headers: {
         Authorization: "Bearer " + accessToken,

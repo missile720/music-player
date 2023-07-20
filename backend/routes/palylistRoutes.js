@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer'
-import { uploadNewPlaylist, getPlaylists, editPlaylist } from '../controllers/playlistController.js';
+import { uploadNewPlaylist, getPlaylists, editPlaylist, deleteTrack } from '../controllers/playlistController.js';
 
 const upload = multer({ storage: multer.memoryStorage() });
 const multerUpload = upload.fields([
@@ -10,13 +10,15 @@ const multerUpload = upload.fields([
     { name: 'songNames' },
     { name: 'songArtists' },
     { name: 'songImages' },
-    { name: 'songSources' }
+    { name: 'songSources' },
+    { name: 'trackId' }
 ]);
 
 const router = express.Router();
 
 router.post("/uploadNewPlaylist", multerUpload, uploadNewPlaylist);
 router.get("/getPlaylists/:email", getPlaylists);
-router.get("/getPlaylists/:email", multerUpload, editPlaylist);
+router.put("/editPlaylist", multerUpload, editPlaylist);
+router.delete("/deleteTrack", deleteTrack);
 
 export default router;
