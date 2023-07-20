@@ -109,7 +109,7 @@ function Nav() {
                         value={search}
                     />
                     <button
-                        className={`btn element-${theme}-${mode}`}
+                        className={`btn element-${theme}-${mode} search-btn`}
                         type="button"
                         id="button-addon2"
                         data-bs-toggle="offcanvas"

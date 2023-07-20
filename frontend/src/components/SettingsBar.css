@@ -18,6 +18,10 @@
   height: 30px;
 }
 
+.form-check-input {
+  cursor: pointer;
+}
+
 .dark-mode-switch {
   font-size: 1.5rem;
 }

@@ -6,7 +6,7 @@ import { MusicPlayerStateContext } from "./MusicPlayerStateContext"
 const SettingsStateContext = createContext()
 
 // Constants
-const AUDIO_SOURCE_UPDATE_DELAY = 500 // in ms
+const AUDIO_SOURCE_UPDATE_DELAY = 1000 // in ms
 const VOLUME_MIN = 0
 const VOLUME_MAX = 100
 const GAIN_MAX = 40
@@ -50,12 +50,21 @@ const SettingsStateContextProvider = ({ children }) => {
                 const audio = player.getInternalPlayer()
 
                 if (audio && audio !== audioSource) {
+                    // Stores and resets the original src attribute of the
+                    // audio in order to have the crossorigin anonymous
+                    // attribute set when creating the element stream
+                    const originalSrc = audio.getAttribute("src")
+
+                    audio.setAttribute("src", "")
                     audio.setAttribute("crossorigin", "anonymous")
+                    audio.setAttribute("src", originalSrc)
+
                     setAudioSource(audio)
                 }
+
+                return () => clearTimeout(audioUpdateTimeout)
             }, AUDIO_SOURCE_UPDATE_DELAY)
 
-            return () => clearTimeout(audioUpdateTimeout)
         }
     }, [currentSongSource, player])
 

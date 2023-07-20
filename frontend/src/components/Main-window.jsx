@@ -8,13 +8,11 @@ import Nav from "./Navbar";
 import LibraryContainer from "./LibraryContainer";
 import PlaylistContainer from "./PlaylistContainer";
 import SettingsBar from "./SettingsBar";
-// import CurrentSong from "./CurrentSong";
 import Player from "./Player.jsx";
 import PlaylistControls from "./PlaylistControls.jsx";
 import WaveformVisualizer from "./WaveformVisualizer.jsx";
 
 import returnImg from "../assets/return.svg";
-import logoutImg from "../assets/arrow-right-from-bracket-solid.svg";
 import "./main.css";
 import LocalMusicPlayer from "./LocalMusicPlayer.jsx";
 
@@ -110,7 +108,8 @@ function Main() {
 
         {/* right column */}
         <div
-          className={`col-12 col-md-6 h-100 ${!libraryView ? "" : "d-none d-md-block"
+          className={`col-12 col-md-6 h-100 ${!libraryView ? ""
+            : "d-none d-md-block"
             }`}
         >
           <div className="col-12 d-flex cur-text align-items-center">
@@ -124,19 +123,9 @@ function Main() {
                 className={`svg-${theme}-${mode}`}
               ></img>
             </button>
-            <div className="col-8 col-md-10 px-2">
+            <div className="col-10 col-md-12 px-2">
               <h3 className="title">{getPlaylistName()}</h3>
             </div>
-            <button
-              className={`btn col-2 element-${theme}-${mode} rounded`}
-              onClick={() => logout()}
-            >
-              <img
-                src={logoutImg}
-                alt="Logout"
-                className={`svg-${theme}-${mode}`}
-              ></img>
-            </button>
           </div>
           {/* Current playlist */}
           <div className="col-12 cur-list">
