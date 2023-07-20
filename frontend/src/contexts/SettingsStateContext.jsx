@@ -46,16 +46,16 @@ const SettingsStateContextProvider = ({ children }) => {
      */
     useEffect(() => {
         if (currentSongSource === "local" && player) {
-            const audioUpdateTimeout = setTimeout(() => {
-                const audio = player.getInternalPlayer()
-
-                if (audio && audio !== audioSource) {
+            const audio = player.getInternalPlayer()
+            if (audio && audio !== audioSource) {
+                const audioUpdateTimeout = setTimeout(() => {
                     audio.setAttribute("crossorigin", "anonymous")
                     setAudioSource(audio)
-                }
-            }, AUDIO_SOURCE_UPDATE_DELAY)
+                }, AUDIO_SOURCE_UPDATE_DELAY)
 
-            return () => clearTimeout(audioUpdateTimeout)
+                return () => clearTimeout(audioUpdateTimeout)
+            }
+
         }
     }, [currentSongSource, player])
 

@@ -39,10 +39,6 @@ function MusicPlayerStateContextProvider({ children }) {
         return () => window.removeEventListener("resize", setAsLibraryView)
     }, [])
 
-    useEffect(() => {
-        console.log(currentTracklist)
-    }, [currentTracklist])
-
     /**
      * Side effect for updating state variables on the change of songIndex,
      * playlistIndex, or library
