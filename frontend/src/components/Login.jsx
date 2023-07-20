@@ -2,6 +2,8 @@ import { useContext } from "react";
 import { Context } from "../contexts/Context"
 import { ThemeContext } from "../contexts/ThemeContext"
 
+import musicPlayerLogoImg from "../assets/music player logo.png"
+
 import "./Login.css"
 
 function Login() {
@@ -16,7 +18,14 @@ function Login() {
       id={`primary-${theme}-${mode}`}
     >
       <div className='login d-flex align-items-center flex-column h-100'>
-        <h1 className="login-header">Music Player</h1>
+        <div className="logo">
+          <img
+            className="logo-img"
+            src={musicPlayerLogoImg}
+            alt="Music Player Logo"
+          />
+          <h1 className="login-header">Music Player</h1>
+        </div>
         <h3 className="login-subheader">Login to account:</h3>
         <div
           className={`login-body d-flex rounded

@@ -6,7 +6,7 @@ import { MusicPlayerStateContext } from "./MusicPlayerStateContext"
 const SettingsStateContext = createContext()
 
 // Constants
-const AUDIO_SOURCE_UPDATE_DELAY = 500 // in ms
+const AUDIO_SOURCE_UPDATE_DELAY = 1000 // in ms
 const VOLUME_MIN = 0
 const VOLUME_MAX = 100
 const GAIN_MAX = 40
@@ -46,15 +46,16 @@ const SettingsStateContextProvider = ({ children }) => {
      */
     useEffect(() => {
         if (currentSongSource === "local" && player) {
-            const audio = player.getInternalPlayer()
-            if (audio && audio !== audioSource) {
-                const audioUpdateTimeout = setTimeout(() => {
+            const audioUpdateTimeout = setTimeout(() => {
+                const audio = player.getInternalPlayer()
+
+                if (audio && audio !== audioSource) {
                     audio.setAttribute("crossorigin", "anonymous")
                     setAudioSource(audio)
-                }, AUDIO_SOURCE_UPDATE_DELAY)
 
-                return () => clearTimeout(audioUpdateTimeout)
-            }
+                    return () => clearTimeout(audioUpdateTimeout)
+                }
+            }, AUDIO_SOURCE_UPDATE_DELAY)
 
         }
     }, [currentSongSource, player])
