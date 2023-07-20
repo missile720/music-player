@@ -5,11 +5,10 @@ import { ThemeContext } from '../contexts/ThemeContext'
 import { Context } from '../contexts/Context'
 
 import { SettingsIcon } from './icons'
-import logoutImg from "../assets/arrow-right-from-bracket-solid.svg";
+import logoutImg from "../assets/arrow-right-from-bracket-solid.svg"
 
 const Settings = ({ handleClick }) => {
     // Context Variables
-    const { logout } = useContext(Context)
     const { theme, mode, toggleTheme } = useContext(ThemeContext)
 
     // States
@@ -33,55 +32,13 @@ const Settings = ({ handleClick }) => {
     }
 
     /**
-     * A modal for prompting the user to logout of the app.
-     * Currently unused due to a glitch that occurs when playing
-     * a local files song that immediately closes the prompt.
+     * Shows a logout prompt modal to the user
      */
-    const LogoutPrompt = () => {
-        return (
-            <div
-                className="modal fade"
-                id="logoutPrompt"
-                tabIndex="-1"
-                aria-labelledby="logoutPromptLabel"
-                data-backdrop="static"
-            >
-                <div className="modal-dialog">
-                    <div className={`modal-content primary-${theme}-${mode}`}>
-                        <div className="modal-header">
-                            <div
-                                className="modal-title fs-5"
-                                id="logoutPromptLabel"
-                            >
-                                Logout
-                            </div>
-                            <button
-                                className="btn-close"
-                                type="button"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                            ></button>
-                        </div>
-                        <div className="modal-body">
-                            Are you sure you want to logout?
-                        </div>
-                        <div className="modal-footer">
-                            <button
-                                type="button"
-                                class={`btn element-${theme}-${mode}`}
-                                data-bs-dismiss="modal"
-                            >Cancel</button>
-                            <button
-                                type="button"
-                                class={`btn element-${theme}-${mode}`}
-                                onClick={() => logout()}
-                                data-bs-dismiss="modal"
-                            >Logout</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        )
+    const promptLogout = () => {
+        const logoutPrompt = new bootstrap.Modal(
+            document.getElementById("logoutPrompt"))
+
+        logoutPrompt.show()
     }
 
     return (
@@ -136,7 +93,7 @@ const Settings = ({ handleClick }) => {
                         className={`btn element-${theme}-${mode} rounded w-100`}
                         type="button"
                         id={`primary-${theme}-${mode}`}
-                        onClick={logout}
+                        onClick={promptLogout}
                     >
                         <img
                             src={logoutImg}
@@ -146,7 +103,6 @@ const Settings = ({ handleClick }) => {
                     </button>
                 </div>
             </div>
-            {/* <LogoutPrompt /> */}
         </div>
     )
 }
