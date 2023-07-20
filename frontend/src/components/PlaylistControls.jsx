@@ -254,7 +254,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
                   aria-orientation="vertical"
                 >
                   <button
-                    className="nav-link active"
+                    className={`nav-link active nav-link-${theme}-${mode}`}
                     id="v-pills-create-tab"
                     onClick={() => handleChangeActiveTab("create")}
                     data-bs-toggle="pill"
@@ -267,7 +267,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
                     Create Local Playlist
                   </button>
                   <button
-                    className="nav-link"
+                    className={`nav-link nav-link-${theme}-${mode}`}
                     id="v-pills-edit-tab"
                     onClick={() => handleChangeActiveTab("edit")}
                     data-bs-toggle="pill"
