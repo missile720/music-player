@@ -34,12 +34,14 @@ function CurrentSong() {
             className={`current-song-container 
                 ${theme}-${mode}-current-song-container 
                 px-1 pe-2 rounded`}
-            data-bs-toggle="offcanvas"
-            data-bs-target="#currentSongOffCanvas"
-            aria-controls="currentSongOffCanvas"
             disabled={libraryView}
         >
-            <div className="current-song-left-side col-8 col-md-6">
+            <div
+                className={`current-song-left-side col-8 col-md-6`}
+                data-bs-toggle="offcanvas"
+                data-bs-target="#currentSongOffCanvas"
+                aria-controls="currentSongOffCanvas"
+            >
                 <div className="image-container col-4 d-flex justify-content-center">
                     {/* Current Song picture */}
                     <img

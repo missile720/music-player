@@ -22,7 +22,7 @@ const debug = false;
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
-  const { userPlaylistSpotify, currentPlayingSongData, logout, userProfileSpotify } = useContext(Context);
+  const { userPlaylistSpotify, currentPlayingSongData, userProfileSpotify } = useContext(Context);
   const [localPlaylistsState, setLocalPlaylistsState] = useState([]);
 
   const {
