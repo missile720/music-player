@@ -50,11 +50,19 @@ const SettingsStateContextProvider = ({ children }) => {
                 const audio = player.getInternalPlayer()
 
                 if (audio && audio !== audioSource) {
-                    audio.setAttribute("crossorigin", "anonymous")
-                    setAudioSource(audio)
+                    // Stores and resets the original src attribute of the
+                    // audio in order to have the crossorigin anonymous
+                    // attribute set when creating the element stream
+                    const originalSrc = audio.getAttribute("src")
 
-                    return () => clearTimeout(audioUpdateTimeout)
+                    audio.setAttribute("src", "")
+                    audio.setAttribute("crossorigin", "anonymous")
+                    audio.setAttribute("src", originalSrc)
+
+                    setAudioSource(audio)
                 }
+
+                return () => clearTimeout(audioUpdateTimeout)
             }, AUDIO_SOURCE_UPDATE_DELAY)
 
         }
