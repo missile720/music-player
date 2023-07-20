@@ -38,8 +38,6 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   }, [selectedPlaylistId]);
 
 
-  // ========================================================================================================================
-  // Helper Functions
   function handleChangeActiveTab(tabName) {
     setActiveTab(tabName);
   }
@@ -86,7 +84,30 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     }
   }
 
-  // ========================================================================================================================
+  async function handlePlaylistEdit(filesToUpload) {
+    const formData = new FormData();
+
+    formData.append('playlistName', playlistData.name);
+    formData.append('playlistImage', playlistData.image);
+    formData.append('playlistId', selectedPlaylistId);
+    filesToUpload.forEach((file) => {
+      formData.append('songNames', file.name);
+      formData.append('songArtists', file.artist);
+      formData.append('songImages', file.songImage);
+      formData.append('songSources', file.audioSource);
+    });
+
+    try {
+      const response = await fetch(`http://localhost:3000/api/playlist/editPlaylist`, {
+        method: "POST",
+        body: formData
+      })
+      const data = await response.json();
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   function handlePlaylistCoverChange(event) {
     const file = event.target.files[0];
     setPlaylistData({
@@ -173,7 +194,8 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
       event.target.reset();
     } else if (activeTab === "edit") {
       if (selectedPlaylistSource === "local") {
-        handleUpload();
+        const files = handleFormattingFilesForUpload();
+        handlePlaylistEdit(files);
       } else if (selectedPlaylistSource === "spotify") {
         updatePlaylistName(selectedPlaylistId, playlistData.name);
       }

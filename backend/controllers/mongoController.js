@@ -100,6 +100,15 @@ async function getMongoPlaylists(email) {
     }
 }
 
+async function editMongoPlaylist(playlistId) {
+
+    try {
+        console.log(playlistId)
+
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 
-export { createMongoPlaylist, createMongoTrack, getMongoPlaylists }
+export { createMongoPlaylist, createMongoTrack, getMongoPlaylists, editMongoPlaylist }

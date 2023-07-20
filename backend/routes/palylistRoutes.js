@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer'
-import { uploadNewPlaylist, getPlaylists } from '../controllers/playlistController.js';
+import { uploadNewPlaylist, getPlaylists, editPlaylist } from '../controllers/playlistController.js';
 
 const upload = multer({ storage: multer.memoryStorage() });
 const multerUpload = upload.fields([
@@ -17,5 +17,6 @@ const router = express.Router();
 
 router.post("/uploadNewPlaylist", multerUpload, uploadNewPlaylist);
 router.get("/getPlaylists/:email", getPlaylists);
+router.get("/getPlaylists/:email", multerUpload, editPlaylist);
 
 export default router;
