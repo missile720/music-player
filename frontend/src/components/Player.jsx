@@ -13,7 +13,9 @@ function Player() {
   const {
     songIndex,
     setSongIndex,
-    currentTracklist
+    currentTracklist,
+    hasNonEmptyTracklist,
+    hasValidSongIndex
   } = useContext(MusicPlayerStateContext);
   const { accessToken, getSongAudioAnalysis } = useContext(Context);
   const { volume, VOLUME_MAX } = useContext(SettingsStateContext);
@@ -84,7 +86,6 @@ function Player() {
     }
   }, [theme, mode])
 
-
   // Updates the songIndex as the user uses the previous and next buttons
   // on the react spotify player, properly updating the songCards in the
   // playlistContainer. Also grabs audio analaysis from the playback
@@ -129,8 +130,8 @@ function Player() {
   return (
     <div className="d-flex justify-content-center flex-column align-items-center h-100">
       {
-        currentTracklist &&
-        currentTracklist.length > 0 &&
+        hasNonEmptyTracklist() &&
+        hasValidSongIndex() &&
         typeof currentTracklist[0] === "string" &&
         <SpotifyPlayer
           name={PLAYER_NAME}

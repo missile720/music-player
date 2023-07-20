@@ -4,6 +4,7 @@
   height: 100%;
   width: 100%;
   justify-content: space-evenly;
+  pointer-events: none;
 }
 
 .current-song-container:focus-within {
@@ -32,6 +33,7 @@ li {
 .music-play-buttons {
   display: flex;
   justify-content: space-between;
+  pointer-events: all;
 }
 
 .music-button {
@@ -86,6 +88,18 @@ li {
 
   .song-title {
     font-size: 1rem;
+  }
+
+  /**
+   * Added styling to only active modal when selecting
+   * non-play buttons
+   */
+  .current-song-container > .current-song-left-side {
+    pointer-events: auto;
+  }
+
+  .current-song-container > .music-play-buttons {
+    pointer-events: none;
   }
 
   .royal-light-current-song-container:active
