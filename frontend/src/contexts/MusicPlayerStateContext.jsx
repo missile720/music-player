@@ -57,11 +57,18 @@ function MusicPlayerStateContextProvider({ children }) {
      * @param {Number} index The index of a playlist in the library
      */
     function choosePlaylist(index) {
+        // Delay when the song index is updated such that the
+        // SpotifyPlayer start playback immediately upon 
+        // songIndex change
+        const SONG_INDEX_UPDATE_DELAY = 250
+
         // Only change playlist index and reset song index when given
         // a new songIndex
+        setPlaylistIndex(index)
         if (index !== playlistIndex) {
-            setSongIndex(0)
-            setPlaylistIndex(index)
+            setTimeout(() => {
+                setSongIndex(0)
+            }, SONG_INDEX_UPDATE_DELAY)
         }
 
         // Only allow user to go to playlist view on mobile
@@ -79,7 +86,6 @@ function MusicPlayerStateContextProvider({ children }) {
         setSongIndex(index)
     }
 
-
     /**
      * Sets the library view as true. Meant to be used as event listener
      * for window size, such that if a user resizes their window to be
@@ -90,6 +96,18 @@ function MusicPlayerStateContextProvider({ children }) {
             window.innerWidth >= MEDIUM_SCREEN_BREAKPOINT) {
             setLibraryView(true)
         }
+    }
+
+    /**
+     * For use of the Player variables to check whether or not
+     * to load based on if the songIndex is in a valid index
+     * for the currentTracklist
+     * @returns {bool} Whether or not the songIndex state is
+     * in the valid range of the currentTracklist
+     */
+    function hasValidSongIndex() {
+        return songIndex >= 0 &&
+            songIndex < currentTracklist.length
     }
 
     // PLAYER CONTROL FUNCTIONS
@@ -214,7 +232,7 @@ function MusicPlayerStateContextProvider({ children }) {
             songImage: ""
         }
 
-        if (hasNonEmptyTracklist()) {
+        if (hasNonEmptyTracklist() && hasValidSongIndex()) {
             const currentSong = currentTracklist[songIndex]
 
             songMetadata.artist = currentSong.artist
@@ -257,7 +275,8 @@ function MusicPlayerStateContextProvider({ children }) {
                 duration,
                 convertToTimestamp,
                 getCurrentSongMetadata,
-                player
+                player,
+                hasValidSongIndex
             }}
         >
             {children}

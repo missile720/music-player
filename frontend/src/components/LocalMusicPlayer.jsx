@@ -16,25 +16,29 @@ const LocalMusicPlayer = () => {
         songIndex,
         hasNonEmptyTracklist,
         nextTrack,
-        getDuration
+        getDuration,
+        hasValidSongIndex
     } = useContext(MusicPlayerStateContext)
     const { volume, VOLUME_MAX } = useContext(SettingsStateContext)
 
     return (
         <>
             <CurrentSong />
-            <ReactPlayer
-                height="0"
-                ref={getPlayer}
-                url={hasNonEmptyTracklist() &&
-                    currentTracklist[songIndex].songSource}
-                playing={playing}
-                played={localPlayback.played}
-                volume={volume / VOLUME_MAX}
-                onProgress={updateProgress}
-                onEnded={nextTrack}
-                onDuration={getDuration}
-            />
+            {
+                hasNonEmptyTracklist() &&
+                hasValidSongIndex() &&
+                <ReactPlayer
+                    height="0"
+                    ref={getPlayer}
+                    url={currentTracklist[songIndex].songSource}
+                    playing={playing}
+                    played={localPlayback.played}
+                    volume={volume / VOLUME_MAX}
+                    onProgress={updateProgress}
+                    onEnded={nextTrack}
+                    onDuration={getDuration}
+                />
+            }
         </>
     )
 }
