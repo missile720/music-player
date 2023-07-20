@@ -11,3 +11,7 @@
 .search-dark {
     filter: invert(93%) sepia(4%) saturate(22%) hue-rotate(79deg) brightness(112%) contrast(96%);
 }
+
+.search-btn {
+    border-radius: 0 0.375rem 0.375rem 0 !important;
+}

@@ -6,63 +6,84 @@ import { ThemeContext } from "../contexts/ThemeContext.jsx";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
 import { SettingsStateContext } from "../contexts/SettingsStateContext"
 
-const PLAYER_NAME = "Syntax Samurai Player"
-const VOLUME_MAX = 100
+const PLAYER_NAME = "Music Player"
 
 function Player() {
+  // Context Variables
   const {
     songIndex,
     setSongIndex,
     currentTracklist
   } = useContext(MusicPlayerStateContext);
   const { accessToken, getSongAudioAnalysis } = useContext(Context);
-  const { volume } = useContext(SettingsStateContext);
+  const { volume, VOLUME_MAX } = useContext(SettingsStateContext);
   const { theme, mode } = useContext(ThemeContext);
 
-  let bgColor = "";
-  let activeColor = "";
-  let color = "";
-  let trackArtistColor = "";
-  let trackNameColor = "";
-  let sliderColor = "";
-
-    if(theme === 'royal' && mode === 'light'){
-      bgColor = '#5CADF8';
-      activeColor = "#000";
-      color = "#000";
-      trackArtistColor = "#000";
-      trackNameColor = "#000";
-      sliderColor = '#fafafa';
-    }
-    else if(theme === 'royal' && mode === 'dark'){
-      bgColor = '#181964';
-      activeColor = "#fff";
-      color = "#fff";
-      trackArtistColor = "#fff";
-      trackNameColor = "#fff";
-      sliderColor = '#0E0F3B';
-    }
-    else if(theme === 'bvt' && mode === 'light'){
-      bgColor = '#FF5531';
-      activeColor = "#fff";
-      color = "#fff";
-      trackArtistColor = "#fff";
-      trackNameColor = "#fff";
-      sliderColor = '#FD2C00';
-    }
-    else{
-      bgColor = '#8D918D';
-      activeColor = "#fff";
-      color = "#fff";
-      trackArtistColor = "#fff";
-      trackNameColor = "#fff";
-      sliderColor = '#737873';
-    }
-
-  const playerVolume = volume / VOLUME_MAX;
-
+  // States
+  const [reactPlayerStyle, setReactPlayerStyle] = useState({
+    activeColor: "",
+    bgColor: "",
+    color: "",
+    loaderColor: '#fff',
+    sliderColor: "",
+    trackArtistColor: "",
+    trackNameColor: ""
+  })
   // Used to track the react spotify player's playback state
   const [playerCallback, setPlayerCallback] = useState("");
+
+  // Constants
+  const playerVolume = volume / VOLUME_MAX;
+
+  /**
+   * Use effect to update reactPlayerStyle on theme/mode change.
+   * Done in order to address bug when changing theme and mode 
+   * when the player is paused, but to no success.
+   */
+  useEffect(() => {
+    if (theme === 'royal' && mode === 'light') {
+      setReactPlayerStyle(prevStyle => ({
+        ...prevStyle,
+        bgColor: '#5CADF8',
+        activeColor: "#000",
+        color: "#000",
+        trackArtistColor: "#000",
+        trackNameColor: "#000",
+        sliderColor: '#fafafa',
+      }))
+    } else if (theme === 'royal' && mode === 'dark') {
+      setReactPlayerStyle(prevStyle => ({
+        ...prevStyle,
+        bgColor: '#181964',
+        activeColor: "#fff",
+        color: "#fff",
+        trackArtistColor: "#fff",
+        trackNameColor: "#fff",
+        sliderColor: '#0E0F3B',
+      }))
+    } else if (theme === 'bvt' && mode === 'light') {
+      setReactPlayerStyle(prevStyle => ({
+        ...prevStyle,
+        bgColor: '#FF5531',
+        activeColor: "#fff",
+        color: "#fff",
+        trackArtistColor: "#fff",
+        trackNameColor: "#fff",
+        sliderColor: '#FD2C00',
+      }))
+    } else {
+      setReactPlayerStyle(prevStyle => ({
+        ...prevStyle,
+        bgColor: '#8D918D',
+        activeColor: "#fff",
+        color: "#fff",
+        trackArtistColor: "#fff",
+        trackNameColor: "#fff",
+        sliderColor: '#737873',
+      }))
+    }
+  }, [theme, mode])
+
 
   // Updates the songIndex as the user uses the previous and next buttons
   // on the react spotify player, properly updating the songCards in the
@@ -107,27 +128,24 @@ function Player() {
 
   return (
     <div className="d-flex justify-content-center flex-column align-items-center h-100">
-      <SpotifyPlayer
-        name={PLAYER_NAME}
-        styles={{
-          activeColor: activeColor,
-          bgColor: bgColor,
-          color: color,
-          loaderColor: '#fff',
-          sliderColor: sliderColor,
-          trackArtistColor: trackArtistColor,
-          trackNameColor: trackNameColor
-        }}
-        callback={setPlayerCallback}
-        token={accessToken}
-        layout='responsive'
-        initialVolume={playerVolume}
-        inlineVolume={true}
-        offset={songIndex}
-        play={true}
-        persistDeviceSelection={false}
-        uris={currentTracklist}
-      />
+      {
+        currentTracklist &&
+        currentTracklist.length > 0 &&
+        typeof currentTracklist[0] === "string" &&
+        <SpotifyPlayer
+          name={PLAYER_NAME}
+          styles={reactPlayerStyle}
+          callback={setPlayerCallback}
+          token={accessToken}
+          layout='responsive'
+          initialVolume={playerVolume}
+          inlineVolume={true}
+          offset={songIndex}
+          play={true}
+          persistDeviceSelection={false}
+          uris={currentTracklist}
+        />
+      }
     </div>
   )
 }

@@ -1,14 +1,25 @@
 /* eslint react/prop-types: 0 */
-import { SettingsIcon } from './icons'
 import { useContext, useState } from 'react'
+
 import { ThemeContext } from '../contexts/ThemeContext'
+import { Context } from '../contexts/Context'
+
+import { SettingsIcon } from './icons'
+import logoutImg from "../assets/arrow-right-from-bracket-solid.svg"
 
 const Settings = ({ handleClick }) => {
+    // Context Variables
     const { theme, mode, toggleTheme } = useContext(ThemeContext)
+
+    // States
     const [formData, setFormData] = useState({
-        themeSelection: theme, 
+        themeSelection: theme,
     })
 
+    /**
+     * Updates theme and form selection theme accordingly
+     * @param {Event} event Dropdown selection event
+     */
     const handleThemeSelection = (event) => {
         const { name, value } = event.target
         toggleTheme(value)
@@ -16,12 +27,23 @@ const Settings = ({ handleClick }) => {
             return {
                 ...prevFormData,
                 [name]: value
-            } 
+            }
         })
+    }
+
+    /**
+     * Shows a logout prompt modal to the user
+     */
+    const promptLogout = () => {
+        const logoutPrompt = new bootstrap.Modal(
+            document.getElementById("logoutPrompt"))
+
+        logoutPrompt.show()
     }
 
     return (
         <div>
+            {/* Settings Offcanvas Body */}
             <a
                 data-bs-toggle="offcanvas"
                 data-bs-target="#staticBackdrop"
@@ -49,18 +71,36 @@ const Settings = ({ handleClick }) => {
                     ></button>
                 </div>
                 <div className={`offcanvas-body secondary-offcanvas-${theme}-${mode}`}>
-                    <div>
-                        <label htmlFor='themeSelection'>Choose Theme</label>
-                        <select 
-                            name='themeSelection' 
-                            className="form-select form-select-lg mb-3" 
+                    <form>
+                        <label
+                            htmlFor='themeSelection'
+                            className='mb-1'
+                        >Choose Theme</label>
+                        <select
+                            name='themeSelection'
+                            className="form-select form-select-lg mb-3"
                             aria-label=".form-select-lg example"
                             value={formData.themeSelection}
                             onChange={handleThemeSelection}>
-                                <option value="royal">Royal</option>                                    
-                                <option value="bvt">BVT!!!</option>
-                        </select> 
-                    </div>
+                            <option value="royal">Royal</option>
+                            <option value="bvt">BVT!!!</option>
+                        </select>
+                    </form>
+                    <span
+                        className='mb-1'
+                    >Logout</span>
+                    <button
+                        className={`btn element-${theme}-${mode} rounded w-100`}
+                        type="button"
+                        id={`primary-${theme}-${mode}`}
+                        onClick={promptLogout}
+                    >
+                        <img
+                            src={logoutImg}
+                            alt="Logout"
+                            className={`svg-${theme}-${mode}`}
+                        ></img>
+                    </button>
                 </div>
             </div>
         </div>
