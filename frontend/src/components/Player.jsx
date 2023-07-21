@@ -18,6 +18,7 @@ function Player() {
   const { accessToken, getSongAudioAnalysis } = useContext(Context);
   const { volume, VOLUME_MAX } = useContext(SettingsStateContext);
   const { theme, mode } = useContext(ThemeContext);
+  const playerKey = `${theme}-${mode}`;
 
   // States
   const [reactPlayerStyle, setReactPlayerStyle] = useState({
@@ -133,6 +134,7 @@ function Player() {
         currentTracklist.length > 0 &&
         typeof currentTracklist[0] === "string" &&
         <SpotifyPlayer
+          key={playerKey}
           name={PLAYER_NAME}
           styles={reactPlayerStyle}
           callback={setPlayerCallback}
