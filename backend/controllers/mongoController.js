@@ -1,99 +1,113 @@
-import dotenv from 'dotenv';
-import mongoose from 'mongoose'
-import User from '../models/userModel.js'
-import Playlist from '../models/playlistModel.js';
-import Track from '../models/trackModel.js';
+import dotenv from "dotenv";
+import mongoose from "mongoose";
+import User from "../models/userModel.js";
+import Playlist from "../models/playlistModel.js";
+import Track from "../models/trackModel.js";
 
 async function createMongoPlaylist(playlistData, tracks, trackIds) {
-    try {
-        for (const track of tracks) {
-            await Track.create({
-                name: track.name,
-                artist: track.artist,
-                songSource: track.songSource,
-                songImage: track.songImage,
-                songSourceId: track.songSourceId,
-                songImageId: track.songImageId,
-                id: track.id
-            });
-        }
-        const playlist = await Playlist.create({
-            name: playlistData.name,
-            coverImageSource: playlistData.coverImageSource,
-            coverImageSourceId: playlistData.coverImageSourceId,
-            tracks: [...trackIds],
-            id: playlistData.id
-        })
-        playlist.save()
-        const user = await User.findOne({ email: playlistData.email });
-
-        if (user) {
-            user.playlists.push(playlistData.id)
-            await user.save()
-
-        } else {
-            await User.create({
-                email: playlistData.email,
-                playlists: [playlistData.id],
-                id: playlistData.userId
-            });
-        }
-        console.log('Playlist and tracks inserted successfully.');
-    } catch (error) {
-        console.log('Error creating playlist:', error)
+  try {
+    for (const track of tracks) {
+      await Track.create({
+        name: track.name,
+        artist: track.artist,
+        songSource: track.songSource,
+        songImage: track.songImage,
+        songSourceId: track.songSourceId,
+        songImageId: track.songImageId,
+        id: track.id,
+      });
     }
+    const playlist = await Playlist.create({
+      name: playlistData.name,
+      coverImageSource: playlistData.coverImageSource,
+      coverImageSourceId: playlistData.coverImageSourceId,
+      tracks: [...trackIds],
+      id: playlistData.id,
+    });
+    playlist.save();
+    const user = await User.findOne({ email: playlistData.email });
 
+    if (user) {
+      user.playlists.push(playlistData.id);
+      await user.save();
+    } else {
+      await User.create({
+        email: playlistData.email,
+        playlists: [playlistData.id],
+        id: playlistData.userId,
+      });
+    }
+    console.log("Playlist and tracks inserted successfully.");
+  } catch (error) {
+    console.log("Error creating playlist:", error);
+  }
 }
 
-async function deleteMongoPlaylist() {
+async function deleteMongoPlaylist(playlistId, trackIds, email) {
+  try {
+    const user = User.findOne({ email: email });
+    await user.playlists.pull(`${playlistId}`);
+    await user.save();
 
+    const playlistToDelete = Playlist.findOne({ id: playlistId });
+    await playlistToDelete.deleteOne();
+    await playlistToDelete.save();
+
+    trackIds.forEach(async (trackId) => {
+      const track = await Track.findOne({ id: trackId });
+      await track.deleteOne();
+      await track.save();
+    });
+  } catch (error) {
+    console.log({ "Error deleting playlist in MongoDB": Error });
+  }
 }
 
 async function deleteMongoTrack(playlistId, trackId) {
-    try {
-        const playlist = await Playlist.findOne({ id: playlistId });
-        const track = await Track.findOne({ id: trackId });
+  try {
+    const playlist = await Playlist.findOne({ id: playlistId });
+    const track = await Track.findOne({ id: trackId });
 
-        await playlist.tracks.pull(`${trackId}`)
-        await track.deleteOne();
-        playlist.save()
+    await playlist.tracks.pull(`${trackId}`);
+    await track.deleteOne();
+    playlist.save();
 
-        console.log('Track deleted successfully.');
-    } catch (error) {
-        console.log(error)
-    }
+    console.log("Track deleted successfully.");
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function editMongoPlaylist(playlistData, tracks, trackIds) {
-    try {
-        const playlistToEdit = await Playlist.findOne({ id: playlistData.id });
+  try {
+    const playlistToEdit = await Playlist.findOne({ id: playlistData.id });
 
-        if (playlistData.name) {
-            playlistToEdit.name = playlistData.name;
-        }
-        if (playlistData.playlistImage) {
-            playlistToEdit.coverImageSource = playlistData.playlistImage;
-            playlistToEdit.coverImageSourceId = playlistData.playlistImageSourceId;
-        }
-        if (tracks) {
-            for (const track of tracks) {
-                await Track.create({
-                    name: track.name,
-                    artist: track.artist,
-                    songSource: track.songSource,
-                    songImage: track.songImage,
-                    songSourceId: track.songSourceId,
-                    songImageId: track.songImageId,
-                    id: track.id
-                });
-            }
-            await playlistToEdit.tracks.push(...trackIds)
-        }
-        await playlistToEdit.save();
-        console.log('Playlist updated successfully.');
-    } catch (error) {
-        console.log(error)
+    if (playlistData.name) {
+      playlistToEdit.name = playlistData.name;
     }
+    if (playlistData.playlistImage) {
+      playlistToEdit.coverImageSource = playlistData.playlistImage;
+      playlistToEdit.coverImageSourceId = playlistData.playlistImageSourceId;
+    }
+    if (tracks) {
+      for (const track of tracks) {
+        await Track.create({
+          name: track.name,
+          artist: track.artist,
+          songSource: track.songSource,
+          songImage: track.songImage,
+          songSourceId: track.songSourceId,
+          songImageId: track.songImageId,
+          id: track.id,
+        });
+      }
+      await playlistToEdit.tracks.push(...trackIds);
+    }
+    await playlistToEdit.save();
+    console.log("Playlist updated successfully.");
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 /**
@@ -104,62 +118,64 @@ async function editMongoPlaylist(playlistData, tracks, trackIds) {
  * @returns {String} The source id of the field we want to search for to remove in Amazon S3
  */
 async function getFieldId(documentType, field, id) {
-    try {
-        const documentToSearch = documentType === 'playlist' ? Playlist : Track;
-        const fieldSetToRemove = await documentToSearch.findOne({ id: id });
-        const fieldSourceId = fieldSetToRemove[field];
+  console.log(documentType, field, id);
+  try {
+    const documentToSearch = documentType === "playlist" ? Playlist : Track;
+    const fieldSetToRemove = await documentToSearch.findOne({ id: id });
+    const fieldSourceId = fieldSetToRemove[field];
 
-        return fieldSourceId
-    }
-    catch (error) {
-        console.log(error)
-    }
+    return fieldSourceId;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 async function getMongoPlaylists(email) {
-    const playlists = [];
-    try {
-        const user = await User.findOne({ email: email });
-        const playlistIds = user.playlists;
+  const playlists = [];
+  try {
+    const user = await User.findOne({ email: email });
+    const playlistIds = user.playlists;
 
-        for (const playlistId of playlistIds) {
-            const playlistSongs = []
-            const playlist = await Playlist.findOne({ id: playlistId });
-            const trackIds = playlist.tracks
-            for (const track of trackIds) {
-                const songData = await Track.findOne({ id: track });
+    for (const playlistId of playlistIds) {
+      const playlistSongs = [];
+      const playlist = await Playlist.findOne({ id: playlistId });
+      const trackIds = playlist.tracks;
+      for (const track of trackIds) {
+        const songData = await Track.findOne({ id: track });
 
-                playlistSongs.push({
-                    name: songData.name,
-                    artist: songData.artist,
-                    songSource: songData.songSource,
-                    songImage: songData.songImage,
-                    songSourceId: songData.songSourceId,
-                    id: songData.id
-                })
-            }
-            playlists.push({
-                name: playlist.name,
-                images: [{
-                    url: playlist.coverImageSource,
-                    id: playlist.coverImageSourceId
-                }],
-                tracks: [...playlistSongs],
-                source: playlist.source,
-                id: playlist.id
-            })
-        }
-        return playlists
-    } catch (error) {
-        console.log(error)
+        playlistSongs.push({
+          name: songData.name,
+          artist: songData.artist,
+          songSource: songData.songSource,
+          songImage: songData.songImage,
+          songSourceId: songData.songSourceId,
+          id: songData.id,
+        });
+      }
+      playlists.push({
+        name: playlist.name,
+        images: [
+          {
+            url: playlist.coverImageSource,
+            id: playlist.coverImageSourceId,
+          },
+        ],
+        tracks: [...playlistSongs],
+        source: playlist.source,
+        id: playlist.id,
+      });
     }
+    return playlists;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export {
-    createMongoPlaylist,
-    getMongoPlaylists,
-    editMongoPlaylist,
-    getFieldId,
-    deleteMongoPlaylist,
-    deleteMongoTrack
-}
+  createMongoPlaylist,
+  getMongoPlaylists,
+  editMongoPlaylist,
+  getFieldId,
+  deleteMongoPlaylist,
+  deleteMongoTrack,
+};
