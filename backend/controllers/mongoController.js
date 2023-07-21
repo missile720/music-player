@@ -49,21 +49,31 @@ async function deleteMongoPlaylist() {
 
 }
 
-async function deleteMongoTrack(playlsitId, trackId) {
+async function deleteMongoTrack(playlistId, trackId) {
+    try {
+        const playlist = await Playlist.findOne({ id: playlistId });
+        const track = await Track.findOne({ id: trackId });
 
+        await playlist.tracks.pull(`${trackId}`)
+        await track.deleteOne();
+        playlist.save()
+
+        console.log('Track deleted successfully.');
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 async function editMongoPlaylist(playlistData, tracks, trackIds) {
-    const playlistToEdit = await Playlist.findOne({ id: playlistData.id });
     try {
+        const playlistToEdit = await Playlist.findOne({ id: playlistData.id });
+
         if (playlistData.name) {
             playlistToEdit.name = playlistData.name;
-            await playlistToEdit.save();
         }
         if (playlistData.playlistImage) {
             playlistToEdit.coverImageSource = playlistData.playlistImage;
             playlistToEdit.coverImageSourceId = playlistData.playlistImageSourceId;
-            await playlistToEdit.save();
         }
         if (tracks) {
             for (const track of tracks) {
@@ -78,8 +88,8 @@ async function editMongoPlaylist(playlistData, tracks, trackIds) {
                 });
             }
             await playlistToEdit.tracks.push(...trackIds)
-            await playlistToEdit.save();
         }
+        await playlistToEdit.save();
         console.log('Playlist updated successfully.');
     } catch (error) {
         console.log(error)
@@ -149,5 +159,7 @@ export {
     createMongoPlaylist,
     getMongoPlaylists,
     editMongoPlaylist,
-    getFieldId
+    getFieldId,
+    deleteMongoPlaylist,
+    deleteMongoTrack
 }

@@ -35,11 +35,13 @@ async function uploadFileToS3(fileId, file, mimetype) {
 
 async function deleteFileFromS3(fileId) {
     try {
-        const params = {
-            Bucket: bucket,
-            Key: fileId
-        };
-        await s3.send(new DeleteObjectCommand(params));
+        if (fileId === true) {
+            const params = {
+                Bucket: bucket,
+                Key: fileId
+            };
+            await s3.send(new DeleteObjectCommand(params));
+        }
     } catch (error) {
         console.log(error)
     }

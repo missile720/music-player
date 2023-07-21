@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 import { nanoid } from 'nanoid'
 import { formatS3Upload } from './s3Controller.js';
-import { createMongoPlaylist, getMongoPlaylists, editMongoPlaylist, getFieldId } from '../controllers/mongoController.js'
+import { createMongoPlaylist, getMongoPlaylists, editMongoPlaylist, getFieldId, deleteMongoTrack } from '../controllers/mongoController.js'
 import { deleteFileFromS3 } from '../libs/client.js';
 
 dotenv.config();
@@ -58,19 +58,9 @@ async function uploadNewPlaylist(req, res) {
 }
 
 async function deletePlaylist(req, res) {
-
-
+    const playlistId = req.body.playlistId;
     try {
-        console.log(req)
-    } catch (error) {
-        console.log(error);
-    }
-}
 
-async function addNewTrack(req, res) {
-
-
-    try {
         console.log(req)
     } catch (error) {
         console.log(error);
@@ -80,9 +70,15 @@ async function addNewTrack(req, res) {
 async function deleteTrack(req, res) {
     const playlistId = req.body.playlistId;
     const trackId = req.body.trackId;
-    console.log(playlistId, trackId)
     try {
-        console.log(req)
+        const songSourceId = await getFieldId(TRACK, SONG_SOURCE_ID, trackId);
+        const songImageId = await getFieldId(TRACK, SONG_IMAGE_ID, trackId);
+
+        await deleteFileFromS3(songSourceId);
+        await deleteFileFromS3(songImageId);
+        await deleteMongoTrack(playlistId, trackId);
+
+        res.send('Track deleted successfully.')
     } catch (error) {
         console.log(error);
     }
@@ -154,7 +150,6 @@ async function editPlaylist(req, res) {
 export {
     uploadNewPlaylist,
     deletePlaylist,
-    addNewTrack,
     deleteTrack,
     getPlaylists,
     editPlaylist

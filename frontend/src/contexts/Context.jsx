@@ -154,7 +154,6 @@ function ContextProvider({ children }) {
    * @returns {Object} A Spotify Playlist Tracks Response Object
    */
   async function getSpotifyPlaylistTracks(tracksUrl) {
-    console.log(tracksUrl)
     const response = await fetch(tracksUrl, {
       headers: {
         Authorization: "Bearer " + accessToken,
@@ -165,8 +164,8 @@ function ContextProvider({ children }) {
     return data;
   }
 
-  function deletePlaylistTrack(playlistId, trackUri) {
-    if (trackUri) {
+  async function deletePlaylistTrack(playlistId, trackUri) {
+    if (trackUri.spotifyTrackUri) {
       fetch(`https://api.spotify.com/v1/playlists/${playlistId}/tracks`, {
         method: "DELETE",
         headers: {
@@ -174,7 +173,7 @@ function ContextProvider({ children }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          tracks: [{ uri: trackUri }],
+          tracks: [{ uri: trackUri.spotifyTrackUri }],
         }),
       })
         .then((response) => {
@@ -188,8 +187,26 @@ function ContextProvider({ children }) {
           }
         })
         .catch((error) => console.error("Error:", error));
+    } else {
+      console.log('Local delete')
+      try {
+        const response = await fetch(`http://localhost:3000/api/playlist/deleteTrack`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            playlistId: playlistId,
+            trackId: trackUri.localTrackId
+          })
+        })
+        const data = await response.json();
+      } catch (error) {
+        console.log({ "Error editing playlist": error })
+      }
     }
   }
+
 
   async function updatePlaylistName(playlistId, newName) {
     try {

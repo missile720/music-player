@@ -108,27 +108,25 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     }
   }
 
-  async function handleDeleteTrack() {
-    try {
-      const response = await fetch(`http://localhost:3000/api/playlist/editPlaylist`, {
-        method: "DELETE",
-        body: {
-          playlistId: selectedPlaylistId,
-          trackId: selectedPlaylistId
-        }
-      })
-      const data = await response.json();
-    } catch (error) {
-      console.log({ "Error editing playlist": error })
-    }
-  }
-
   async function handleDeletePlaylist() {
     if (library[playlistIndex].id === selectedPlaylistId) {
       choosePlaylist(playlistIndex - 1);
     }
     if (selectedPlaylistSource === 'local') {
-      await handleDeletePlaylist();
+      try {
+        const response = await fetch(`http://localhost:3000/api/playlist/deletePlaylist`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            playlistId: selectedPlaylistId,
+          })
+        })
+        const data = await response.json();
+      } catch (error) {
+        console.log({ "Error editing playlist": error })
+      }
     }
   }
 

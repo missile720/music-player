@@ -108,7 +108,7 @@ function SongCard({ song, index, cardClickHandler, isEditable }) {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={() =>
-          deletePlaylistTrack(currentPlaylist, song.uri ? song.uri : song.id)
+          deletePlaylistTrack(currentPlaylist, song.uri ? { spotifyTrackUri: song.uri } : { localTrackId: song.id })
         }
         alt="trash icon"
         className="trashIcon"
