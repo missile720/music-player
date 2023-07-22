@@ -24,7 +24,7 @@ function Main() {
   const { theme, mode } = useContext(ThemeContext);
   const { userPlaylistSpotify, currentPlayingSongData, userProfileSpotify } = useContext(Context);
   const [localPlaylistsState, setLocalPlaylistsState] = useState([]);
-
+  console.log(currentPlayingSongData);
   const {
     library,
     setLibrary,
@@ -135,7 +135,7 @@ function Main() {
           </div>
           {/* Music Visualizer */}
           <div className="col-12 cur-vis">
-            {currentPlayingSongData && <WaveformVisualizer />}
+            {currentPlayingSongData && !Object.hasOwnProperty.call(currentPlayingSongData, 'error') && <WaveformVisualizer />}
           </div>
           {/* Current song bar */}
           <div className="col-12 cur-song-bar ">
