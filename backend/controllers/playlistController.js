@@ -82,22 +82,24 @@ async function deletePlaylist(req, res) {
   const playlistId = req.body.playlistId;
   const email = req.body.email;
   try {
-    const trackIds = await getFieldId(PLAYLIST, TRACK_IDS, playlistId);
-    trackIds.forEach(async (trackId) => {
-      const songSourceId = getFieldId(TRACK, SONG_SOURCE_ID, trackId);
-      const songImageId = getFieldId(TRACK, SONG_IMAGE_ID, trackId);
-      await deleteFileFromS3(songSourceId);
-      await deleteFileFromS3(songImageId);
-    });
+    const trackIds = getFieldId(PLAYLIST, TRACK_IDS, playlistId);
+
+    if (trackIds[0] !== undefined) {
+      trackIds.forEach(async (trackId) => {
+        const songSourceId = getFieldId(TRACK, SONG_SOURCE_ID, trackId);
+        const songImageId = getFieldId(TRACK, SONG_IMAGE_ID, trackId);
+        await deleteFileFromS3(songSourceId);
+        await deleteFileFromS3(songImageId);
+      });
+    }
     const coverImageSourceId = await getFieldId(
-      Playlist,
+      PLAYLIST,
       COVER_IMAGE_ID,
       playlistId
     );
-    console.log(coverImageSourceId);
     await deleteFileFromS3(coverImageSourceId);
     await deleteMongoPlaylist(playlistId, trackIds, email);
-    res.send("Playlist was deleted successfully.");
+    res.send("Playlist was deleted successfully.")
   } catch (error) {
     console.log(error);
   }
@@ -110,8 +112,10 @@ async function deleteTrack(req, res) {
     const songSourceId = await getFieldId(TRACK, SONG_SOURCE_ID, trackId);
     const songImageId = await getFieldId(TRACK, SONG_IMAGE_ID, trackId);
 
+    if (songImageId !== 0) {
+      await deleteFileFromS3(songImageId);
+    }
     await deleteFileFromS3(songSourceId);
-    await deleteFileFromS3(songImageId);
     await deleteMongoTrack(playlistId, trackId);
 
     res.send("Track deleted successfully.");
@@ -135,18 +139,10 @@ async function editPlaylist(req, res) {
   const playlistImage = req.files.playlistImage;
   const playlistId = req.body.playlistId;
 
-  const songSources = Array.isArray(req.files.songSources)
-    ? req.files.songSources
-    : [req.files.songSources];
-  const songNames = Array.isArray(req.body.songNames)
-    ? req.body.songNames
-    : [req.body.songNames];
-  const songImages = Array.isArray(req.files.songImages)
-    ? req.files.songImages
-    : [req.files.songImages];
-  const songArtists = Array.isArray(req.body.songArtists)
-    ? req.body.songArtists
-    : [req.body.songArtists];
+  const songSources = Array.isArray(req.files.songSources) ? req.files.songSources : [req.files.songSources];
+  const songNames = Array.isArray(req.body.songNames) ? req.body.songNames : [req.body.songNames];
+  const songImages = Array.isArray(req.files.songImages) ? req.files.songImages : [req.files.songImages];
+  const songArtists = Array.isArray(req.body.songArtists) ? req.body.songArtists : [req.body.songArtists];
 
   const tracks = [];
   const newPlaylistData = {
@@ -158,28 +154,18 @@ async function editPlaylist(req, res) {
     newPlaylistData.name = playlistName;
   }
 
-  if (playlistImage && playlistImage.length) {
-    const imageSourceId = await getFieldId(
-      PLAYLIST,
-      COVER_IMAGE_ID,
-      playlistId
-    );
+  if (playlistImage && playlistImage.length > 0) {
+    const imageSourceId = await getFieldId(PLAYLIST, COVER_IMAGE_ID, playlistId);
     await deleteFileFromS3(imageSourceId);
-    const { fileSource: playlistImageSource, fileId: playlistImageSourceId } =
-      await formatS3Upload(playlistImage[0]);
+    const { fileSource: playlistImageSource, fileId: playlistImageSourceId } = await formatS3Upload(playlistImage[0]);
     newPlaylistData.playlistImage = playlistImageSource;
     newPlaylistData.playlistImageSourceId = playlistImageSourceId;
   }
 
-  if (songSources.length) {
+  if (songSources.length > 0 && songSources[0] !== undefined) {
     for (let i = 0; i < songSources.length; i++) {
-      const { fileSource: songSource, fileId: songSourceId } =
-        await formatS3Upload(songSources[i]);
-      const { fileSource: songImageSource, fileId: songImageId } = !songImages[
-        i
-      ]
-        ? { fileSource: "", fileId: 0 }
-        : await formatS3Upload(songImages[i]);
+      const { fileSource: songSource, fileId: songSourceId } = await formatS3Upload(songSources[i]);
+      const { fileSource: songImageSource, fileId: songImageId } = !songImages[i] ? { fileSource: "", fileId: 0 } : await formatS3Upload(songImages[i]);
 
       tracks.push({
         name: songNames[i],

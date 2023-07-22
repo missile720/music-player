@@ -137,6 +137,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
           }
         );
         const data = await response.json();
+
       } catch (error) {
         console.log({ "Error editing playlist": error });
       }
@@ -190,7 +191,6 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
           console.log(error);
         },
       });
-      console.log(songData);
       return songData;
     });
     setPlaylistData({

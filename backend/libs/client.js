@@ -35,7 +35,7 @@ async function uploadFileToS3(fileId, file, mimetype) {
 
 async function deleteFileFromS3(fileId) {
     try {
-        if (fileId === true) {
+        if (fileId !== undefined) {
             const params = {
                 Bucket: bucket,
                 Key: fileId

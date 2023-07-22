@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import Playlist from "../models/playlistModel.js";
 import Track from "../models/trackModel.js";
@@ -45,21 +43,24 @@ async function createMongoPlaylist(playlistData, tracks, trackIds) {
 
 async function deleteMongoPlaylist(playlistId, trackIds, email) {
   try {
-    const user = User.findOne({ email: email });
-    await user.playlists.pull(`${playlistId}`);
-    await user.save();
+    if (trackIds[0] !== undefined) {
+      trackIds.forEach(async (trackId) => {
+        const track = await Track.findOne({ id: trackId });
+        await track.deleteOne();
+        await track.save();
+      });
+    }
 
     const playlistToDelete = Playlist.findOne({ id: playlistId });
     await playlistToDelete.deleteOne();
-    await playlistToDelete.save();
 
-    trackIds.forEach(async (trackId) => {
-      const track = await Track.findOne({ id: trackId });
-      await track.deleteOne();
-      await track.save();
-    });
+    const user = await User.findOne({ email: email });
+    await user.playlists.pull(playlistId);
+    await user.save();
+
+    console.log("Playlist deleted successfully.");
   } catch (error) {
-    console.log({ "Error deleting playlist in MongoDB": Error });
+    console.log({ "Error deleting playlist in MongoDB": error });
   }
 }
 
@@ -74,7 +75,7 @@ async function deleteMongoTrack(playlistId, trackId) {
 
     console.log("Track deleted successfully.");
   } catch (error) {
-    console.log(error);
+    console.log({ 'Error deleting track': error });
   }
 }
 
@@ -89,7 +90,7 @@ async function editMongoPlaylist(playlistData, tracks, trackIds) {
       playlistToEdit.coverImageSource = playlistData.playlistImage;
       playlistToEdit.coverImageSourceId = playlistData.playlistImageSourceId;
     }
-    if (tracks) {
+    if (tracks.length > 0) {
       for (const track of tracks) {
         await Track.create({
           name: track.name,
@@ -111,18 +112,17 @@ async function editMongoPlaylist(playlistData, tracks, trackIds) {
 }
 
 /**
- * Helper function to get the source id of an audio or image source.
+ * Helper function to get the id of a specified document and field type.
  * @param {String} documentType The document type to search for: playlist or track
  * @param {String} field The field id we want to get i.e. songSourceId, coverImageId, songImageId
- * @param {String} id The id document we want to search for
+ * @param {String} id The id of the document we want to search for
  * @returns {String} The source id of the field we want to search for to remove in Amazon S3
  */
 async function getFieldId(documentType, field, id) {
-  console.log(documentType, field, id);
   try {
     const documentToSearch = documentType === "playlist" ? Playlist : Track;
-    const fieldSetToRemove = await documentToSearch.findOne({ id: id });
-    const fieldSourceId = fieldSetToRemove[field];
+    const targetDocument = await documentToSearch.findOne({ id: id });
+    const fieldSourceId = targetDocument[field];
 
     return fieldSourceId;
   } catch (error) {
@@ -139,6 +139,7 @@ async function getMongoPlaylists(email) {
     for (const playlistId of playlistIds) {
       const playlistSongs = [];
       const playlist = await Playlist.findOne({ id: playlistId });
+
       const trackIds = playlist.tracks;
       for (const track of trackIds) {
         const songData = await Track.findOne({ id: track });
