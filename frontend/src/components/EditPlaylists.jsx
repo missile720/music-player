@@ -2,7 +2,7 @@ const EditPlaylists = ({
   playlistData,
   handlePlaylistChangeName,
   handlePlaylistCoverChange,
-  handleFileUpload,
+  handleSongMetaData,
   handleSelectionChange,
   selectedPlaylistSource,
   library,
@@ -22,7 +22,9 @@ const EditPlaylists = ({
           data-live-search="true"
           onChange={handleSelectionChange}
         >
-          <option value="none" selected disabled hidden>Select an Option</option>
+          <option value="none" selected disabled hidden>
+            Select an Option
+          </option>
           {playlistsToEditOptions}
         </select>
       </div>
@@ -61,10 +63,11 @@ const EditPlaylists = ({
               id="formFileMultiple"
               accept="audio/*"
               multiple
-              onChange={handleFileUpload}
+              onChange={handleSongMetaData}
             />
           </div>
           <button
+            type="button"
             className="btn btn-sm btn-danger"
             data-bs-toggle="modal"
             data-bs-target="#delete-playlist-modal"

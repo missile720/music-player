@@ -1,20 +1,21 @@
 import { useState, useContext, useEffect } from "react";
 import { Context } from "../contexts/Context";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext";
-import { ThemeContext } from "../contexts/ThemeContext"
+import { ThemeContext } from "../contexts/ThemeContext";
 
 import EditPlaylists from "./EditPlaylists";
 import CreatePlaylist from "./CreatePlaylist";
 
 import "./PlaylistControls.css";
 
-
 const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
   const [selectedPlaylistSource, setSelectedPlaylistSource] = useState("");
   const [activeTab, setActiveTab] = useState("create");
 
-  const { library, playlistIndex, choosePlaylist } = useContext(MusicPlayerStateContext);
+  const { library, playlistIndex, choosePlaylist } = useContext(
+    MusicPlayerStateContext
+  );
   const { theme, mode } = useContext(ThemeContext);
   const { updatePlaylistName, userProfileSpotify } = useContext(Context);
 
@@ -37,9 +38,6 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     }
   }, [selectedPlaylistId]);
 
-
-  // ========================================================================================================================
-  // Helper Functions
   function handleChangeActiveTab(tabName) {
     setActiveTab(tabName);
   }
@@ -52,48 +50,106 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     setPlaylistData({
       name: "",
       tracks: [],
-      source: 'local'
+      source: "local",
     });
   }
 
   function handleFormattingFilesForUpload() {
-    const files = [...playlistData.tracks]
-    return files
+    const files = [...playlistData.tracks];
+    return files;
   }
 
   async function handleUpload(filesToUpload) {
     const formData = new FormData();
 
-    formData.append('email', userProfileSpotify.email);
-    formData.append('playlistName', playlistData.name);
-    formData.append('playlistImage', playlistData.image)
+    formData.append("email", userProfileSpotify.email);
+    formData.append("playlistName", playlistData.name);
+    formData.append("playlistImage", playlistData.image);
     filesToUpload.forEach((file) => {
-      formData.append('songNames', file.name);
-      formData.append('songArtists', file.artist);
-      formData.append('songImages', file.songImage);
-      formData.append('songSources', file.audioSource);
+      formData.append("songNames", file.name);
+      formData.append("songArtists", file.artist);
+      formData.append("songImages", file.songImage);
+      formData.append("songSources", file.audioSource);
     });
 
     try {
-      const response = await fetch(`http://localhost:3000/api/playlist/uploadNewPlaylist`, {
-        method: "POST",
-        body: formData
-      })
+      const response = await fetch(
+        `http://localhost:3000/api/playlist/uploadNewPlaylist`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       const data = await response.json();
       setLocalPlaylistsState(await fetchLocalPlaylists());
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
 
-  // ========================================================================================================================
+  async function handlePlaylistEdit(filesToUpload) {
+    const formData = new FormData();
+
+    formData.append("playlistName", playlistData.name);
+    formData.append(
+      "playlistImage",
+      playlistData.image ? playlistData.image : ""
+    );
+    formData.append("playlistId", selectedPlaylistId);
+    filesToUpload.forEach((file) => {
+      formData.append("songNames", file.name);
+      formData.append("songArtists", file.artist);
+      formData.append("songImages", file.songImage);
+      formData.append("songSources", file.audioSource);
+    });
+
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/playlist/editPlaylist`,
+        {
+          method: "PUT",
+          body: formData,
+        }
+      );
+      const data = await response.json();
+    } catch (error) {
+      console.log({ "Error editing playlist": error });
+    }
+  }
+
+  async function handleDeletePlaylist() {
+    if (library[playlistIndex].id === selectedPlaylistId) {
+      choosePlaylist(playlistIndex - 1);
+    }
+    if (selectedPlaylistSource === "local") {
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/playlist/deletePlaylist`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              playlistId: selectedPlaylistId,
+              email: userProfileSpotify.email,
+            }),
+          }
+        );
+        const data = await response.json();
+
+      } catch (error) {
+        console.log({ "Error editing playlist": error });
+      }
+    }
+  }
+
   function handlePlaylistCoverChange(event) {
     const file = event.target.files[0];
     setPlaylistData({
       ...playlistData,
-      image: file
-    })
-
+      image: file,
+    });
   }
 
   function handlePlaylistChangeName(event) {
@@ -112,7 +168,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
         name: song.name,
         artist: "Unknown Artist",
         audioSource: song,
-        songImage: ''
+        songImage: "",
       };
       jsMediaTags.read(song, {
         onSuccess: function (tag) {
@@ -135,28 +191,12 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
           console.log(error);
         },
       });
-      console.log(songData)
       return songData;
     });
     setPlaylistData({
       ...playlistData,
       tracks: songFiles,
     });
-  }
-
-  function handleDeletePlaylist() {
-    // if (library[playlistIndex].id === selectedPlaylistId) {
-    //   choosePlaylist(playlistIndex - 1);
-    // }
-    // if (selectedPlaylistSource === 'local') {
-    //   const localStorage = fetchLocalPlaylists();
-    //   const updatedLocalStorage = localStorage.filter(playlist => playlist.id !== selectedPlaylistId);
-    //   // This updates the local storage
-
-    //   // This updates the state of what the local storage is so that the useEffect in the parent component
-    //   // can re-render the library with the changes
-    //   setLocalPlaylistsState(fetchLocalPlaylists())
-    // }
   }
 
   function handleSubmit(event) {
@@ -173,7 +213,8 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
       event.target.reset();
     } else if (activeTab === "edit") {
       if (selectedPlaylistSource === "local") {
-        handleUpload();
+        const files = handleFormattingFilesForUpload();
+        handlePlaylistEdit(files);
       } else if (selectedPlaylistSource === "spotify") {
         updatePlaylistName(selectedPlaylistId, playlistData.name);
       }
@@ -215,7 +256,12 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
               >
                 No
               </button>
-              <button type="button" data-bs-dismiss="modal" className="btn btn-danger" onClick={handleDeletePlaylist}>
+              <button
+                type="button"
+                data-bs-dismiss="modal"
+                className="btn btn-danger"
+                onClick={handleDeletePlaylist}
+              >
                 Yes
               </button>
             </div>

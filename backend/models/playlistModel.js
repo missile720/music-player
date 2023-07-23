@@ -4,23 +4,28 @@ const playlistSchema = mongoose.Schema(
     {
         name: {
             type: String,
-            required: true
+            required: true,
+            "writable": true
         },
         coverImageSource: {
             type: String,
-            required: true
+            required: true,
+            "writable": true
         },
         coverImageSourceId: {
             type: String,
-            required: true
+            required: true,
+            "writable": true
         },
         tracks: [{
             type: String,
-            ref: 'Track'
+            ref: 'Track',
+            "writable": true
         }],
         source: {
             type: String,
             default: 'local',
+            "writable": true
         },
         id: {
             type: String,
