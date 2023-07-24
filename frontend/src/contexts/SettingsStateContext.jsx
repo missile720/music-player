@@ -77,6 +77,7 @@ const SettingsStateContextProvider = ({ children }) => {
      */
     useEffect(() => {
         if (audioSource && Object.keys(audioSource).length) {
+            console.log(audioContext)
             const source = audioContext.createMediaElementSource(audioSource)
             source.connect(trebleFilter)
         }
