@@ -24,7 +24,6 @@ function Main() {
   const { theme, mode } = useContext(ThemeContext);
   const { userPlaylistSpotify, currentPlayingSongData, userProfileSpotify } = useContext(Context);
   const [localPlaylistsState, setLocalPlaylistsState] = useState([]);
-  console.log(currentPlayingSongData);
   const {
     library,
     setLibrary,

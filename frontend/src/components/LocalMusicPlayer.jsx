@@ -1,10 +1,12 @@
-import { useContext } from "react"
+import { useState, useEffect, useContext } from "react"
 import ReactPlayer from "react-player"
 
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext.jsx"
 import { SettingsStateContext } from "../contexts/SettingsStateContext.jsx"
 
 import CurrentSong from "./CurrentSong"
+
+const DUMMY_MP3_URL = "https://bvt-music-player.s3.us-west-1.amazonaws.com/v-XUxmg-m0OsdYEFDprh"
 
 const LocalMusicPlayer = () => {
     const {
@@ -19,7 +21,23 @@ const LocalMusicPlayer = () => {
         getDuration,
         hasValidSongIndex
     } = useContext(MusicPlayerStateContext)
-    const { volume, VOLUME_MAX } = useContext(SettingsStateContext)
+    const {
+        volume,
+        VOLUME_MAX,
+        audioSource
+    } = useContext(SettingsStateContext)
+
+    const [loaded, setLoaded] = useState(false)
+
+    useEffect(() => {
+        if (audioSource && audioSource.hasOwnProperty("crossorigin")) {
+            console.log("audio source check")
+            console.log(audioSource)
+            setTimeout(() => {
+                setLoaded(true)
+            }, 2000)
+        }
+    }, [audioSource])
 
     return (
         <>
@@ -30,7 +48,8 @@ const LocalMusicPlayer = () => {
                 <ReactPlayer
                     height="0"
                     ref={getPlayer}
-                    url={currentTracklist[songIndex].songSource}
+                    url={loaded ? currentTracklist[songIndex].songSource
+                        : DUMMY_MP3_URL}
                     playing={playing}
                     played={localPlayback.played}
                     volume={volume / VOLUME_MAX}
