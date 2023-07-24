@@ -30,7 +30,11 @@ trebleFilter.connect(bassFilter)
 
 const SettingsStateContextProvider = ({ children }) => {
     // Context Values
-    const { currentSongSource, player } = useContext(MusicPlayerStateContext)
+    const {
+        currentSongSource,
+        player,
+        currentTracklist
+    } = useContext(MusicPlayerStateContext)
 
     // States
     const [volume, setVolume] = useState(50)
@@ -53,11 +57,9 @@ const SettingsStateContextProvider = ({ children }) => {
                     // Stores and resets the original src attribute of the
                     // audio in order to have the crossorigin anonymous
                     // attribute set when creating the element stream
-                    const originalSrc = audio.getAttribute("src")
-
                     audio.setAttribute("src", "")
                     audio.setAttribute("crossorigin", "anonymous")
-                    audio.setAttribute("src", originalSrc)
+                    audio.setAttribute("src", currentTracklist[0].songSource)
 
                     setAudioSource(audio)
                 }
@@ -66,7 +68,8 @@ const SettingsStateContextProvider = ({ children }) => {
             }, AUDIO_SOURCE_UPDATE_DELAY)
 
         }
-    }, [currentSongSource, player])
+    }, [currentSongSource, player, player && player.getInternalPlayer()])
+
 
     /**
      * Effect to connect the audioSource to the equalizer when
