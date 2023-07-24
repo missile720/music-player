@@ -6,7 +6,8 @@ import { SettingsStateContext } from "../contexts/SettingsStateContext.jsx"
 
 import CurrentSong from "./CurrentSong"
 
-const DUMMY_MP3_URL = "https://bvt-music-player.s3.us-west-1.amazonaws.com/v-XUxmg-m0OsdYEFDprh"
+// A dummy mp3 to load with the ReactPlayer to tank the CORS denied error
+const DUMMY_MP3_URL = "https://bvt-music-player.s3.us-west-1.amazonaws.com/01_Sam_Rudich.mp3"
 
 const LocalMusicPlayer = () => {
     const {
@@ -29,13 +30,13 @@ const LocalMusicPlayer = () => {
 
     const [loaded, setLoaded] = useState(false)
 
+    /**
+     * Use effect to load the proper mp3 files for the player after the CORS issue
+     * has been tanked
+     */
     useEffect(() => {
         if (audioSource && Object.keys(audioSource).length) {
-            console.log("audio source check")
-            console.log(audioSource)
-            setTimeout(() => {
-                setLoaded(true)
-            }, 1000)
+            setLoaded(true)
         }
     }, [audioSource])
 
