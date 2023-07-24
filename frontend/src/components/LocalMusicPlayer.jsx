@@ -30,12 +30,12 @@ const LocalMusicPlayer = () => {
     const [loaded, setLoaded] = useState(false)
 
     useEffect(() => {
-        if (audioSource && audioSource.hasOwnProperty("crossorigin")) {
+        if (audioSource && Object.keys(audioSource).length) {
             console.log("audio source check")
             console.log(audioSource)
             setTimeout(() => {
                 setLoaded(true)
-            }, 2000)
+            }, 1000)
         }
     }, [audioSource])
 
