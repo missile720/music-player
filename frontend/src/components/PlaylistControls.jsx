@@ -8,7 +8,7 @@ import CreatePlaylist from "./CreatePlaylist";
 
 import "./PlaylistControls.css";
 
-const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
+const PlaylistControls = ({ fetchLocalPlaylists }) => {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
   const [selectedPlaylistSource, setSelectedPlaylistSource] = useState("");
   const [activeTab, setActiveTab] = useState("create");
@@ -81,7 +81,6 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
         }
       );
       const data = await response.json();
-      setLocalPlaylistsState(await fetchLocalPlaylists());
     } catch (error) {
       console.log(error);
     }
@@ -137,7 +136,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
           }
         );
         const data = await response.json();
-
+        await fetchLocalPlaylists();
       } catch (error) {
         console.log({ "Error editing playlist": error });
       }
@@ -199,7 +198,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     });
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     if (activeTab === "create") {
       if (
@@ -208,7 +207,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
         playlistData.tracks.length
       ) {
         const files = handleFormattingFilesForUpload();
-        handleUpload(files);
+        await handleUpload(files);
       }
       event.target.reset();
     } else if (activeTab === "edit") {
@@ -219,6 +218,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
         updatePlaylistName(selectedPlaylistId, playlistData.name);
       }
     }
+    await fetchLocalPlaylists();
   }
 
   return (

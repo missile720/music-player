@@ -60,7 +60,7 @@ function Main() {
     try {
       const response = await fetch(`http://localhost:3000/api/playlist/getPlaylists/${userProfileSpotify.email}`);
       const data = await response.json();
-      setLocalPlaylistsState(data)
+      setLocalPlaylistsState(data);
     } catch (error) {
       console.log(error)
 
