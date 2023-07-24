@@ -89,7 +89,6 @@ function CurrentSong() {
                         src={rewindImg}
                         onClick={previousTrack}
                         tabIndex="999"
-                        data-bs-toggle="offcanvas"
                     ></img>
                     {/* Play */}
                     <img
@@ -97,7 +96,6 @@ function CurrentSong() {
                         src={playing ? pauseImg : playImg}
                         onClick={togglePlay}
                         tabIndex="1000"
-                        data-bs-toggle="offcanvas"
                     ></img>
                     {/* skip forward  */}
                     <img
@@ -105,7 +103,6 @@ function CurrentSong() {
                         src={fastforwardImg}
                         onClick={nextTrack}
                         tabIndex="1001"
-                        data-bs-toggle="offcanvas"
                     ></img>
                 </div>
             </div>
