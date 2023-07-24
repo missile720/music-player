@@ -36,6 +36,10 @@ li {
   pointer-events: all;
 }
 
+.custom-range {
+  pointer-events: all;
+}
+
 .music-button {
   cursor: pointer;
   width: 30px;
