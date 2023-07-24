@@ -41,12 +41,12 @@ const LogoutPrompt = () => {
                     <div className="modal-footer">
                         <button
                             type="button"
-                            class={`btn element-${theme}-${mode}`}
+                            className={`btn element-${theme}-${mode}`}
                             data-bs-dismiss="modal"
                         >Cancel</button>
                         <button
                             type="button"
-                            class={`btn element-${theme}-${mode}`}
+                            className={`btn element-${theme}-${mode}`}
                             onClick={() => logout()}
                             data-bs-dismiss="modal"
                         >Logout</button>
