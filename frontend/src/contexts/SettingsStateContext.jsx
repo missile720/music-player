@@ -41,6 +41,7 @@ const SettingsStateContextProvider = ({ children }) => {
     const [bass, setBass] = useState(0)
     const [treble, setTreble] = useState(0)
     const [audioSource, setAudioSource] = useState({})
+    const [audioSourceNode, setAudioSourceNode] = useState(null)
 
     // Effects 
     /**
@@ -77,8 +78,16 @@ const SettingsStateContextProvider = ({ children }) => {
      */
     useEffect(() => {
         if (audioSource && Object.keys(audioSource).length) {
+            // Disconnects the previous audioSourceNode to prevent
+            // multiple audio source nodes from chaining to the 
+            // biquadFilters
+            if (audioSourceNode) {
+                audioSourceNode.disconnect()
+            }
+
             const source = audioContext.createMediaElementSource(audioSource)
             source.connect(trebleFilter)
+            setAudioSourceNode(source)
         }
     }, [audioSource])
 
