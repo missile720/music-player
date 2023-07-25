@@ -10,6 +10,7 @@ import CurrentSong from "./CurrentSong"
 const DUMMY_MP3_URL = "https://bvt-music-player.s3.us-west-1.amazonaws.com/01_Sam_Rudich.mp3"
 
 const LocalMusicPlayer = () => {
+    // Context Variables
     const {
         playing,
         localPlayback,
@@ -28,6 +29,8 @@ const LocalMusicPlayer = () => {
         audioSource
     } = useContext(SettingsStateContext)
 
+    // State Variables
+    // Indicates if ReactPlayer internal player is loaded with crossorigin header
     const [loaded, setLoaded] = useState(false)
 
     /**
@@ -40,6 +43,20 @@ const LocalMusicPlayer = () => {
         }
     }, [audioSource])
 
+    /**
+     * A fix to address the Chrome issue of caching calls, as without this the app
+     * would sometimes load the first songs of playlists without the crossorigin 
+     * attribute
+     * @returns {string} The url of the current song to play on the Amazon backend
+     */
+    function getCurrentSong() {
+        if (songIndex !== 0 && audioSource.getAttribute("crossorigin")) {
+            return currentTracklist[songIndex].songSource
+        } else {
+            return currentTracklist[0].songSource
+        }
+    }
+
     return (
         <>
             <CurrentSong />
@@ -49,7 +66,7 @@ const LocalMusicPlayer = () => {
                 <ReactPlayer
                     height="0"
                     ref={getPlayer}
-                    url={loaded ? currentTracklist[songIndex].songSource
+                    url={loaded ? getCurrentSong()
                         : DUMMY_MP3_URL}
                     playing={playing}
                     played={localPlayback.played}
