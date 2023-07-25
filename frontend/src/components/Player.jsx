@@ -6,7 +6,7 @@ import { ThemeContext } from "../contexts/ThemeContext.jsx";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext"
 import { SettingsStateContext } from "../contexts/SettingsStateContext"
 
-const PLAYER_NAME = "Music Player"
+const PLAYER_NAME = "EchoBox"
 
 function Player() {
   // Context Variables
