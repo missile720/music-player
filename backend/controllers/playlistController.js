@@ -10,7 +10,6 @@ import {
   deleteMongoPlaylist,
 } from "../controllers/mongoController.js";
 import { deleteFileFromS3 } from "../libs/client.js";
-import Playlist from "../models/playlistModel.js";
 
 dotenv.config();
 

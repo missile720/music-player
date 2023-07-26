@@ -8,7 +8,7 @@ import CreatePlaylist from "./CreatePlaylist";
 
 import "./PlaylistControls.css";
 
-const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
+const PlaylistControls = () => {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
   const [selectedPlaylistSource, setSelectedPlaylistSource] = useState("");
   const [activeTab, setActiveTab] = useState("create");
@@ -17,7 +17,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     MusicPlayerStateContext
   );
   const { theme, mode } = useContext(ThemeContext);
-  const { updatePlaylistName, userProfileSpotify } = useContext(Context);
+  const { updatePlaylistName, userProfileSpotify, updateLocalPlaylists } = useContext(Context);
 
   const [playlistData, setPlaylistData] = useState({});
 
@@ -73,15 +73,14 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     });
 
     try {
-      const response = await fetch(
+      await fetch(
         `http://localhost:3000/api/playlist/uploadNewPlaylist`,
         {
           method: "POST",
           body: formData,
         }
       );
-      const data = await response.json();
-      setLocalPlaylistsState(await fetchLocalPlaylists());
+      await updateLocalPlaylists();
     } catch (error) {
       console.log(error);
     }
@@ -104,14 +103,14 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     });
 
     try {
-      const response = await fetch(
+      await fetch(
         `http://localhost:3000/api/playlist/editPlaylist`,
         {
           method: "PUT",
           body: formData,
         }
       );
-      const data = await response.json();
+      await updateLocalPlaylists();
     } catch (error) {
       console.log({ "Error editing playlist": error });
     }
@@ -123,7 +122,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     }
     if (selectedPlaylistSource === "local") {
       try {
-        const response = await fetch(
+        await fetch(
           `http://localhost:3000/api/playlist/deletePlaylist`,
           {
             method: "DELETE",
@@ -136,8 +135,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
             }),
           }
         );
-        const data = await response.json();
-
+        await updateLocalPlaylists();
       } catch (error) {
         console.log({ "Error editing playlist": error });
       }
@@ -199,7 +197,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
     });
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
     if (activeTab === "create") {
       if (
@@ -208,7 +206,7 @@ const PlaylistControls = ({ setLocalPlaylistsState, fetchLocalPlaylists }) => {
         playlistData.tracks.length
       ) {
         const files = handleFormattingFilesForUpload();
-        handleUpload(files);
+        await handleUpload(files);
       }
       event.target.reset();
     } else if (activeTab === "edit") {
