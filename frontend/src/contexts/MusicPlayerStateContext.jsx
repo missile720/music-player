@@ -51,7 +51,8 @@ function MusicPlayerStateContextProvider({ children }) {
     }, [songIndex, playlistIndex, library])
 
     /**
-     * Updating 
+     * Sets updating variable to false after library has finished refreshing after 
+     * an update has been made.
      */
     useEffect(() => {
         setUpdating(false)
