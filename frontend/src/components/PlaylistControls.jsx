@@ -233,7 +233,7 @@ const PlaylistControls = () => {
         aria-hidden="true"
       >
         <div className="modal-dialog">
-          <div className="modal-content">
+          <div className={`modal-content primary-${theme}-${mode}`}>
             <div className="modal-header">
               <h1 className="modal-title fs-5">Delete Playlist</h1>
               <button
