@@ -22,7 +22,14 @@ const debug = false;
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
-  const { userPlaylistSpotify, currentPlayingSongData, userProfileSpotify, fetchLocalPlaylists, localPlaylistsState, updateLocalPlaylists } = useContext(Context);
+  const {
+    userPlaylistSpotify,
+    currentPlayingSongData,
+    userProfileSpotify,
+    fetchLocalPlaylists,
+    localPlaylistsState,
+    updateLocalPlaylists,
+  } = useContext(Context);
 
   const {
     library,
@@ -32,6 +39,7 @@ function Main() {
     setLibraryView,
     currentSongSource,
     getPlaylistName,
+    updating,
   } = useContext(MusicPlayerStateContext);
 
   // Load the user's playlists from Spotify and their uploaded playlists  
@@ -80,6 +88,7 @@ function Main() {
               className={`btn element-${theme}-${mode}`}
               data-bs-toggle="modal"
               data-bs-target="#file-upload"
+              disabled={updating}
             >
               Playlist Controls
             </button>
