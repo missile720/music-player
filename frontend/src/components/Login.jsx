@@ -24,7 +24,7 @@ function Login() {
             src={musicPlayerLogoImg}
             alt="Music Player Logo"
           />
-          <h1 className="login-header">Music Player</h1>
+          <h1 className="login-header">EchoBox</h1>
         </div>
         <h3 className="login-subheader">Login to account:</h3>
         <div
