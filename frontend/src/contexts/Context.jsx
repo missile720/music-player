@@ -12,6 +12,8 @@ function ContextProvider({ children }) {
   const [currentPlaylist, setCurrentPlaylist] = useState("");
   const [currentPlayingSongData, setCurrentPlayingSongData] = useState();
   const [currentPlayingSongCallback, setCurrentPlayingSongCallback] = useState();
+  const [localPlaylistsState, setLocalPlaylistsState] = useState([]);
+
   const clientId = "146d22c1a56f4060939214df2f8b8ab4";
   const redirectUri = "http://localhost:5173/callback";
 
@@ -188,7 +190,6 @@ function ContextProvider({ children }) {
         })
         .catch((error) => console.error("Error:", error));
     } else {
-      console.log('Local delete')
       try {
         const response = await fetch(`http://localhost:3000/api/playlist/deleteTrack`, {
           method: "DELETE",
@@ -200,7 +201,7 @@ function ContextProvider({ children }) {
             trackId: trackUri.localTrackId
           })
         })
-        const data = await response.json();
+        updateLocalPlaylists()
       } catch (error) {
         console.log({ "Error editing playlist": error })
       }
@@ -255,6 +256,22 @@ function ContextProvider({ children }) {
         }
       })
       .catch((error) => console.error("Error:", error));
+  }
+
+  async function fetchLocalPlaylists() {
+    try {
+      const response = await fetch(`http://localhost:3000/api/playlist/getPlaylists/${userProfileSpotify.email}`);
+      const data = await response.json();
+      return data
+    } catch (error) {
+      console.log(error)
+      return [];
+    }
+  }
+
+  async function updateLocalPlaylists() {
+    const data = await fetchLocalPlaylists();
+    setLocalPlaylistsState(data)
   }
 
   function logout() {
@@ -320,6 +337,8 @@ function ContextProvider({ children }) {
     return () => clearInterval(refreshInterval);
   }, [refreshToken, expiresIn]);
 
+
+
   return (
     <Context.Provider
       value={{
@@ -329,6 +348,7 @@ function ContextProvider({ children }) {
         currentPlaylist,
         currentPlayingSongData,
         currentPlayingSongCallback,
+        localPlaylistsState,
         getSpotifyPlaylistTracks,
         loginSpotify,
         deletePlaylistTrack,
@@ -336,7 +356,8 @@ function ContextProvider({ children }) {
         currentPlaylistId,
         updatePlaylistName,
         getSongAudioAnalysis,
-        logout
+        logout,
+        updateLocalPlaylists
       }}
     >
       {children}

@@ -8,7 +8,7 @@ import CreatePlaylist from "./CreatePlaylist";
 
 import "./PlaylistControls.css";
 
-const PlaylistControls = ({ fetchLocalPlaylists }) => {
+const PlaylistControls = () => {
   const [selectedPlaylistId, setSelectedPlaylistId] = useState("");
   const [selectedPlaylistSource, setSelectedPlaylistSource] = useState("");
   const [activeTab, setActiveTab] = useState("create");
@@ -17,7 +17,7 @@ const PlaylistControls = ({ fetchLocalPlaylists }) => {
     MusicPlayerStateContext
   );
   const { theme, mode } = useContext(ThemeContext);
-  const { updatePlaylistName, userProfileSpotify } = useContext(Context);
+  const { updatePlaylistName, userProfileSpotify, updateLocalPlaylists } = useContext(Context);
 
   const [playlistData, setPlaylistData] = useState({});
 
@@ -73,14 +73,14 @@ const PlaylistControls = ({ fetchLocalPlaylists }) => {
     });
 
     try {
-      const response = await fetch(
+      await fetch(
         `http://localhost:3000/api/playlist/uploadNewPlaylist`,
         {
           method: "POST",
           body: formData,
         }
       );
-      const data = await response.json();
+      await updateLocalPlaylists();
     } catch (error) {
       console.log(error);
     }
@@ -103,14 +103,14 @@ const PlaylistControls = ({ fetchLocalPlaylists }) => {
     });
 
     try {
-      const response = await fetch(
+      await fetch(
         `http://localhost:3000/api/playlist/editPlaylist`,
         {
           method: "PUT",
           body: formData,
         }
       );
-      const data = await response.json();
+      await updateLocalPlaylists();
     } catch (error) {
       console.log({ "Error editing playlist": error });
     }
@@ -122,7 +122,7 @@ const PlaylistControls = ({ fetchLocalPlaylists }) => {
     }
     if (selectedPlaylistSource === "local") {
       try {
-        const response = await fetch(
+        await fetch(
           `http://localhost:3000/api/playlist/deletePlaylist`,
           {
             method: "DELETE",
@@ -135,8 +135,7 @@ const PlaylistControls = ({ fetchLocalPlaylists }) => {
             }),
           }
         );
-        const data = await response.json();
-        await fetchLocalPlaylists();
+        await updateLocalPlaylists();
       } catch (error) {
         console.log({ "Error editing playlist": error });
       }
@@ -218,7 +217,6 @@ const PlaylistControls = ({ fetchLocalPlaylists }) => {
         updatePlaylistName(selectedPlaylistId, playlistData.name);
       }
     }
-    await fetchLocalPlaylists();
   }
 
   return (

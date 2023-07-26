@@ -22,8 +22,8 @@ const debug = false;
 
 function Main() {
   const { theme, mode } = useContext(ThemeContext);
-  const { userPlaylistSpotify, currentPlayingSongData, userProfileSpotify } = useContext(Context);
-  const [localPlaylistsState, setLocalPlaylistsState] = useState([]);
+  const { userPlaylistSpotify, currentPlayingSongData, userProfileSpotify, fetchLocalPlaylists, localPlaylistsState, updateLocalPlaylists } = useContext(Context);
+
   const {
     library,
     setLibrary,
@@ -34,8 +34,8 @@ function Main() {
     getPlaylistName,
   } = useContext(MusicPlayerStateContext);
 
-  // Load the user's playlists from Spotify and local storage into the
-  // library whenever it's updated
+  // Load the user's playlists from Spotify and their uploaded playlists  
+  // into the library whenever it's updated
   useEffect(() => {
     if (debug) {
       setLibrary(testPlaylistsData);
@@ -53,25 +53,14 @@ function Main() {
   }, [userPlaylistSpotify, localPlaylistsState]);
 
   useEffect(() => {
-    fetchLocalPlaylists();
-  }, [userProfileSpotify])
+    updateLocalPlaylists();
+  }, [userProfileSpotify]);
 
-  async function fetchLocalPlaylists() {
-    try {
-      const response = await fetch(`http://localhost:3000/api/playlist/getPlaylists/${userProfileSpotify.email}`);
-      const data = await response.json();
-      setLocalPlaylistsState(data);
-    } catch (error) {
-      console.log(error)
 
-      return [];
-    }
-  }
 
   return (
     <div className="container-fluid  h-100" id={`primary-${theme}-${mode}`}>
       <PlaylistControls
-        setLocalPlaylistsState={setLocalPlaylistsState}
         fetchLocalPlaylists={fetchLocalPlaylists}
       />
       <div className="row h-100">
