@@ -37,7 +37,7 @@ const PlaylistControls = () => {
         }
       }
     }
-  }, [selectedPlaylistId]);
+  }, [selectedPlaylistId, library]);
 
   function handleChangeActiveTab(tabName) {
     setActiveTab(tabName);
@@ -136,11 +136,14 @@ const PlaylistControls = () => {
             }),
           }
         );
+        formRef.current.reset();
+        setSelectedPlaylistSource("");
         await updateLocalPlaylists();
       } catch (error) {
         console.log({ "Error editing playlist": error });
       }
     }
+
   }
 
   function handlePlaylistCoverChange(event) {
@@ -356,6 +359,7 @@ const PlaylistControls = () => {
                       handleSelectionChange={handleSelectionChange}
                       selectedPlaylistSource={selectedPlaylistSource}
                       library={library}
+                      formRef={formRef}
                     />
                   </div>
                 </div>

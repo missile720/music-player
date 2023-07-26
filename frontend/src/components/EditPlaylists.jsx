@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 const EditPlaylists = ({
   playlistData,
   handlePlaylistChangeName,
@@ -5,8 +7,10 @@ const EditPlaylists = ({
   handleSongMetaData,
   handleSelectionChange,
   selectedPlaylistSource,
-  library
+  library,
+  formRef
 }) => {
+
   const playlistsToEditOptions = library.map((playlist) => (
     <option key={playlist.id} value={playlist.id}>
       {playlist.name}
@@ -21,8 +25,9 @@ const EditPlaylists = ({
           className="form-select"
           data-live-search="true"
           onChange={handleSelectionChange}
+          ref={formRef}
         >
-          <option value="none" selected disabled hidden>
+          <option value="" selected disabled hidden>
             Select an Option
           </option>
           {playlistsToEditOptions}
