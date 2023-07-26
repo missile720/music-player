@@ -13,11 +13,18 @@ const PlaylistControls = () => {
   const [selectedPlaylistSource, setSelectedPlaylistSource] = useState("");
   const [activeTab, setActiveTab] = useState("create");
 
-  const { library, playlistIndex, choosePlaylist } = useContext(
-    MusicPlayerStateContext
-  );
+  const {
+    library,
+    playlistIndex,
+    choosePlaylist,
+    setUpdating,
+  } = useContext(MusicPlayerStateContext);
   const { theme, mode } = useContext(ThemeContext);
-  const { updatePlaylistName, userProfileSpotify, updateLocalPlaylists } = useContext(Context);
+  const {
+    updatePlaylistName,
+    userProfileSpotify,
+    updateLocalPlaylists
+  } = useContext(Context);
 
   const [playlistData, setPlaylistData] = useState({});
   const formRef = useRef(null);
@@ -136,6 +143,7 @@ const PlaylistControls = () => {
             }),
           }
         );
+        setUpdating(true)
         formRef.current.reset();
         setSelectedPlaylistSource("");
         await updateLocalPlaylists();
@@ -378,6 +386,7 @@ const PlaylistControls = () => {
                 form="file-upload"
                 className={`btn element-${theme}-${mode}`}
                 data-bs-dismiss="modal"
+                onClick={() => setUpdating(true)}
               >
                 Submit
               </button>

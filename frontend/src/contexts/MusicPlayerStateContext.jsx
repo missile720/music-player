@@ -24,6 +24,7 @@ function MusicPlayerStateContextProvider({ children }) {
     })
     const [player, setPlayer] = useState(() => { })
     const [duration, setDuration] = useState(0)
+    const [updating, setUpdating] = useState(false)
 
     // Effects
     /**
@@ -48,6 +49,14 @@ function MusicPlayerStateContextProvider({ children }) {
             setCurrentSongSource(library[playlistIndex].source ? 'local' : 'spotify')
         }
     }, [songIndex, playlistIndex, library])
+
+    /**
+     * Sets updating variable to false after library has finished refreshing after 
+     * an update has been made.
+     */
+    useEffect(() => {
+        setUpdating(false)
+    }, [library])
 
     // Functions
     /**
@@ -276,7 +285,9 @@ function MusicPlayerStateContextProvider({ children }) {
                 convertToTimestamp,
                 getCurrentSongMetadata,
                 player,
-                hasValidSongIndex
+                hasValidSongIndex,
+                updating,
+                setUpdating
             }}
         >
             {children}
