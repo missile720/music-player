@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect, useRef } from "react";
 import { Context } from "../contexts/Context";
 import { MusicPlayerStateContext } from "../contexts/MusicPlayerStateContext";
 import { ThemeContext } from "../contexts/ThemeContext";
@@ -27,6 +27,7 @@ const PlaylistControls = () => {
   } = useContext(Context);
 
   const [playlistData, setPlaylistData] = useState({});
+  const formRef = useRef(null);
 
   useEffect(() => {
     resetInputs();
@@ -43,7 +44,7 @@ const PlaylistControls = () => {
         }
       }
     }
-  }, [selectedPlaylistId]);
+  }, [selectedPlaylistId, library]);
 
   function handleChangeActiveTab(tabName) {
     setActiveTab(tabName);
@@ -143,11 +144,14 @@ const PlaylistControls = () => {
           }
         );
         setUpdating(true)
+        formRef.current.reset();
+        setSelectedPlaylistSource("");
         await updateLocalPlaylists();
       } catch (error) {
         console.log({ "Error editing playlist": error });
       }
     }
+
   }
 
   function handlePlaylistCoverChange(event) {
@@ -225,6 +229,8 @@ const PlaylistControls = () => {
         updatePlaylistName(selectedPlaylistId, playlistData.name);
       }
     }
+    resetInputs();
+    formRef.current.reset();
   }
 
   return (
@@ -283,12 +289,13 @@ const PlaylistControls = () => {
         aria-labelledby="file-upload-modal"
         aria-hidden="true"
         onSubmit={handleSubmit}
+        ref={formRef}
       >
         <div className="modal-dialog">
           <div className={`modal-content primary-${theme}-${mode}`}>
             <div className="modal-header">
               <h5 className="modal-title" id="exampleModalLabel">
-                Local Playlist Controls
+                Playlist Controls
               </h5>
               <button
                 type="button"
@@ -316,7 +323,7 @@ const PlaylistControls = () => {
                     aria-controls="v-pills-create"
                     aria-selected="true"
                   >
-                    Create Local Playlist
+                    Create a Playlist
                   </button>
                   <button
                     className={`nav-link nav-link-${theme}-${mode}`}
@@ -329,7 +336,7 @@ const PlaylistControls = () => {
                     aria-controls="v-pills-edit"
                     aria-selected="false"
                   >
-                    Edit Local Playlists
+                    Edit Playlists
                   </button>
                 </div>
                 <div className="tab-content" id="v-pills-tabContent">
@@ -360,6 +367,7 @@ const PlaylistControls = () => {
                       handleSelectionChange={handleSelectionChange}
                       selectedPlaylistSource={selectedPlaylistSource}
                       library={library}
+                      formRef={formRef}
                     />
                   </div>
                 </div>
