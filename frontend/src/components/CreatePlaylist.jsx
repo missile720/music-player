@@ -1,17 +1,6 @@
 const CreatePlaylist = ({ playlistData, handlePlaylistChangeName, handlePlaylistCoverChange, handleSongMetaData }) => {
     return (
         <>
-            <div className="mb-3">
-                <span id="inputGroup-sizing-default">Playlist Cover Image</span>
-                <input
-                    type="file"
-                    className="form-control"
-                    aria-label="Sizing example input"
-                    aria-describedby="inputGroup-sizing-default"
-                    onChange={handlePlaylistCoverChange}
-                    accept="image/*"
-                />
-            </div>
             <div className=" mb-3">
                 <span id="inputGroup-sizing-default">Playlist Name</span>
                 <input
@@ -23,6 +12,19 @@ const CreatePlaylist = ({ playlistData, handlePlaylistChangeName, handlePlaylist
                     onChange={handlePlaylistChangeName}
                 />
             </div>
+
+            <div className="mb-3">
+                <span id="inputGroup-sizing-default">Playlist Cover Image</span>
+                <input
+                    type="file"
+                    className="form-control"
+                    aria-label="Sizing example input"
+                    aria-describedby="inputGroup-sizing-default"
+                    onChange={handlePlaylistCoverChange}
+                    accept="image/*"
+                />
+            </div>
+
             <div className="mb-3">
                 <span id="inputGroup-sizing-default">Songs</span>
                 <input

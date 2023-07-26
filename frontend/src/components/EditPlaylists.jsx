@@ -5,7 +5,7 @@ const EditPlaylists = ({
   handleSongMetaData,
   handleSelectionChange,
   selectedPlaylistSource,
-  library,
+  library
 }) => {
   const playlistsToEditOptions = library.map((playlist) => (
     <option key={playlist.id} value={playlist.id}>
