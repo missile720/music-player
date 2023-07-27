@@ -194,7 +194,6 @@ function ContextProvider({ children }) {
       try {
         const response = await fetch(`https://music-player-api.vercel.app/api/playlist/deleteTrack`, {
           method: "DELETE",
-          credentials: 'include',
           headers: {
             "Content-Type": "application/json",
           },
@@ -262,9 +261,7 @@ function ContextProvider({ children }) {
 
   async function fetchLocalPlaylists() {
     try {
-      const response = await fetch(`https://music-player-api.vercel.app/api/playlist/getPlaylists/${userProfileSpotify.email}`, {
-        credentials: 'include'
-      });
+      const response = await fetch(`https://music-player-api.vercel.app/api/playlist/getPlaylists/${userProfileSpotify.email}`);
       const data = await response.json();
       return data
     } catch (error) {
