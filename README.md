@@ -17,6 +17,9 @@ A playlist aggregator app, allows the user to listen to their Spotify and local 
 * Mongoose
 * Multer
 
+### Development 
+* Vite
+
 ### Hosting
 * Vercel
 
