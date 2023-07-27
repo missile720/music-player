@@ -15,7 +15,7 @@ function ContextProvider({ children }) {
   const [localPlaylistsState, setLocalPlaylistsState] = useState([]);
 
   const clientId = "146d22c1a56f4060939214df2f8b8ab4";
-  const redirectUri = "http://localhost:5173/callback";
+  const redirectUri = "https://music-player-frontend-missile720.vercel.app";
 
   async function loginSpotify() {
     let codeVerifier = generateRandomString(128);
