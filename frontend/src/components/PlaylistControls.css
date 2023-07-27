@@ -1,0 +1,47 @@
+#local-playlist-controls-body {
+    min-height: 350px;
+}
+
+/* 
+ * nav-links styled separately with important tags to
+ * override bootstrap styling
+ */
+.nav-link-royal-light {
+    background-color: #fafafa !important;
+    color: #323130 !important;
+}
+
+.nav-link-royal-light.active {
+    background-color: #5CADF8 !important;
+    color: #fafafa !important;
+}
+
+.nav-link-royal-dark {
+    background-color: #0E0F3B !important;
+    color: #fafafa !important;
+}
+
+.nav-link-royal-dark.active {
+    background-color: #22238D !important;
+    color: #fafafa !important;
+}
+
+.nav-link-bvt-light {
+    background-color: #FD2C00 !important;
+    color: #fafafa !important;
+}
+
+.nav-link-bvt-light.active {
+    background-color: #FF5531 !important;
+    color: #fafafa !important;
+}
+
+.nav-link-bvt-dark {
+    background-color: #737873 !important;
+    color: #fafafa !important;
+}
+
+.nav-link-bvt-dark.active {
+    background-color: #FF5531 !important;
+    color: #fafafa !important;
+}

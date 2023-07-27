@@ -1,0 +1,125 @@
+.current-song-container {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  justify-content: space-evenly;
+  pointer-events: none;
+}
+
+.current-song-container:focus-within {
+  background-color: #ffffff00 !important;
+}
+
+.current-song-left-side {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+ul {
+  padding-left: 0;
+}
+
+li {
+  list-style: none;
+  margin-bottom: .5rem;
+}
+
+.song-title {
+  font-size: 1.1rem;
+}
+
+.music-play-buttons {
+  display: flex;
+  justify-content: space-between;
+  pointer-events: all;
+}
+
+.custom-range {
+  pointer-events: all;
+}
+
+.music-button {
+  cursor: pointer;
+  width: 30px;
+}
+
+.music-button:hover, .music-button:active {
+  filter: invert(34%) sepia(1%) saturate(0%) hue-rotate(18deg) brightness(91%) contrast(88%);
+}
+
+.image-container {
+  width: 30%;
+  height: 100%;
+}
+
+.song-art {
+  width: 100%;
+  padding: 1rem;
+}
+
+#range {
+  width: 100%;
+}
+
+.timestamp-text {
+  font-size: .8rem;
+  min-width: 2rem;
+}
+
+.current-song-right-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (max-width: 1210px) {
+  .song-art {
+    width: 100%;
+    padding: .25rem;
+  }
+}
+
+@media (max-width: 767px) {
+  li {
+    margin-bottom: .25rem;
+  }
+
+  .song-meta-data {
+    font-size: .8rem;
+  }
+
+  .song-title {
+    font-size: 1rem;
+  }
+
+  /**
+   * Added styling to only active modal when selecting
+   * non-play buttons
+   */
+  .current-song-container > .current-song-left-side {
+    pointer-events: auto;
+  }
+
+  .current-song-container > .music-play-buttons {
+    pointer-events: none;
+  }
+
+  .royal-light-current-song-container:active
+  {
+      background-color: #5CADF8;
+  }
+    
+  .royal-dark-current-song-container:active {
+      background-color: #181964;
+  }
+
+  .bvt-light-current-song-container:active {
+      background-color: #8D918D;
+  }
+    
+  .bvt-dark-current-song-container:active {
+      background-color: #FF5531;
+  }
+}

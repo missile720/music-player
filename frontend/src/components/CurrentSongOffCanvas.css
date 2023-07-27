@@ -1,0 +1,19 @@
+.song-pop-up {
+    background-color: #fff;
+    height: 80vh !important;
+}
+
+.offcanvas-art {
+    width: 80%;
+    border-radius: 0.5rem;
+}
+
+.offcanvas-song-title {
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.offcanvas-song-artist {
+    font-size: 1.3rem;
+    text-align: center;
+}

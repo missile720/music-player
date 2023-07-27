@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "music-player": "file:frontend",
+    "react-player": "^2.12.0"
+  }
+}

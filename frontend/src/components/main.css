@@ -1,0 +1,219 @@
+.container-fluid {
+    width: auto;
+    overflow: hidden;
+}
+
+.title {
+    padding: 20px 0px 20px 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#primary-royal-light, .primary-royal-light {
+    background-color: #fafafa;
+    color: #323130;
+}
+  
+#primary-royal-dark, .primary-royal-dark {
+    background-color: #0E0F3B;
+    color: #fafafa;
+}
+
+#primary-bvt-dark, .primary-bvt-dark {
+    background-color: #737873;
+    color: #fafafa;
+}
+  
+#primary-bvt-light, .primary-bvt-light {
+    background-color: #FD2C00;
+    color: #fafafa;
+}
+/*  */
+
+#secondary-royal-light, .secondary-royal-light {
+    background-color: #5CADF8;
+    color: #323130;
+}
+  
+#secondary-royal-dark, .secondary-royal-dark {
+    background-color: #181964;
+    color: #fafafa;
+}
+
+#secondary-bvt-dark, .secondary-bvt-dark {
+    background-color: #8D918D;
+    color: #fafafa;
+}
+  
+#secondary-bvt-light, .secondary-bvt-light {
+    background-color: #FF5531;
+    color: #fafafa;
+}
+/*  */
+
+#secondary-offcanvas-royal-light, .secondary-offcanvas-royal-light {
+    background-color: #5CADF8;
+    color: #323130;
+}
+  
+#secondary-offcanvas-royal-dark, .secondary-offcanvas-royal-dark {
+    background-color: #181964;
+    color: #fafafa;
+}
+
+#secondary-offcanvas-bvt-dark, .secondary-offcanvas-bvt-dark {
+    background-color: #8D918D;
+    color: #fafafa;
+
+}
+  
+#secondary-offcanvas-bvt-light, .secondary-offcanvas-bvt-light {
+    background-color: #FF5531;
+    color: #fafafa;
+}
+
+/*  */
+
+/* #tertiary-royal-light, .tertiary-royal-light {
+    background-color: #FFFFFF;
+    color: #323130;
+    border: 1px solid #170873;
+}
+  
+#tertiary-royal-dark, .tertiary-royal-dark {
+    background-color: #FFFFFF;
+    color: #323130;
+    border: 1px solid #323130;
+}
+
+#tertiary-bvt-light, .tertiary-bvt-light {
+    background-color: #d4d4d4;
+    color: #323130;
+}
+  
+#tertiary-bvt-dark, .tertiary-bvt-dark {
+    background-color: #d4d4d4;
+    color: #323130;
+} */
+/*  */
+
+#element-royal-light, .element-royal-light {
+    background-color: #d4d4d4;
+    color: #323130;
+    
+}
+  
+#element-royal-dark, .element-royal-dark {
+    background-color: #181964;
+    color: #fafafa;
+}
+
+.element-royal-light:hover {
+    background-color: #d4d4d4;
+    border: 2px solid #2B94F6;
+}
+  
+.element-royal-dark:hover {
+    background-color: #170873;
+    border: 2px solid #fafafa;
+}
+
+#element-bvt-dark, .element-bvt-dark {
+    background-color: #8D918D;
+    color: #fafafa;
+}
+  
+#element-bvt-light, .element-bvt-light {
+    background-color: #FF5531;
+    color: #fafafa;
+}
+
+.element-bvt-dark:hover {
+    background-color: #8D918D;
+    color: #fafafa;
+    border: 2px solid #FF5531;
+}
+  
+.element-bvt-light:hover {
+    background-color: #FF5531;
+    color: #fafafa;
+    border: 2px solid #fafafa;
+}
+
+.music-button-royal-light, .svg-royal-light {
+    filter: invert(14%) sepia(7%) saturate(129%) hue-rotate(349deg) brightness(91%) contrast(84%);
+}
+
+.music-button-royal-dark, .svg-royal-dark {
+    filter: invert(93%) sepia(4%) saturate(22%) hue-rotate(79deg) brightness(112%) contrast(96%);
+}
+
+.music-button-bvt-light, .svg-bvt-light {
+    filter: invert(96%) sepia(72%) saturate(7469%) hue-rotate(190deg) brightness(132%) contrast(96%);
+}
+
+.music-button-bvt-dark {
+    filter: invert(96%) sepia(72%) saturate(7469%) hue-rotate(190deg) brightness(132%) contrast(96%);
+}
+
+.svg-bvt-dark {
+    filter: invert(99%) sepia(1%) saturate(584%) hue-rotate(94deg) brightness(122%) contrast(100%);
+}
+
+
+.lib-list {
+    height: 70%;
+    max-height: 70vh;
+}
+
+.cur-list {
+    height: 70%;
+    max-height: 80vh;
+}
+.cur-vis{
+    height: 10%;
+    position: relative;
+}
+
+.cur-vis-canvas{
+    height: 100%;
+}
+
+.settings-bar,
+.cur-song-bar {
+    height: 15%;
+}
+
+.ns-bar {
+    height: 10%;
+}
+
+.lib-text,
+.cur-text {
+    height: 5%;
+}
+
+.playlist-bar {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1%;
+}
+
+/* Reproportions Playlist view for mobile */
+@media (max-height: 988px) and (max-width: 767px) {
+    .cur-list {
+        height: 60%;
+        max-height: 60vh;
+    }
+
+    .cur-text {
+        height: 10%;
+    }
+
+    .cur-song-bar {
+        height: 20%;
+    }
+}

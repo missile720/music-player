@@ -1,0 +1,62 @@
+/**
+ * Stands for music player card art, used to avoid interfering
+ * with bootstrap's card class
+ */
+.mp-card--art {
+    height: 4rem;
+    width: 5rem;
+    padding-right: 10px;
+    max-width: 100%;
+}
+
+
+
+.royal-light-selected-card {
+    background-color: #2B94F6 !important;
+    /* color: #d4d4d4 !important; */
+}
+
+.royal-dark-selected-card {
+    background-color: #22238D !important;
+    /* color: #d4d4d4 !important; */
+}
+
+.bvt-dark-selected-card {
+    background-color: #FF5531 !important;
+    /*color: #FF5531 !important; */
+}
+
+.bvt-light-selected-card {
+    background-color: #FD2C00 !important;
+    /* color: #d4d4d4 !important; */
+}
+
+.trashIcon {
+    margin-left: auto;
+    height: 2rem;
+}
+
+.shared-code {
+    cursor: pointer;
+    text-align: left;
+}
+
+.royal-light-container-card:hover {
+    background-color: #2B94F6;
+
+}
+
+.royal-dark-container-card:hover {
+    background: #22238D;
+
+}
+
+.bvt-dark-container-card:hover {
+    background: #737873;
+    color: white;
+
+}
+
+.bvt-light-container-card:hover {
+    background: #FD2C00;
+}
