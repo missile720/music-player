@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import db from "./config/mongoDB.js";
 //import spotifyRoutes from './routes/spotifyRoutes.js';
-import playlistRoutes from "./routes/palylistRoutes.js";
+import playlistRoutes from "./routes/playlistRoutes.js";
 
 const port = process.env.PORT;
 
@@ -11,7 +11,11 @@ dotenv.config();
 db();
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: ["https://echo-box-syntax-samurai.vercel.app/"],
+  methods: ["POST", "GET", "PUT", "DELETE"],
+  credentials: true
+}));
 app.use(express.json());
 //app.use('/api/spotify', spotifyRoutes);
 app.use("/api/playlist", playlistRoutes);
