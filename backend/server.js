@@ -11,12 +11,13 @@ dotenv.config();
 db();
 const app = express();
 
-app.use(cors({
-  origin: ["https://echo-box-syntax-samurai.vercel.app/"],
-  methods: ["POST", "GET", "PUT", "DELETE"],
-  credentials: true
-}));
+// app.use(cors({
+//   origin: ["https://echo-box-syntax-samurai.vercel.app/"],
+//   methods: ["POST", "GET", "PUT", "DELETE"],
+//   credentials: true
+// }));
 app.use(express.json());
+app.use(cors());
 //app.use('/api/spotify', spotifyRoutes);
 app.use("/api/playlist", playlistRoutes);
 
