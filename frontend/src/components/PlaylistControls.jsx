@@ -85,6 +85,7 @@ const PlaylistControls = () => {
         `https://music-player-api.vercel.app/api/playlist/uploadNewPlaylist`,
         {
           method: "POST",
+          credentials: 'include',
           body: formData,
         }
       );
@@ -115,6 +116,7 @@ const PlaylistControls = () => {
         `https://music-player-api.vercel.app/api/playlist/editPlaylist`,
         {
           method: "PUT",
+          credentials: 'include',
           body: formData,
         }
       );
@@ -134,6 +136,7 @@ const PlaylistControls = () => {
           `https://music-player-api.vercel.app/api/playlist/deletePlaylist`,
           {
             method: "DELETE",
+            credentials: 'include',
             headers: {
               "Content-Type": "application/json",
             },
