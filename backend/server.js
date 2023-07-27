@@ -5,7 +5,7 @@ import db from "./config/mongoDB.js";
 //import spotifyRoutes from './routes/spotifyRoutes.js';
 import playlistRoutes from "./routes/playlistRoutes.js";
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 dotenv.config();
 db();
