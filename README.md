@@ -1,5 +1,5 @@
 # EchoBox
-A playlist aggregator app, allows the user to listen to their Spotify and local playlists from a single source.
+A playlist aggregator app, to listen to your Spotify and local playlists from a single source.
 
 ## Tech Stack
 ### Front-end
