@@ -192,7 +192,7 @@ function ContextProvider({ children }) {
         .catch((error) => console.error("Error:", error));
     } else {
       try {
-        const response = await fetch(`http://localhost:3000/api/playlist/deleteTrack`, {
+        const response = await fetch(`https://music-player-api.vercel.app/api/playlist/deleteTrack`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -261,7 +261,7 @@ function ContextProvider({ children }) {
 
   async function fetchLocalPlaylists() {
     try {
-      const response = await fetch(`http://localhost:3000/api/playlist/getPlaylists/${userProfileSpotify.email}`);
+      const response = await fetch(`https://music-player-api.vercel.app/api/playlist/getPlaylists/${userProfileSpotify.email}`);
       const data = await response.json();
       return data
     } catch (error) {

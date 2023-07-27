@@ -82,7 +82,7 @@ const PlaylistControls = () => {
 
     try {
       await fetch(
-        `http://localhost:3000/api/playlist/uploadNewPlaylist`,
+        `https://music-player-api.vercel.app/api/playlist/uploadNewPlaylist`,
         {
           method: "POST",
           body: formData,
@@ -112,7 +112,7 @@ const PlaylistControls = () => {
 
     try {
       await fetch(
-        `http://localhost:3000/api/playlist/editPlaylist`,
+        `https://music-player-api.vercel.app/api/playlist/editPlaylist`,
         {
           method: "PUT",
           body: formData,
@@ -131,7 +131,7 @@ const PlaylistControls = () => {
     if (selectedPlaylistSource === "local") {
       try {
         await fetch(
-          `http://localhost:3000/api/playlist/deletePlaylist`,
+          `https://music-player-api.vercel.app/api/playlist/deletePlaylist`,
           {
             method: "DELETE",
             headers: {
