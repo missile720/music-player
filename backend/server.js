@@ -15,7 +15,7 @@ app.use(express.json());
 
 app.use(cors({
   origin: ["https://echo-box-syntax-samurai.vercel.app/"],
-  methods: ["POST", "GET", "PUT", "DELETE"],
+  methods: ["PUT"]
 }));
 // app.use(cors());
 //app.use('/api/spotify', spotifyRoutes);
