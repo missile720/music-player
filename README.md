@@ -1,5 +1,10 @@
 # EchoBox
-A playlist aggregator app, allows the user to listen to their Spotify and local playlists from a single source.
+A playlist aggregator app, to listen to your Spotify and local playlists from a single source.
+
+## Usage
+The app can be accessed from this [site](https://echo-box-syntax-samurai.vercel.app/)
+
+The app however is restricted only people approved for development, and as such only developers currently have access to use the app.
 
 ## Tech Stack
 ### Front-end
