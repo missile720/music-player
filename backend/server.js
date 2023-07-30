@@ -14,6 +14,7 @@ const app = express();
 // app.use(cors({
 //   origin: ["https://echo-box-syntax-samurai.vercel.app/"],
 //   methods: ["POST", "GET", "PUT", "DELETE"],
+//   credentials: true
 // }));
 app.use(express.json());
 app.use(cors());
