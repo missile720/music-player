@@ -86,6 +86,7 @@ const PlaylistControls = () => {
         {
           method: "POST",
           body: formData,
+          mode: "no-cors",
         }
       );
       await updateLocalPlaylists();
@@ -116,6 +117,7 @@ const PlaylistControls = () => {
         {
           method: "PUT",
           body: formData,
+          mode: "no-cors",
         }
       );
       await updateLocalPlaylists();
